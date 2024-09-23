@@ -1,0 +1,558 @@
+/* Asegúrate de incluir este CSS en tu archivo clientes.css o styles.css */
+.table thead th,
+td {
+    text-align: center;
+    /* Centra horizontalmente */
+    vertical-align: middle;
+    /* Centra verticalmente */
+    padding: 8px;
+}
+
+/*  */
+
+.table-row {
+    display: flex;
+    align-items: stretch;
+}
+
+
+
+/*  ver cual sacar */
+
+/* archivo: cliente.css */
+body {
+   /*  background-color: #f8f9fa; */
+    /* Color de fondo suave */
+    font-family: Arial, sans-serif;
+    
+    
+}
+
+.container {
+    max-width: 800px;
+
+    padding: 10px;
+    border-radius: 10px;
+
+}
+
+h2 {
+    color: #003D79;
+}
+
+.btn-primary {
+    background-color: #1D4ED8;
+    /* Botón azul */
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #003D79;
+    /* Botón azul oscuro al pasar el mouse */
+}
+
+.formularioPersonal {
+
+    /* Fondo claro con opacidad */
+    padding: 10px;
+    /* margin: auto; */
+
+    /* Sombra oscura para darle profundidad */
+}
+
+/*  */
+
+.fixed-column {
+    background-color: transparent;
+    /* Asegura que el fondo sea transparente */
+    white-space: nowrap;
+    /* Evita que el contenido se desborde */
+}
+
+.fixed-column button {
+    background-color: #f8f9fa;
+    /* Fondo claro para los botones */
+    border: #01080f;
+    /* Remueve los bordes de los botones */
+    color: #007bff;
+    /* Color del texto */
+}
+
+.fixed-column button:hover {
+    background-color: #e2e6ea;
+    /* Fondo más oscuro al hacer hover */
+    color: #0056b3;
+    /* Cambia el color del texto al hacer hover */
+}
+
+.fixed-column .d-flex {
+    gap: 0.3rem;
+    /* Añade espacio entre los botones */
+}
+
+.fixed-column,
+.other-columns {
+    position: sticky;
+    right: 0;
+    z-index: 4;
+}
+
+/*  */
+/*  */
+
+/* Estilo personalizado para el botón de cierre */
+.btn-close {
+    filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(100%) contrast(100%);
+    background-color: transparent;
+    /* Asegúrate de que el fondo sea transparente */
+    color: #13132f;
+}
+
+.btn-close:hover {
+    color: #820909;
+    /* Color del icono en estado hover */
+    background-color: #343a40;
+    /* Color de fondo en estado hover (opcional) */
+}
+
+.btn-close:focus {
+    box-shadow: none;
+    /* Elimina el contorno azul en el enfoque */
+}
+
+
+.form-control {
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+
+.form-control:focus {
+    border-color: #00509e;
+    box-shadow: 0 0 5px rgba(0, 80, 158, 0.5);
+}
+
+.btn-primary {
+    background-color: #00509e;
+    border-color: #00509e;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #00376b;
+    border-color: #00376b;
+}
+
+.form-group {
+    margin-bottom: 30px;
+    /* Aumenta el espacio entre los grupos de formularios */
+}
+
+.form {
+    display: block;
+    /* Asegura que el label ocupe toda la fila */
+    margin-bottom: 5px;
+    /* Espacio entre el label y el campo */
+    font-weight: bold;
+    /* Hacer que el label se vea más destacado */
+    color: #333;
+    /* Color del texto del label */
+}
+
+.form-control {
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.form-select {
+    width: 1px;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    /*    font-size: small; */
+}
+
+/* Texto en negrita y con sombra */
+label {
+
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    /* Sombra suave */
+    color: #2a2a41;
+    /* Color del texto */
+}
+
+/* Color más claro para el placeholder */
+::placeholder,
+select {
+    color: #dedfe0;
+    /* Color más claro */
+    opacity: 10;
+    /* Asegura que el color se aplique con la opacidad completa */
+}
+
+.modal-body {
+    background: rgba(244, 244, 245, 0.65);
+}
+
+
+.dropdown-container {
+    position: relative;
+    display: inline-block;
+}
+
+.custom-select {
+    padding-right: 2.5rem;
+    /* Ajusta el espacio para el ícono */
+}
+
+.custom-icon {
+    position: absolute;
+    right: 0.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    font-size: 1.2rem;
+    /* Tamaño del ícono */
+}
+
+.required::after {
+    content: "*";
+    color: rgb(199, 13, 13);
+    margin-left: 5px;
+}
+
+.search-container {
+    position: relative;
+    width: 100%;
+}
+
+.search-container input {
+    padding-left: 2.5rem;
+    /* Adjust padding to fit the icon */
+}
+
+.search-container i {
+    position: absolute;
+    top: 50%;
+    left: 0.5rem;
+    transform: translateY(-50%);
+    pointer-events: none;
+    /* Allows clicks to pass through to the input */
+}
+
+.modal-header {
+    background-image: url('../images/fondoMainGris.png');
+    background-size: cover;
+    /* Ajusta la imagen para que cubra el área del footer */
+    background-position: center;
+    /* Centra la imagen en el footer */
+    background-repeat: no-repeat;
+    /* Evita que la imagen se repita */
+    padding: 20px;
+    /* Ajusta el espaciado según sea necesario */
+
+    /*  color: #13132f; */
+    /* Cambia el color del texto para que contraste con la imagen de fondo */
+}
+
+.modal-footer {
+    background-image: url('../images/fondoMainGris.png');
+    background-size: cover;
+    /* Ajusta la imagen para que cubra el área del footer */
+    background-position: center;
+    /* Centra la imagen en el footer */
+    background-repeat: no-repeat;
+    /* Evita que la imagen se repita */
+    padding: 20px;
+    /* Ajusta el espaciado según sea necesario */
+    /*  color: #13132f; */
+    /* Cambia el color del texto para que contraste 
+     */
+}
+
+/* styles.css o clientes.css */
+
+.table-responsive {
+    overflow-x: scroll;
+    /* Barra de desplazamiento horizontal siempre visible */
+    overflow-y: auto;
+    /* Barra de desplazamiento vertical aparece cuando es necesario */
+    white-space: nowrap;
+    /* Evita que el contenido se ajuste */
+    padding-bottom: 1rem;
+    /* Espacio adicional para la barra de desplazamiento horizontal */
+}
+
+/* Opcional: Añade un fondo blanco o un color para que la barra horizontal sea visible */
+.table-responsive::-webkit-scrollbar {
+    height: 12px;
+    /* Altura de la barra de desplazamiento horizontal */
+}
+
+.table-responsive::-webkit-scrollbar-thumb {
+    background-color: #888888;
+    /* Color del pulgar de la barra de desplazamiento */
+    border-radius: 10px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+    /* Color del pulgar de la barra de desplazamiento cuando está en hover */
+}
+
+
+
+/*  */
+
+/* Estilo básico para el input */
+input[type="text"] {
+    border: none;
+    /* Elimina los bordes */
+    border-bottom: 2px solid #007BFF;
+    /* Borde inferior con color */
+    background-color: transparent;
+    /* Fondo transparente */
+    color: #007BFF;
+    /* Color del texto */
+    padding: 5px 0;
+    /* Espacio superior e inferior */
+    font-size: 16px;
+    /* Tamaño de fuente */
+    width: 100%;
+    /* Ancho completo */
+    outline: none;
+    /* Elimina el borde al hacer click */
+}
+
+/* Estilo cuando el input está enfocado */
+input[type="text"]:focus {
+    border-bottom: 2px solid #0056b3;
+    /* Cambia el color del borde al enfocar */
+}
+
+
+.search-container {
+    display: flex;
+    align-items: center;
+    /* Alinea verticalmente el icono y el texto */
+}
+
+.search-icon {
+    width: 22px;
+    /* Tamaño del icono */
+    height: 22px;
+    /* Tamaño del icono */
+    margin-right: 8px;
+    /* Espacio entre el icono y el texto */
+}
+
+.search-text {
+    font-size: 16px;
+    /* Tamaño del texto */
+}
+
+.search-container input:hover {
+    cursor: pointer;
+}
+
+
+/* Sweet Alert */
+/* Personalizar el botón de confirmación */
+.swal2-confirm {
+    background-color: #1652e9d1;
+    /* Color de fondo */
+
+    border: none;
+    /* Sin borde */
+    color: white;
+    /* Color del texto */
+    font-size: 16px;
+    /* Tamaño de la fuente */
+}
+
+/* Barra horizontal y vertical de la tabla clientes */
+
+.table-container {
+    height: 400px;
+    /* Ajusta la altura según tus necesidades */
+    overflow-y: auto;
+    /* Habilita el desplazamiento vertical */
+    border: 1px solid #dee2e6;
+    /* Borde opcional */
+    border-radius: .25rem;
+    /* Bordes redondeados opcionales */
+    overflow: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+
+/* Estilos para la fila fija */
+/*  */
+
+.fixed-column {
+    background: #f9f9f9; /* Fondo para la celda fija */
+    position: sticky;
+    z-index: 3; /* Asegura que la celda esté por encima del contenido cuando se haga scroll */
+    right: 0; /* Mantiene la celda en el borde derecho cuando se hace scroll horizontal */
+}
+
+.fixed-row th {
+    background: #f9f9f9; /* Fondo para la fila fija */
+    position: sticky;
+    z-index: 2; /* Asegura que la fila esté por encima del contenido cuando se haga scroll */
+    top: 0; /* Mantiene la fila en la parte superior cuando se hace scroll vertical */
+}
+
+/* Asegura que la celda fija en la intersección de la fila y columna fijas se muestre correctamente */
+#acciones {
+    position: sticky;
+    top: 0;
+    right: 0;
+    z-index: 4; /* Asegura que esta celda esté por encima de las otras fijas */
+    
+}
+
+/* Paginacion */
+
+.table-container {
+    position: relative;
+    overflow: auto; /* Asegura que la tabla sea scrollable si es necesario */
+}
+
+.pagination {
+    margin-top: 10px;
+    font-size: smaller;
+    cursor: pointer;
+    height: 10px;
+}
+
+/* cambio tamaño boton nuevo, paginacion */
+.scale {
+    transform: scale(0.90);
+}
+
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+th, td {
+    
+    font-size: 0.92rem;
+}
+tr {
+    line-height: 1.25; /* Ajusta la altura de las filas */
+    vertical-align: middle; /* Alinea el texto verticalmente en su contenedor */
+    
+}
+
+ /* Elimina el margen y el borde por defecto */
+ .table {
+    border-collapse: collapse; /* Elimina el espaciado entre celdas */
+}
+
+.table th, .table td {
+    border: 1px solid #dee2e6; /* Asegura que el borde sea consistente */
+}
+
+/*  */
+
+.page-item.active .page-link {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+.page-link {
+    cursor: pointer;
+    max-height: 37px;
+}
+
+
+#rowsPerPage {
+    width: 100%;
+  /*  border-color: transparent; */
+    cursor: pointer;
+   
+}
+
+/* Producto */
+.modal-producto {
+    max-width: 600px; 
+    width: 100%;
+}
+
+.modal-content {
+    min-height: 80vh; 
+}
+
+.mayorista {
+    margin-right: 134px ;
+}
+
+.precios {
+    margin-left: -15px ;
+}
+ 
+/* Con lo de abajo acomode q la tabla se vea todo con scrolelers juntos */
+/* Asegura que la tabla ocupe el 100% de su contenedor */
+.table-responsive {
+    width: 100%;
+    max-height: calc(70vh - 150px); /* Ajusta el tamaño máximo según la altura de la pantalla */
+    overflow: auto;
+}
+
+
+/*  */
+
+
+.producto-row {
+    align-items: flex-end; /* Alinea los elementos en la parte inferior del contenedor */
+}
+
+#direccionEntregaContainer {
+    margin-top: 2px; /* Ajusta este valor para reducir o aumentar el espacio */
+}
+
+.custom-modal {
+    max-width: 90%; /* Ajusta el ancho máximo según sea necesario */
+    margin-top: 5vh; /* Ajusta el margen superior para mover el modal hacia arriba */
+}
+
+.modal-content {
+    min-height: 600px; /* Ajusta la altura mínima según sea necesario */
+}
+
+/*  */
+.hide-column {
+    display: none;
+}
+
+/* tabla informacion pedidos */
+.total-cell {
+    background-color: #888a8d;
+    color: #010a13;
+    font-weight: bold;
+    border-color: #01080f;
+}
+
+.modal-pedidos {
+    min-width: 350px;
+}
+
+.sb-sidenav-menu .nav-link {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1rem;
+}
+
+.sb-nav-link-icon {
+    margin-right: 0.5rem; /* Espacio entre el icono y el texto */
+    display: flex;
+    align-items: center;
+}

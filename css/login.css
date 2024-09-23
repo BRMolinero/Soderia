@@ -1,0 +1,87 @@
+body {
+    background-image: url("../images/FondoLoginAzulBrillante.png"); /* Reemplaza con la ruta de tu imagen */
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.login-container {
+    background: rgba(255, 255, 255, 0.8); /* Fondo claro con opacidad */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); /* Sombra oscura para darle profundidad */
+    border: 2px solid rgba(255, 255, 255, 0.6); /* Borde claro */
+    width: 350px;
+}
+
+.login-container h2 {
+    color: #000119; /* Texto en color oscuro */
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.login-container .form-control {
+    background: rgba(255, 255, 255, 0.9); /* Fondo casi blanco para los campos de entrada */
+    border: none;
+    color: #000119; /* Texto en color oscuro */
+}
+
+.login-container .btn {
+    background-color: #1D4ED8; /* Botón azul brillante */
+    border: none;
+    width: 100%;
+    color: #FFFFFF; /* Texto en blanco */
+    font-weight: bold;
+}
+
+.login-container .btn:hover {
+    background-color: #003D79; /* Color del botón al hacer hover */
+}
+
+.login-container .forgot-password {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.login-container .forgot-password a {
+    color: #003D79; /* Enlace en color azul oscuro */
+    text-decoration: none;
+}
+
+.login-container .forgot-password a:hover {
+    text-decoration: underline;
+}
+
+.logo-container {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.logo-container img {
+    max-width: 150px; /* Tamaño del logo más grande */
+}
+
+.logoEmpresa {
+    max-width: 100%; /* Ajusta la imagen al ancho del contenedor */
+    height: auto;    /* Mantiene las proporciones de la imagen */
+  }
+
+  /*  */
+  .input-group-text .bi {
+    font-size: 1.2rem; /* Ajusta el tamaño del ícono */
+    color: #6c757d; /* Color del ícono */
+}
+
+.form-control {
+    padding-left: 2.5rem; /* Añade espacio para el ícono a la izquierda */
+}
+
+#togglePassword {
+    cursor: pointer;
+}
+
