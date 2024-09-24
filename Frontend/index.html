@@ -11,12 +11,9 @@
     <link rel="stylesheet" href="./css/styles.css">
     <link rel="stylesheet" href="./css/formulario.css">
 
-
     <script src="./js/scripts.js" defer></script>
-    <!--  <script src="./js/datatables-simple-demo.js" defer></script> -->
+    <script src="./js/barras.js" defer></script>
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous" defer></script>
-    <!--     <script src="assets/demo/chart-area-demo.js" defer></script>
-    <script src="assets/demo/chart-bar-demo.js" defer></script> -->
     <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js"
         crossorigin="anonymous" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"
@@ -26,291 +23,94 @@
     <script src="https://kit.fontawesome.com/413c497387.js" crossorigin="anonymous" defer></script>
 </head>
 
-
-<body class="sb-nav-fixed">
-    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-gradient bg-gradient">
-        <a class="navbar-brand ps-3 mt-1mb 1" href="index.html">
-            <img src="./images/userlmn_2.png" alt="Logo" class="logoEmpresa">
-        </a>
-        <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i
-                class="fas fa-bars"></i></button>
-        <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
-
-        </form>
-        <!------------ Barra horizontal----------------------->
-        <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown"
-                    aria-expanded="false">
-                    <i class="fas fa-user fa-fw" style="font-size: 1.8rem;"></i>
-                </a>
-                <!-- Menu desplegable -->
-                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown"
-                    style="background-color:#13132f">
-                    <li><a class="dropdown-item text-white-50" href="#!"><i
-                                class="fas fa-user-circle text-primary text-opacity-75"></i>
-                            Perfil</a></li>
-                    <li><a class="dropdown-item text-white-50" href="#!"><i
-                                class="fas fa-cog text-primary text-opacity-75"></i>
-                            Configuración</a></li>
-                    <li>
-                        <hr class="dropdown-divider" />
-                    </li>
-                    <li><a class="dropdown-item text-white-50" href="#!"><i
-                                class="fas fa-sign-out-alt text-primary text-opacity-75"></i> Cerrar Sesión</a></li>
-                </ul>
-            </li>
-        </ul>
-
-    </nav>
+<body class="sb-nav-fixed"></body>
+    <div id="layout"></div>
     <div id="layoutSidenav">
-        <div id="layoutSidenav_nav" class="escalado">
-
-            <!----------- Barra vertical --------------------------------->
-            <nav class="sb-sidenav accordion text-muted nav" id="sidenavAccordion">
-                <div class="sb-sidenav-menu" style="--bs-bg-opacity: .95;">
-                    <div class="nav ">
-                        <div class="sb-sidenav-menu-heading">Principal</div>
-                        <a class="nav-link" href="index.html">
-                            <div class="sb-nav-link-icon"><i class="fa-solid fa-house text-primary text-opacity-75"></i>
-                            </div>
-                            Inicio
-                        </a>
-
-                        <div class="sb-sidenav-menu-heading">Menú</div>
-
-                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-                            data-bs-target="#collapseClientes" aria-expanded="false" aria-controls="collapseClientes">
-                            <div class="sb-nav-link-icon"><i class="fas fa-users text-primary text-opacity-75"></i>
-                            </div>
-                            Clientes
-                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                        </a>
-
-                        <div class="collapse" id="collapseClientes" aria-labelledby="headingTwo"
-                            data-bs-parent="#sidenavAccordion">
-                            <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPagesClientes">
-
-                                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-                                    data-bs-target="#pagesCollapseErrorClientes" aria-expanded="false"
-                                    aria-controls="pagesCollapseErrorClientes">
-                                    Lista de Cientes
-                                </a>
-                            </nav>
-                        </div>
-
-                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-                            data-bs-target="#collapseEmpleados" aria-expanded="false" aria-controls="collapseEmpleados">
-                            <div class="sb-nav-link-icon"><i class="fas fa-id-badge text-primary text-opacity-75"></i>
-                            </div>
-                            Empleados
-                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                        </a>
-
-                        <div class="collapse" id="collapseEmpleados" aria-labelledby="headingTwo"
-                            data-bs-parent="#sidenavAccordion">
-                            <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPagesEmpleados">
-
-                                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-                                    data-bs-target="#pagesCollapseErrorEmpleados" aria-expanded="false"
-                                    aria-controls="pagesCollapseErrorEmpleados">
-                                    Lista de Empleados
-                                </a>
-                            </nav>
-                        </div>
-
-
-                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-                            data-bs-target="#collapsePedidos" aria-expanded="false" aria-controls="collapsePedidos">
-                            <div class="sb-nav-link-icon"><i
-                                    class="fas fa-clipboard-list text-primary text-opacity-75"></i></div>
-                            Pedidos
-                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                        </a>
-
-                        <div class="collapse" id="collapsePedidos" aria-labelledby="headingTwo"
-                            data-bs-parent="#sidenavAccordion">
-                            <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPagesPedidos">
-                                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-                                    data-bs-target="#pagesCollapseErrorPedidos" aria-expanded="false"
-                                    aria-controls="pagesCollapseErrorPedidos">
-                                    Lista de Pedidos
-                                </a>
-                            </nav>
-                        </div>
-
-
-                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-                            data-bs-target="#collapseProductos" aria-expanded="false" aria-controls="collapseProductos">
-                            <div class="sb-nav-link-icon"><i class="fas fa-box text-primary text-opacity-75"></i></div>
-                            Productos
-                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                        </a>
-
-                        <div class="collapse" id="collapseProductos" aria-labelledby="headingTwo"
-                            data-bs-parent="#sidenavAccordion">
-                            <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPagesProductos">
-                                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-                                    data-bs-target="#pagesCollapseErrorProductos" aria-expanded="false"
-                                    aria-controls="pagesCollapseErrorProductos">
-                                    Lista de Productos
-                                </a>
-                                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-                                    data-bs-target="#pagesCollapseErrorProductos" aria-expanded="false"
-                                    aria-controls="pagesCollapseErrorProductos">
-                                    Tipos de Productos
-                                </a>
-
-                            </nav>
-                        </div>
-
-                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-                            data-bs-target="#collapseProveedores" aria-expanded="false"
-                            aria-controls="collapseProveedores">
-                            <div class="sb-nav-link-icon"><i class="fas fa-handshake text-primary text-opacity-75"></i>
-                            </div>
-                            Proveedores
-                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                        </a>
-
-                        <div class="collapse" id="collapseProveedores" aria-labelledby="headingTwo"
-                            data-bs-parent="#sidenavAccordion">
-                            <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPagesProveedores">
-
-                                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-                                    data-bs-target="#pagesCollapseErrorProveedores" aria-expanded="false"
-                                    aria-controls="pagesCollapseErrorProveedores">
-                                    Lista de Proveedores
-                                </a>
-                            </nav>
-                        </div>
-
-                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-                            data-bs-target="#collapseRecorridos" aria-expanded="false"
-                            aria-controls="collapseRecorridos">
-                            <div class="sb-nav-link-icon"><i class="fas fa-route text-primary text-opacity-75"></i>
-                            </div>
-                            Recorridos
-                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                        </a>
-
-                        <div class="collapse" id="collapseRecorridos" aria-labelledby="headingTwo"
-                            data-bs-parent="#sidenavAccordion">
-                            <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPagesRecorridos">
-                                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-                                    data-bs-target="#pagesCollapseErrorRecorridos" aria-expanded="false"
-                                    aria-controls="pagesCollapseErrorRecorridos">
-                                    Lista de Recorridos
-                                </a>
-
-                                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-                                    data-bs-target="#pagesCollapseErrorRecorridos" aria-expanded="false"
-                                    aria-controls="pagesCollapseErrorRecorridos">
-                                    Localidades
-                                </a>
-                                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-                                    data-bs-target="#pagesCollapseErrorRecorridos" aria-expanded="false"
-                                    aria-controls="pagesCollapseErrorRecorridos">
-                                    Vehículos
-                                </a>
-                                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-                                    data-bs-target="#pagesCollapseErrorRecorridos" aria-expanded="false"
-                                    aria-controls="pagesCollapseErrorRecorridos">
-                                    Zonas
-                                </a>
-                            </nav>
-                        </div>
-                    </div>
-                </div>
-                
-            </nav>
-        </div>
-
         <div id="layoutSidenav_content">
             <main class="mt-2 mb-10">
-              <br>
-              <br><br>
+                <div class="container">
+                    <br><br><br>
 
-                <div>
-                    <div class="container-fluid align-items-center justify-content-center">
+                    <div>
+                        <div class="container-fluid align-items-center justify-content-center">
 
-                        <div class="row d-flex align-items-center justify-content-center">
-                            <div class="row justify-content-center">
-                                <div class="col-xl-4 col-lg-5 col-md-5 col-sm-6 col-6 mb-5 ">
-                                    <a href="clientes.html" class="card-link">
-                                        <div class="card bg-primary bg-gradient text-white custom-card-height"
-                                            style="--bs-bg-opacity: .93;">
-                                            <div class="card-body text-center">
-                                                <img src="./images/Clientes_claro.png" alt="Ícono Clientes"
-                                                    class="icono-clase mb-3">
-                                                <div>Clientes</div>
+                            <div class="row d-flex align-items-center justify-content-center">
+                                <div class="row justify-content-center">
+                                    <div class="col-xl-4 col-lg-5 col-md-5 col-sm-6 col-6 mb-5 ">
+                                        <a href="clientes.html" class="card-link">
+                                            <div class="card bg-primary bg-gradient text-white custom-card-height"
+                                                style="--bs-bg-opacity: .93;">
+                                                <div class="card-body text-center">
+                                                    <img src="./images/Clientes_claro.png" alt="Ícono Clientes"
+                                                        class="icono-clase mb-3">
+                                                    <div>Clientes</div>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </a>
+                                        </a>
+                                    </div>
+
+                                    <div class="col-xl-4 col-lg-5 col-md-5 col-sm-6 col-6 mb-5 mt-auto">
+                                        <a href="pedidos.html" class="card-link">
+                                            <div class="card bg-primary bg-gradient text-white custom-card-height"
+                                                style="--bs-bg-opacity: .93;">
+                                                <div class="card-body ">
+                                                    <img src="./images/Pedido_claro.png" alt="Ícono Pedidos"
+                                                        class="icono-clase mb-3">
+                                                    <div class="text-center">Pedidos</div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
                                 </div>
 
-                                <div class="col-xl-4 col-lg-5 col-md-5 col-sm-6 col-6 mb-5 mt-auto">
-                                    <a href="pedidos.html" class="card-link">
-                                        <div class="card bg-primary bg-gradient text-white custom-card-height"
-                                            style="--bs-bg-opacity: .93;">
-                                            <div class="card-body ">
-                                                <img src="./images/Pedido_claro.png" alt="Ícono Pedidos"
-                                                    class="icono-clase mb-3">
-                                                <div class="text-center">Pedidos</div>
+
+                                <div class="row justify-content-center">
+                                    <div class="col-xl-4 col-lg-5 col-md-5 col-sm-6 col-6 mb-4 mt-auto">
+                                        <a href="productos.html" class="card-link">
+                                            <div class="card bg-primary bg-gradient text-white custom-card-height"
+                                                style="--bs-bg-opacity: .93;">
+                                                <div class="card-body text-center">
+                                                    <img src="./images/Producto claro.png" alt="Ícono Productos"
+                                                        class="icono-clase mb-3">
+                                                    <div>Productos</div>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </a>
+                                        </a>
+                                    </div>
+
+                                    <div class="col-xl-4 col-lg-5 col-md-5 col-sm-6 col-6 mb-4 mt-auto">
+                                        <a href="recorridos.html" class="card-link">
+                                            <div class="card bg-primary bg-gradient text-white custom-card-height"
+                                                style="--bs-bg-opacity: .93;">
+                                                <div class="card-body">
+                                                    <img src="./images/Recorrido_claro.png" alt="Ícono Recorridos"
+                                                        class="icono-clase mb-3 ">
+                                                    <div class="text-center">Recorridos</div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
                                 </div>
+
                             </div>
-
-
-                            <div class="row justify-content-center">
-                                <div class="col-xl-4 col-lg-5 col-md-5 col-sm-6 col-6 mb-4 mt-auto">
-                                    <a href="productos.html" class="card-link">
-                                        <div class="card bg-primary bg-gradient text-white custom-card-height"
-                                            style="--bs-bg-opacity: .93;">
-                                            <div class="card-body text-center">
-                                                <img src="./images/Producto claro.png" alt="Ícono Productos"
-                                                    class="icono-clase mb-3">
-                                                <div>Productos</div>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </div>
-
-                                <div class="col-xl-4 col-lg-5 col-md-5 col-sm-6 col-6 mb-4 mt-auto">
-                                    <a href="recorridos.html" class="card-link">
-                                        <div class="card bg-primary bg-gradient text-white custom-card-height"
-                                            style="--bs-bg-opacity: .93;">
-                                            <div class="card-body">
-                                                <img src="./images/Recorrido_claro.png" alt="Ícono Recorridos"
-                                                    class="icono-clase mb-3 ">
-                                                <div class="text-center">Recorridos</div>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-
                         </div>
                     </div>
-                </div>
 
-            </main>
+                </main>
 
-            <!----------- FOOTER ----------------------------->
-            <footer class="py-4 bs-secondary-color mt-auto">
-                <div class="container-fluid px-4">
-                    <div class="d-flex align-items-center justify-content-between small">
-                        <div class="text-muted">Copyright &copy; EffiTech 2024</div>
+                <!----------- FOOTER ----------------------------->
+                <footer class="py-4 bs-secondary-color mt-auto">
+                    <div class="container-fluid px-4">
+                        <div class="d-flex align-items-center justify-content-between small">
+                            <div class="text-muted">Copyright &copy; EffiTech 2024</div>
+                        </div>
                     </div>
-                </div>
-            </footer>
+                </footer>
+            </div>
+
+
+
         </div>
-
-
-
-    </div>
 
 </body>
 

@@ -1,10 +1,42 @@
 const db = require('../db/db');
 
 const cliente = {
-  getAll: async () => {
+/*  getAll: async () => {
     const [rows] = await db.query('SELECT * FROM cliente');
     return rows;
+  },  */
+  getAll: async () => {
+    try {
+      const [rows] = await db.query(`
+        SELECT 
+          c.DNI,
+          c.apellido,
+          c.condicionFiscal,
+          c.correoElectronico,
+          c.cuitCuil,
+          c.domicilio,
+          c.estado,
+          DATE_FORMAT(c.fechaNacimiento, '%d-%m-%Y') AS fechaNacimiento, 
+          c.idCliente,
+          c.nombre,
+          c.razonSocial,
+          c.telefono,
+          z.nombre AS zona_nombre,
+          l.nombre AS localidad_nombre,  
+          t.nombre AS tipo_cliente_nombre
+        FROM 
+          cliente c
+          INNER JOIN zona z ON c.idZona = z.idZona
+          INNER JOIN localidad l ON z.idLocalidad = l.idLocalidad  
+          INNER JOIN tipoCliente t ON c.idTipoCliente = t.idTipoCliente
+      `);
+      return rows;
+    } catch (error) {
+      console.error('Error en getAll:', error);
+      throw error;
+    }
   },
+  
   getById: async (id) => {
     const [rows] = await db.query('SELECT * FROM cliente WHERE idCliente = ?', [id]);
     return rows[0];

@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const cors = require('cors'); // Importa cors
 
 const clienteRoutes = require('./routes/clienteRoutes');
 /* const pedidoRoutes = require('./routes/pedidoRoutes'); */
@@ -10,6 +11,7 @@ const usuarioRoutes = require('./routes/usuarioRoutes'); */
 const app = express();
 
 // Middleware
+app.use(cors()); // Usa CORS para todas las rutas
 app.use(bodyParser.json());
 
 // Rutas

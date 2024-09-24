@@ -25,59 +25,6 @@ window.addEventListener('DOMContentLoaded', event => {
 
 });
 
-/* Filtros clientes */
-document.addEventListener('DOMContentLoaded', function () {
-    const filterApellido = document.getElementById('filterApellido');
-    const filterRazonSocial = document.getElementById('filterRazonSocial');
-    const table = document.getElementById('clientesTable');
-    const tableBody = table.querySelector('tbody');
-
-    function filterTable() {
-        const apellidoFilter = filterApellido.value.toLowerCase();
-        const razonSocialFilter = filterRazonSocial.value.toLowerCase();
-
-        for (const row of tableBody.rows) {
-            const apellidoCell = row.cells[1].textContent.toLowerCase();
-            const razonSocialCell = row.cells[9].textContent.toLowerCase();
-
-            const matchesApellido = apellidoCell.includes(apellidoFilter);
-            const matchesRazonSocial = razonSocialCell.includes(razonSocialFilter);
-
-            row.style.display = (matchesApellido && matchesRazonSocial) ? '' : 'none';
-        }
-    }
-
-    filterApellido.addEventListener('input', filterTable);
-    filterRazonSocial.addEventListener('input', filterTable);
-});
-document.addEventListener('DOMContentLoaded', function () {
-    const rowsPerPageSelect = document.getElementById('rowsPerPage');
-    const table = document.getElementById('clientesTable');
-    const rows = table.getElementsByTagName('tr');
-
-
-
-    // Función para mostrar la cantidad de filas seleccionada
-    function updateTableRows() {
-        const rowsPerPage = parseInt(rowsPerPageSelect.value, 10);
-        let currentRow = 1;
-
-        for (let i = 1; i < rows.length; i++) {
-            if (currentRow <= rowsPerPage) {
-                rows[i].style.display = '';
-            } else {
-                rows[i].style.display = 'none';
-            }
-            currentRow++;
-        }
-    }
-
-    // Escucha el cambio en el selector de filas
-    rowsPerPageSelect.addEventListener('change', updateTableRows);
-
-    // Llama a la función para mostrar las filas al cargar la página
-    updateTableRows();
-});
 
 
 /* Mostrar una alerta al presionar "Eliminar" */
@@ -182,43 +129,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
-/* Paginacion Tabla clientes */
-document.addEventListener('DOMContentLoaded', function () {
-    const rowsPerPage = 20;
-    const table = document.querySelector('#clientesTable tbody');
-    const pagination = document.querySelector('#pagination');
-
-    const rows = Array.from(table.querySelectorAll('tr'));
-    const numPages = Math.ceil(rows.length / rowsPerPage);
-
-    function displayPage(page) {
-        rows.forEach((row, index) => {
-            row.style.display = (Math.floor(index / rowsPerPage) === page) ? '' : 'none';
-        });
-        updatePagination(page);
-    }
-
-    function updatePagination(currentPage) {
-        pagination.innerHTML = '';
-        for (let i = 0; i < numPages; i++) {
-            const li = document.createElement('li');
-            li.className = 'page-item' + (i === currentPage ? ' active' : '');
-            const a = document.createElement('a');
-            a.className = 'page-link';
-            a.href = '#';
-            a.textContent = i + 1;
-            a.addEventListener('click', (e) => {
-                e.preventDefault();
-                displayPage(i);
-            });
-            li.appendChild(a);
-            pagination.appendChild(li);
-        }
-    }
-
-    // Inicializar la paginación en la primera página
-    displayPage(0);
-});
 
 
 /* Login */
