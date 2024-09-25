@@ -7,6 +7,7 @@ const clienteRoutes = require('./routes/clienteRoutes');
 const productoRoutes = require('./routes/productoRoutes');
 /* const recorridoRoutes = require('./routes/recorridoRoutes');
 const usuarioRoutes = require('./routes/usuarioRoutes'); */
+const secundariasRoutes = require('./routes/secundariasRoutes');
 
 const app = express();
 
@@ -20,6 +21,9 @@ app.use('/api/cliente', clienteRoutes);
 app.use('/api/producto', productoRoutes); 
 /* app.use('/api/recorrido', recorridoRoutes);
 app.use('/api/usuario', usuarioRoutes); */
+
+app.use('/api/secundarias', secundariasRoutes);
+
 
 // Iniciar el servidor
 const PORT = process.env.PORT || 3000;

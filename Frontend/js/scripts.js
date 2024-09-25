@@ -29,9 +29,9 @@ window.addEventListener('DOMContentLoaded', event => {
 
 /* Mostrar una alerta al presionar "Eliminar" */
 
-document.addEventListener('DOMContentLoaded', function () {
+/* document.addEventListener('DOMContentLoaded', function () { */
     // Selecciona todos los botones de eliminar
-    const deleteButtons = document.querySelectorAll('.btn-outline-danger');
+/*     const deleteButtons = document.querySelectorAll('.btn-outline-danger');
 
     deleteButtons.forEach(button => {
         button.addEventListener('click', function () {
@@ -49,40 +49,40 @@ document.addEventListener('DOMContentLoaded', function () {
                     Swal.fire(
                         'Eliminado',
                         'El elemento ha sido eliminado.',
-                        'success'
-                    );
+                        'success' */
+                   /*  ); */
                     // Aquí puedes agregar el código para eliminar el elemento de la tabla o base de datos
-                }
+/*                 }
             });
         });
     });
 });
-
+ */
 
 /* Modal para editar la tabla */
 
-document.addEventListener('DOMContentLoaded', function () {
-    // Selecciona todos los botones de editar
+/* document.addEventListener('DOMContentLoaded', function () {
+   
     const editButtons = document.querySelectorAll('.btn-outline-primary');
 
     editButtons.forEach(button => {
         button.addEventListener('click', function () {
-            // Obtén los datos de la fila correspondiente
+      
             const row = this.closest('tr');
             const itemName = row.querySelector('.item-name').textContent;
             const itemDescription = row.querySelector('.item-description').textContent;
 
-            // Rellena los campos del modal con los datos obtenidos
+          
             document.getElementById('itemName').value = itemName;
             document.getElementById('itemDescription').value = itemDescription;
 
-            // Muestra el modal
+           
             const editModal = new bootstrap.Modal(document.getElementById('editModal'));
             editModal.show();
         });
     });
 });
-
+ */
 /* Alerta para el modal Editar de clientes */
 /* 
 document.addEventListener('DOMContentLoaded', function () {
@@ -131,24 +131,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-/* Login */
-
-const togglePassword = document.querySelector('#togglePassword');
-const password = document.querySelector('#password');
-
-togglePassword.addEventListener('click', function () {
-    // Toggle the type attribute
-    const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
-    password.setAttribute('type', type);
-
-    // Toggle the icon
-    this.classList.toggle('bi-eye');
-    this.classList.toggle('bi-eye-slash');
-});
-
-
-/* Peidos modal */
-/* está en html ver porque no anda al eta acá */
 
 
 

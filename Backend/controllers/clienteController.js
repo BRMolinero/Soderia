@@ -25,7 +25,7 @@ exports.getClienteById = async (req, res) => {
 };
 
 // Crear un nuevo cliente
-exports.createCliente= async (req, res) => {
+exports.createCliente = async (req, res) => {
   try {
     const nuevoCliente = req.body;
     const cliente = await Cliente.create(nuevoCliente);
@@ -48,6 +48,8 @@ exports.updateCliente = async (req, res) => {
 };
 
 // Eliminar un cliente
+
+/* ver si hay que cambiarlo */
 exports.deleteCliente = async (req, res) => {
   try {
     const { id } = req.params;
