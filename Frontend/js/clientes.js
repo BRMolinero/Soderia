@@ -15,7 +15,6 @@ async function cargarClientesTabla() {
     }
 }
 
-// Agrega una fila a la tabla para un cliente específico
 function agregarFilaCliente(tbody, cliente) {
     const fila = document.createElement('tr');
 
@@ -81,9 +80,15 @@ function agregarFilaCliente(tbody, cliente) {
     celdaAcciones.classList.add('fixed-column');
     celdaAcciones.innerHTML = `
         <div class="d-flex align-items-center">
-            <button class="btn btn-sm btn-outline-primary me-1" title="Editar" onclick="editarCliente(${cliente.idCliente})">
+            <button class="btn btn-sm btn-outline-primary me-1" title="Editar" data-bs-toggle="modal"
+                        data-bs-target="#editarClienteModal
+                        " onclick="editarCliente(${cliente.idCliente})">
                 <i class="bi bi-pencil-square"></i>
             </button>
+           
+
+
+
             <button class="btn btn-sm btn-outline-danger" title="Eliminar" onclick="eliminarCliente(${cliente.idCliente})">
                 <i class="bi bi-trash"></i>
             </button>
@@ -94,85 +99,76 @@ function agregarFilaCliente(tbody, cliente) {
     tbody.appendChild(fila);
 }
 
+let formulario = document.getElementById("formularioPersonal");
+let botonGuardar = document.getElementById("guardarBoton");
 
+function nuevoCliente() {
+    const apiUrl = `http://localhost:3000/api/cliente`;
+    const clienteData = obtenerDatosFormulario();
 
+    // if (!validarDatos(clienteData)) return; // Valida los datos antes de enviarlos
 
+    axios.post(apiUrl, clienteData)
+        .then(function (response) {
+            if (response.status === 200 || response.status === 201) {
+                console.log('Cliente guardado:', response.data);
+                alert("Cliente Guardado");
+                location.reload();
+            } else {
+                throw new Error('Error al guardar el cliente: ' + response.status);
+            }
+        })
+        .catch(function (error) {
+            console.error('Error al guardar el cliente:', error.response ? error.response.data : error.message);
+            alert('Error al guardar el cliente. Intenta nuevamente.');
+        });
 
-/* document.getElementById('guardarBoton').addEventListener('click', async () => {
-    // Recoger datos del formulario
-    const clienteData = {
+}
+
+function obtenerDatosFormulario() {
+    return {
         nombre: document.getElementById('nombre').value,
         apellido: document.getElementById('apellido').value,
         telefono: document.getElementById('telefono').value,
         correoElectronico: document.getElementById('email').value,
         calle: document.getElementById('direccion').value,
-        numeroCalle: document.getElementById('numero').value,
-        piso: document.getElementById('piso').value,
-        numeroDepartamento: document.getElementById('departamento').value,
+        numeroCalle: parseInt(document.getElementById('numero').value, 10),
+        piso: parseInt(document.getElementById('piso').value, 10),
+        numeroDepartamento: parseInt(document.getElementById('departamento').value, 10),
         fechaNacimiento: document.getElementById('fechaNacimiento').value,
         DNI: document.getElementById('DNI').value,
         razonSocial: document.getElementById('razonSocial').value,
-        idCondicionFiscal: document.getElementById('condicionFiscal').value,
+        idCondicionFiscal: parseInt(document.getElementById('condicionFiscal').value, 10),
         cuitCuil: document.getElementById('cuit').value,
-        idZona: document.getElementById('zona').value, // Asumiendo que tienes opciones en el select
-        idTipoCliente: document.getElementById('tipoCliente').value // Asumiendo que tienes opciones en el select
+        idZona: parseInt(document.getElementById('zona').value, 10),
+        idTipoCliente: parseInt(document.getElementById('tipoCliente').value, 10),
+        estado: parseInt(document.getElementById('estado').value, 10)
     };
+}
 
-    // Enviar datos a la API
-    try {
-        const response = await axios.post('http://localhost:3000/api/cliente', clienteData, {
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        });
-
-        console.log('Cliente guardado:', response.data);
-        // Aquí puedes manejar la respuesta, como cerrar el modal o mostrar un mensaje
-        $('#clienteModal').modal('hide'); // Cerrar el modal
-    } catch (error) {
-        console.error('Error:', error);
-        // Aquí puedes manejar errores, como mostrar un mensaje de error al usuario
+// ver si la uso
+function validarDatos(clienteData) {
+    const camposObligatorios = ['nombre', 'apellido', 'telefono', 'correoElectronico', 'calle', 'numeroCalle', 'fechaNacimiento', 'idZona', 'idTipoCliente'];
+    for (const campo of camposObligatorios) {
+        if (!clienteData[campo]) {
+            alert(`Falta completar el campo: ${campo}`);
+            return false;
+        }
     }
-}); */
+    return true;
+}
 
-document.getElementById('formularioPersonal').addEventListener('submit', async (event) => {
-    event.preventDefault(); // Evita el envío por defecto del formulario
-    const clienteData = {
-        nombre: document.getElementById('nombre').value,
-        apellido: document.getElementById('apellido').value,
-        telefono: document.getElementById('telefono').value,
-        correoElectronico: document.getElementById('email').value,
-        calle: document.getElementById('direccion').value,
-        numeroCalle: document.getElementById('numero').value,
-        piso: document.getElementById('piso').value,
-        numeroDepartamento: document.getElementById('departamento').value,
-        fechaNacimiento: document.getElementById('fechaNacimiento').value,
-        DNI: document.getElementById('DNI').value,
-        razonSocial: document.getElementById('razonSocial').value,
-        idCondicionFiscal: document.getElementById('condicionFiscal').value,
-        cuitCuil: document.getElementById('cuit').value,
-        idZona: document.getElementById('zona').value,
-        idTipoCliente: document.getElementById('tipoCliente').value
-    };
 
-    try {
-        const response = await axios.post('http://localhost:3000/api/cliente', clienteData, {
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        });
-        console.log('Cliente guardado:', response.data);
-        $('#clienteModal').modal('hide'); // Cerrar el modal
-        cargarClientesTabla(); // Recargar la tabla de clientes
-    } catch (error) {
-        console.error('Error:', error);
-        // Mostrar mensaje de error al usuario
-    }
+
+botonGuardar.addEventListener("click", function (event) {
+    event.preventDefault();
+    nuevoCliente();
+
+    // Si quieres cerrar el modal después de guardar el cliente
+/*     let clienteModal = new bootstrap.Modal(document.getElementById('clienteModal'));
+    clienteModal.hide(); */
 });
 
 
 
-
-
-// Llamar a cargarClientes para inicializar la tabla
 cargarClientesTabla();

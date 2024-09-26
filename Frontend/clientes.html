@@ -234,7 +234,16 @@
                             <label for="DNI" class="">DNI</label>
                             <input class="form-control" id="DNI" placeholder="12345678" required>
                         </div>
+                        <div class="dropdown-container col-md-4 col-sm-6 col-7 mb-3">
+                            <label for="estado" class="required">Estado</label>
+                            <select class="form-select custom-select" id="estado" required>
+                                <option value="" selected disabled>Seleccione Estado</option>
+                                <option value="1">Activo</option>
+                                <option value="0">Inactivo</option>
+                            </select>
+                        </div>
                     </div>
+                    
                 </form>
             </div>
             <div class="modal-footer">
@@ -249,205 +258,127 @@
     </div>
 </div>
 
-<!-- Modal para editar cliente -->
-<!-- <div class="modal fade scale" id="editarClienteModal" tabindex="-1" aria-labelledby="editarClienteModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="editarClienteModalLabel">
-                        <i class="bi bi-pencil-square p-1"></i> Editar Cliente
-                    </h4>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                   
-                    <form id="formularioEditarCliente" class="formularioPersonal">
-                        <div class="row">
-                            <div class="col-md-6 col-sm-6 mb-3">
-                                <label for="apellido" class="required">Apellidos</label>
-                                <input class="form-control" id="editarApellido" value="Gomez" required>
-                            </div>
-                            <div class="col-md-6 col-sm-6 mb-3">
-                                <label for="nombre" class="required">Nombres</label>
-                                <input class="form-control" id="editarNombre" value="Ana" required>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 col-sm-9 mb-3">
-                                <label for="direccion" class="required">Calle</label>
-                                <input class="form-control" id="editarDireccion" value="Córdoba" required>
-                            </div>
-                            <div class="col-md-2 col-sm-3 col-4 col-xs-1 mb-3">
-                                <label for="numero" class="required">Número</label>
-                                <input class="form-control" id="editarNumero" value="321" required>
-                            </div>
-                            <div class="col-md-2 col-sm-2 col-4 mb-3">
-                                <label for="piso">Piso</label>
-                                <input class="form-control" id="editarPiso" value="1">
-                            </div>
-                            <div class="col-md-2 col-sm-3 col-4 mb-3">
-                                <label for="departamento">N° Dpto.</label>
-                                <input class="form-control" id="editarDepartamento" value="1C">
-                            </div>
-                            <div class="dropdown-container col-md-6 col-sm-7 col-6 mb-3">
-                                <label for="ciudad" class="required">Localidad</label>
-                                <select class="form-select custom-select" id="editarCiudad" required>
-                                    <option value="Devoto" selected>Devoto</option>
-                                </select>
-                            </div>
-                            <div class="dropdown-container col-md-3 col-sm-6 col-6 mb-3">
-                                <label for="zona" class="required">Zona</label>
-                                <select class="form-select custom-select" id="editarZona" required>
-                                    <option value="Norte" selected>Norte</option>
-                                </select>
-                            </div>
-                            <div class="dropdown-container col-md-3 col-sm-6 col-6 mb-3">
-                                <label for="tipoCliente" class="required">Tipo de Cliente</label>
-                                <select class="form-select custom-select" id="editarTipoCliente" required>
-                                    <option value="particular" selected>Particular</option>
-                                </select>
-                            </div>
-                            <div class="col-md-4 col-sm-12 col-6 mb-3">
-                                <label for="razonSocial">Razón Social</label>
-                                <input class="form-control" id="editarRazonSocial" placeholder="-" disabled>
-                            </div>
-                            <div class="col-md-4 col-sm-6 col-7 mb-3">
-                                <label for="condicionFiscal">Condición Fiscal</label>
-                                <input class="form-control" id="editarCondicionFiscal" value="-" disabled>
-                            </div>
-                            <div class="col-md-4 col-sm-6 col-5 mb-3">
-                                <label for="cuit">CUIT/CUIL</label>
-                                <input class="form-control" id="editarCuit" placeholder="-" disabled>
-                            </div>
-                            <div class="col-md-4 col-sm-8 col-7 mb-3">
-                                <label for="email">Correo Electrónico</label>
-                                <input class="form-control" id="editarEmail" value="anagomez@gmail.com" required>
-                            </div>
-                            <div class="col-md-3 col-sm-4 col-5 mb-3">
-                                <label for="telefono" class="required">Celular</label>
-                                <input class="form-control" id="editarTelefono" value="35644388456" required>
-                            </div>
-                            <div class="col-md-3 col-sm-6 col-7 mb-3">
-                                <label for="fechaNacimiento" class="required">Fecha de Nacimiento</label>
-                                <input class="form-control" id="editarFechaNacimiento" type="date" value="1972-07-07"
-                                    required>
-                            </div>
-                            <div class="col-md-2 col-sm-6 col-5 mb-3">
-                                <label for="DNI">DNI</label>
-                                <input class="form-control" id="editarDNI" value="20205443" required>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary bg-gradient" id="guardarBotonEditar">
-                        <i class="bi bi-save"></i> Guardar
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div> -->
+
+<!-- Modal de Colsulta de Datos -->
 <!-- Modal de Edición -->
-<!-- Modal de Edición -->
-<div class="modal fade" id="editarClienteModal" tabindex="-1" aria-labelledby="editarClienteModalLabel"
-    aria-hidden="true">
+<div class="modal fade scale" id="editarClienteModal" tabindex="-1" aria-labelledby="editarClienteModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="editarClienteModalLabel">
+                <h4 class="modal-title" id="editarClienteModalLabel">
                     <i class="bi bi-pencil-square p-1"></i> Editar Cliente
-                </h5>
+                </h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
+              
                 <form id="formularioEditarCliente" class="formularioPersonal">
                     <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="editarApellido" class="form-label required">Apellidos</label>
-                            <input type="text" class="form-control" id="editarApellido" value="Gomez" required>
+                        <div class="col-md-6 col-sm-6 col-6 mb-3">
+                            <label for="editarApellido" class="required">Apellidos</label>
+                            <input class="form-control" id="editarApellido" placeholder="Pérez" required>
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="editarNombre" class="form-label required">Nombres</label>
-                            <input type="text" class="form-control" id="editarNombre" value="Ana" required>
+                        <div class="col-md-6 col-sm-6 col-6 mb-3">
+                            <label for="editarNombre" class="required">Nombres</label>
+                            <input class="form-control" id="editarNombre" placeholder="Juan" required>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="editarDireccion" class="form-label required">Calle</label>
-                            <input type="text" class="form-control" id="editarDireccion" value="Córdoba" required>
+                        <div class="col-md-6 col-sm-9 mb-3">
+                            <label for="editarDireccion" class="required">Calle</label>
+                            <input class="form-control" id="editarDireccion" placeholder="Vélez Sarsfield" required>
                         </div>
-                        <div class="col-md-2 mb-3">
-                            <label for="editarNumero" class="form-label required">Número</label>
-                            <input type="number" class="form-control" id="editarNumero" value="321" required>
+                        <div class="col-md-2 col-sm-3 col-4 mb-3">
+                            <label for="editarNumero" class="required">Número</label>
+                            <input class="form-control" id="editarNumero" placeholder="123" required>
                         </div>
-                        <div class="col-md-2 mb-3">
-                            <label for="editarPiso" class="form-label">Piso</label>
-                            <input type="text" class="form-control" id="editarPiso" value="1">
+                        <div class="col-md-2 col-sm-2 col-4 mb-3">
+                            <label for="editarPiso">Piso</label>
+                            <input class="form-control" id="editarPiso" placeholder="4">
                         </div>
-                        <div class="col-md-2 mb-3">
-                            <label for="editarDepartamento" class="form-label">N° Dpto.</label>
-                            <input type="text" class="form-control" id="editarDepartamento" value="1C">
+                        <div class="col-md-2 col-sm-3 col-4 mb-3">
+                            <label for="editarDepartamento">N° Dpto.</label>
+                            <input class="form-control" id="editarDepartamento" placeholder="5A">
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="editarCiudad" class="form-label required">Localidad</label>
-                            <select class="form-select" id="editarCiudad" required>
-                                <option value="Devoto" selected>Devoto</option>
+
+
+                     
+                        <div class="dropdown-container col-md-4 col-sm-7 col-6 mb-3">
+                            <label for="editarCiudad" class="required">Localidad</label>
+                            <select class="form-select custom-select" id="editarCiudad" required>
+                             
                             </select>
                         </div>
-                        <div class="col-md-3 mb-3">
-                            <label for="editarZona" class="form-label required">Zona</label>
-                            <select class="form-select" id="editarZona" required>
-                                <option value="Norte" selected>Norte</option>
+
+                        <!--  -->
+                        <div class="dropdown-container col-md-4 col-sm-6 col-6 mb-3">
+                            <label for="editarZona" class="required">Zona</label>
+                            <select class="form-select custom-select" id="editarZona" required>
+                                <option value="" selected disabled>Seleccione una Zona</option>
+                              
                             </select>
                         </div>
-                        <div class="col-md-3 mb-3">
-                            <label for="editarTipoCliente" class="form-label required">Tipo de Cliente</label>
-                            <select class="form-select" id="editarTipoCliente" required>
-                                <option value="particular" selected>Particular</option>
+
+                        <div class="dropdown-container col-md-4 col-sm-6 col-6 mb-3">
+                            <label for="editarTipoCliente" class="required">Tipo de Cliente</label>
+                            <select class="form-select custom-select" id="editarTipoCliente" required>
+                              
                             </select>
                         </div>
-                        <div class="col-md-4 mb-3">
-                            <label for="editarRazonSocial" class="form-label">Razón Social</label>
-                            <input type="text" class="form-control" id="editarRazonSocial" placeholder="-" disabled>
+
+                        <div class="col-md-4 col-sm-12 col-6 mb-3">
+                            <label for="editarRazonSocial">Razón Social</label>
+                            <input class="form-control" id="editarRazonSocial" placeholder="Nombre de la Empresa">
                         </div>
-                        <div class="col-md-4 mb-3">
-                            <label for="editarCondicionFiscal" class="form-label">Condición Fiscal</label>
-                            <input type="text" class="form-control" id="editarCondicionFiscal" value="-" disabled>
+
+                        <div class="dropdown-container col-md-4 col-sm-6 col-7 mb-3">
+                            <label for="editarCondicionFiscal" class="required">Condición Fiscal</label>
+                            <select class="form-select custom-select" id="editarCondicionFiscal" required>
+                                <option value="" selected disabled>Seleccione Cond. Fiscal</option>
+                            
+                            </select>
                         </div>
-                        <div class="col-md-4 mb-3">
-                            <label for="editarCuit" class="form-label">CUIT/CUIL</label>
-                            <input type="text" class="form-control" id="editarCuit" placeholder="-" disabled>
+
+                        <div class="col-md-4 col-sm-6 col-5 mb-3">
+                            <label for="editarCuit">CUIT/CUIL</label>
+                            <input class="form-control" id="editarCuit" placeholder="20-12345678-9" required>
                         </div>
-                        <div class="col-md-4 mb-3">
-                            <label for="editarEmail" class="form-label">Correo Electrónico</label>
-                            <input type="email" class="form-control" id="editarEmail" value="anagomez@gmail.com"
-                                required>
+                        <div class="col-md-4 col-sm-8 col-7 mb-3">
+                            <label for="editarEmail">Correo Electrónico</label>
+                            <input class="form-control" id="editarEmail" placeholder="juanperez@gmail.com" required>
                         </div>
-                        <div class="col-md-3 mb-3">
-                            <label for="editarTelefono" class="form-label required">Celular</label>
-                            <input type="tel" class="form-control" id="editarTelefono" value="35644388456" required>
+                        <div class="col-md-3 col-sm-4 col-5 mb-3">
+                            <label for="editarTelefono" class="required">Celular</label>
+                            <input class="form-control" id="editarTelefono" placeholder="35646543210" required>
                         </div>
-                        <div class="col-md-3 mb-3">
-                            <label for="editarFechaNacimiento" class="form-label required">Fecha de Nacimiento</label>
-                            <input type="date" class="form-control" id="editarFechaNacimiento" value="1972-07-07"
-                                required>
+                        <div class="col-md-3 col-sm-6 col-7 mb-3">
+                            <label for="editarFechaNacimiento" class="required">Fecha de Nacimiento</label>
+                            <input class="form-control" id="editarFechaNacimiento" type="date" required>
                         </div>
-                        <div class="col-md-2 mb-3">
-                            <label for="editarDNI" class="form-label">DNI</label>
-                            <input type="text" class="form-control" id="editarDNI" value="20205443" required>
+                        <div class="col-md-2 col-sm-6 col-5 mb-3">
+                            <label for="editarDNI">DNI</label>
+                            <input class="form-control" id="editarDNI" placeholder="12345678" required>
+                        </div>
+                        <div class="dropdown-container col-md-4 col-sm-6 col-7 mb-3">
+                            <label for="editarEstado" class="required">Estado</label>
+                            <select class="form-select custom-select" id="editarEstado" required>
+                                <option value="" selected disabled>Seleccione Estado</option>
+                                <option value="1">Activo</option>
+                                <option value="0">Inactivo</option>
+                            </select>
                         </div>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="guardarBotonEditar">
+                <button type="button" class="btn btn-primary bg-gradient" id="guardarBotonEditar" data-bs-dismiss="modal">
                     <i class="bi bi-save"></i> Guardar
                 </button>
             </div>
         </div>
     </div>
 </div>
+ 
 
 
 </div>
