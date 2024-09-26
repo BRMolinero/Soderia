@@ -18,7 +18,7 @@ const cliente = {
           c.DNI,
           t.nombre AS tipoCliente,
           c.razonSocial,
-          c.condicionFiscal,
+          cf.nombre as condicionFiscal,
           c.cuitCuil,
           z.nombre AS zona,
           l.nombre AS localidad,  
@@ -28,6 +28,7 @@ const cliente = {
           INNER JOIN zona z ON c.idZona = z.idZona
           INNER JOIN localidad l ON z.idLocalidad = l.idLocalidad
           INNER JOIN tipoCliente t ON c.idTipoCliente = t.idTipoCliente
+          INNER JOIN condicionFiscal AS cf ON c.idCondicionFiscal = cf.idCondicionFiscal
       `);
       return rows;
     } catch (error) {
@@ -42,50 +43,61 @@ const cliente = {
   },
 
   create: async (cliente) => {
-    const { 
-      nombre, 
-      apellido, 
-      telefono, 
-      correoElectronico, 
-      calle, 
-      numeroCalle, 
-      piso, 
-      numeroDepartamento, 
-      fechaNacimiento, 
-      DNI, 
-      razonSocial, 
-      condicionFiscal, 
-      cuitCuil, 
-      idZona, 
-      idTipoCliente, 
-      estado 
-    } = cliente;
+    try {
+      // Validación básica
+      if (!cliente || !cliente.nombre || !cliente.apellido) {
+        throw new Error('Faltan datos obligatorios');
+      }
 
-    const [result] = await db.query(
-      'INSERT INTO cliente (nombre, apellido, telefono, correoElectronico, calle, numeroCalle, piso, numeroDepartamento, fechaNacimiento, DNI, razonSocial, condicionFiscal, cuitCuil, idZona, idTipoCliente, estado) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-      [nombre, apellido, telefono, correoElectronico, calle, numeroCalle, piso, numeroDepartamento, fechaNacimiento, DNI, razonSocial, condicionFiscal, cuitCuil, idZona, idTipoCliente, estado]
-    );
-    return { id: result.insertId, ...cliente };
-  }, 
+      const {
+        nombre,
+        apellido,
+        telefono,
+        correoElectronico,
+        calle,
+        numeroCalle,
+        piso,
+        numeroDepartamento,
+        fechaNacimiento,
+        DNI,
+        razonSocial,
+        idCondicionFiscal,
+        cuitCuil,
+        idZona,
+        idTipoCliente,
+        estado
+      } = cliente;
+
+      const [result] = await db.query(
+        'INSERT INTO cliente (nombre, apellido, telefono, correoElectronico, calle, numeroCalle, piso, numeroDepartamento, fechaNacimiento, DNI, razonSocial, idCondicionFiscal, cuitCuil, idZona, idTipoCliente, estado) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+        [nombre, apellido, telefono, correoElectronico, calle, numeroCalle, piso, numeroDepartamento, fechaNacimiento, DNI, razonSocial, idCondicionFiscal, cuitCuil, idZona, idTipoCliente, estado]
+      );
+
+      return { id: result.insertId, ...cliente };
+    } catch (error) {
+      console.error('Error al crear cliente:', error);
+      throw error; // O maneja el error como desees
+    }
+  },
 
   update: async (idCliente, cliente) => {
-    const { 
-      nombre, 
-      apellido, 
-      telefono, 
-      correoElectronico, 
-      calle, 
-      numeroCalle, 
-      piso, 
-      numeroDepartamento, 
-      fechaNacimiento, 
-      DNI, 
-      razonSocial, 
-      condicionFiscal, 
-      cuitCuil, 
-      idZona, 
-      idTipoCliente, 
-      estado 
+    const {
+      nombre,
+      apellido,
+      telefono,
+      correoElectronico,
+      calle,
+      numeroCalle,
+      piso,
+      numeroDepartamento,
+      fechaNacimiento,
+      DNI,
+      razonSocial,
+      idCondicionFiscal,
+      cuitCuil,
+      idZona,
+      idTipoCliente,
+      estado
     } = cliente;
 
     await db.query(
@@ -102,13 +114,13 @@ const cliente = {
           fechaNacimiento = ?, 
           DNI = ?, 
           razonSocial = ?, 
-          condicionFiscal = ?, 
+          idCondicionFiscal = ?, 
           cuitCuil = ?, 
           idZona = ?, 
           idTipoCliente = ?, 
           estado = ? 
       WHERE idCliente = ?`,
-      [nombre, apellido, telefono, correoElectronico, calle, numeroCalle, piso, numeroDepartamento, fechaNacimiento, DNI, razonSocial, condicionFiscal, cuitCuil, idZona, idTipoCliente, estado, idCliente]
+      [nombre, apellido, telefono, correoElectronico, calle, numeroCalle, piso, numeroDepartamento, fechaNacimiento, DNI, razonSocial, idCondicionFiscal, cuitCuil, idZona, idTipoCliente, estado, idCliente]
     );
 
     return { idCliente, ...cliente };

@@ -71,3 +71,28 @@ exports.getLocalidadById = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+/* CONDICION FISCAL ------------------------------------------------------------------- */
+exports.getAllCondicionFiscal = async (req, res) => {
+  try {
+    const condicionFiscal = await Secundarias.condicionFiscal.getAll();
+    res.json(condicionFiscal);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+
+exports.getCondicionFiscalById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const condicionFiscal = await Secundarias.condicionFiscal.getById(id);
+    if (condicionFiscal) {
+      res.json(condicionFiscal);
+    } else {
+      res.status(404).json({ message: 'Condición Fiscal no encontrada' });
+    }
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};

@@ -92,8 +92,32 @@ const localidad = {
   },
 };
 
+const condicionFiscal = {
+  getAll: async () => {
+    try {
+      const [rows] = await db.query(`
+        SELECT 
+          co.idCondicionFiscal,
+          co.nombre AS condicionFiscal,
+          co.estado
+        FROM condicionFiscal AS co
+      `);
+      return rows;
+    } catch (error) {
+      console.error('Error en getAll:', error);
+      throw error;
+    }
+  },
+
+  getById: async (id) => {
+    const [rows] = await db.query('SELECT * FROM condicionFiscal WHERE idCondicionFiscal = ?', [id]);
+    return rows[0];
+  },
+};
+
 module.exports = {
   tipoCliente,
   zona,
   localidad,
+  condicionFiscal
 };

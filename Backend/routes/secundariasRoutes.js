@@ -21,4 +21,9 @@ router.get('/localidad', secundariasController.getAllLocalidad);
 router.get('/localidad/:id', secundariasController.getLocalidadById);
 
 
+/* Condicion Fiscal --------------------------------------------------------------------*/
+router.get('/condicion-fiscal', secundariasController.getAllCondicionFiscal);
+
+router.get('/condicion-fiscal/:id', secundariasController.getCondicionFiscalById);
+
 module.exports = router;

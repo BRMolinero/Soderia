@@ -4,7 +4,7 @@ async function cargarTiposCliente() {
         const response = await axios.get('http://localhost:3000/api/secundarias/tipo-cliente');
         const selectTipoCliente = document.querySelector('#tipoCliente');
 
-        selectTipoCliente.innerHTML = '<option value="" selected disabled>Seleccione un tipo de cliente</option>';
+        selectTipoCliente.innerHTML = '<option value="" selected disabled>Seleccione un tipo</option>';
         response.data.forEach(tipoCliente => {
             const option = document.createElement('option');
             option.value = tipoCliente.idTipoCliente;
@@ -68,9 +68,27 @@ async function cargarLocalidades() {
         console.error('Error al cargar las localidades:', error);
     }
 }
+    async function cargarCondicionFiscal() {
+        try {
+            const response = await axios.get('http://localhost:3000/api/secundarias/condicion-fiscal');
+            console.log(response.data); // Verifica los datos aquí
+            const selectCondicionFiscal = document.querySelector('#condicionFiscal');
+            selectCondicionFiscal.innerHTML = '<option value="" selected disabled>Seleccione Cond. Fiscal</option>';
+            response.data.forEach(condicionFiscal => {
+                const option = document.createElement('option');
+                option.value = condicionFiscal.idCondicionFiscal;
+                option.textContent = condicionFiscal.condicionFiscal || 'Sin Nombre'; // Por si el campo nombre está vacío
+                selectCondicionFiscal.appendChild(option);
+            });
+        } catch (error) {
+            console.error('Error al cargar las condiciones fiscales:', error);
+        }
+    }
+    
 
 document.addEventListener('DOMContentLoaded', function () {
     cargarLocalidades();
     cargarTiposCliente();
+    cargarCondicionFiscal();
 });
 

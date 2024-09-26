@@ -26,9 +26,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" defer></script>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-
-
-
 </head>
 
 <body class="sb-nav-fixed"></body>
@@ -183,24 +180,24 @@
                         </div>
 
                         <!--  -->
-                        <div class="dropdown-container col-md-6 col-sm-7 col-6 mb-3">
+                        <div class="dropdown-container col-md-4 col-sm-7 col-6 mb-3">
                             <label for="ciudad" class="required">Localidad</label>
                             <select class="form-select custom-select" id="ciudad" required>
-                                <option value="" selected disabled>Seleccione Localidad</option>
+                                <!-- <option value="" selected disabled>Seleccione Localidad</option> -->
                             </select>
                         </div>
 
-                        <div class="dropdown-container col-md-3 col-sm-6 col-6 mb-3">
+                        <div class="dropdown-container col-md-4 col-sm-6 col-6 mb-3">
                             <label for="zona" class="required">Zona</label>
                             <select class="form-select custom-select" id="zona" required disabled>
-                                <option value="" selected disabled>Seleccione Zona</option>
+                                <option value="" selected disabled>Seleccione una Zona</option>
                             </select>
                         </div>
 
-                        <div class="dropdown-container col-md-3 col-sm-6 col-6 mb-3">
+                        <div class="dropdown-container col-md-4 col-sm-6 col-6 mb-3">
                             <label for="tipoCliente" class="required">Tipo de Cliente</label>
                             <select class="form-select custom-select" id="tipoCliente" required>
-                                <option value="" selected disabled>Seleccione Tipo</option>
+                                <!-- <option value="" selected disabled>Seleccione Tipo</option> -->
                             </select>
                         </div>
                         <!--  -->
@@ -209,16 +206,14 @@
                             <label for="razonSocial" class="">Razón Social</label>
                             <input class="form-control" id="razonSocial" placeholder="Nombre de la Empresa">
                         </div>
-                        <div class="col-md-4 col-sm-6 col-7 mb-3">
-                            <label for="condicionFiscal" class="">Condición Fiscal</label>
-                            <select class="form-control" id="condicionFiscal" required>
+
+                        <div class="dropdown-container col-md-4 col-sm-6 col-7 mb-3">
+                            <label for="condicionFiscal" class="required">Condición Fiscal</label>
+                            <select class="form-select custom-select" id="condicionFiscal" required>
                                 <option value="" selected disabled>Seleccione Cond. Fiscal</option>
-                                <option value="consumidor_final">Consumidor Final</option>
-                                <option value="responsable_inscripto">Responsable Inscripto</option>
-                                <option value="monotributista">Monotributista</option>
-                                <option value="exento">Exento</option>
                             </select>
                         </div>
+
                         <div class="col-md-4 col-sm-6 col-5 mb-3">
                             <label for="cuit" class="">CUIT/CUIL</label>
                             <input class="form-control" id="cuit" placeholder="20-12345678-9" required>
@@ -355,7 +350,8 @@
     </div> -->
 <!-- Modal de Edición -->
 <!-- Modal de Edición -->
-<div class="modal fade" id="editarClienteModal" tabindex="-1" aria-labelledby="editarClienteModalLabel" aria-hidden="true">
+<div class="modal fade" id="editarClienteModal" tabindex="-1" aria-labelledby="editarClienteModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -425,7 +421,8 @@
                         </div>
                         <div class="col-md-4 mb-3">
                             <label for="editarEmail" class="form-label">Correo Electrónico</label>
-                            <input type="email" class="form-control" id="editarEmail" value="anagomez@gmail.com" required>
+                            <input type="email" class="form-control" id="editarEmail" value="anagomez@gmail.com"
+                                required>
                         </div>
                         <div class="col-md-3 mb-3">
                             <label for="editarTelefono" class="form-label required">Celular</label>
@@ -433,7 +430,8 @@
                         </div>
                         <div class="col-md-3 mb-3">
                             <label for="editarFechaNacimiento" class="form-label required">Fecha de Nacimiento</label>
-                            <input type="date" class="form-control" id="editarFechaNacimiento" value="1972-07-07" required>
+                            <input type="date" class="form-control" id="editarFechaNacimiento" value="1972-07-07"
+                                required>
                         </div>
                         <div class="col-md-2 mb-3">
                             <label for="editarDNI" class="form-label">DNI</label>
