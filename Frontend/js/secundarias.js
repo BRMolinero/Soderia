@@ -86,9 +86,11 @@ async function cargarLocalidades() {
     }
     
 
-document.addEventListener('DOMContentLoaded', function () {
-    cargarLocalidades();
-    cargarTiposCliente();
-    cargarCondicionFiscal();
-});
+    
+
+// document.addEventListener('DOMContentLoaded', function () {
+//     cargarLocalidades();
+//     cargarTiposCliente();
+//     cargarCondicionFiscal();
+// });
 

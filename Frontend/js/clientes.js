@@ -80,14 +80,11 @@ function agregarFilaCliente(tbody, cliente) {
     celdaAcciones.classList.add('fixed-column');
     celdaAcciones.innerHTML = `
         <div class="d-flex align-items-center">
-            <button class="btn btn-sm btn-outline-primary me-1" title="Editar" data-bs-toggle="modal"
-                        data-bs-target="#editarClienteModal
-                        " onclick="editarCliente(${cliente.idCliente})">
+            <button type="button" class="btn btn-sm btn-outline-primary me-1" title="Editar" data-bs-toggle="modal"
+                        data-bs-target="#editarClienteModal">
                 <i class="bi bi-pencil-square"></i>
             </button>
            
-
-
 
             <button class="btn btn-sm btn-outline-danger" title="Eliminar" onclick="eliminarCliente(${cliente.idCliente})">
                 <i class="bi bi-trash"></i>
@@ -99,8 +96,10 @@ function agregarFilaCliente(tbody, cliente) {
     tbody.appendChild(fila);
 }
 
-let formulario = document.getElementById("formularioPersonal");
+/* let formulario = document.getElementById("formularioPersonal"); */
 let botonGuardar = document.getElementById("guardarBoton");
+/* let botonEditar = document.getElementById("editarClienteModal"); */
+
 
 function nuevoCliente() {
     const apiUrl = `http://localhost:3000/api/cliente`;
@@ -159,15 +158,77 @@ function validarDatos(clienteData) {
 }
 
 
+function editarCliente(registroConsultado) {
+    let nombre = document.getElementById('nombre');
+    nombre.value = registroConsultado.nombre;
+
+    let apellido = document.getElementById('apellido');
+    apellido.value = registroConsultado.apellido;
+
+    let telefono = document.getElementById('telefono');
+    telefono.value = registroConsultado.telefono;
+
+    let correoElectronico = document.getElementById('email');
+    correoElectronico.value = registroConsultado.correoElectronico;
+
+    let calle = document.getElementById('direccion');
+    calle.value = registroConsultado.calle;
+
+    let numeroCalle = document.getElementById('numero');
+    numeroCalle.value = parseInt(registroConsultado.numeroCalle, 10);
+
+    let piso = document.getElementById('piso');
+    piso.value = parseInt(registroConsultado.piso, 10);
+
+    let numeroDepartamento = document.getElementById('departamento');
+    numeroDepartamento.value = parseInt(registroConsultado.numeroDepartamento, 10);
+
+    let fechaNacimiento = document.getElementById('fechaNacimiento');
+    fechaNacimiento.value = registroConsultado.fechaNacimiento;
+
+    let DNI = document.getElementById('DNI');
+    DNI.value = registroConsultado.DNI;
+
+    let razonSocial = document.getElementById('razonSocial');
+    razonSocial.value = registroConsultado.razonSocial;
+
+    let idCondicionFiscal = document.getElementById('condicionFiscal');
+    idCondicionFiscal.value = parseInt(registroConsultado.idCondicionFiscal, 10);
+
+    let cuitCuil = document.getElementById('cuit');
+    cuitCuil.value = registroConsultado.cuitCuil;
+
+    let idZona = document.getElementById('zona');
+    idZona.value = parseInt(registroConsultado.idZona, 10);
+
+    let idTipoCliente = document.getElementById('tipoCliente');
+    idTipoCliente.value = parseInt(registroConsultado.idTipoCliente, 10);
+
+    let estado = document.getElementById('estado');
+    estado.value = parseInt(registroConsultado.estado, 10);
+
+
+}
+
+
+
+
+
+
 
 botonGuardar.addEventListener("click", function (event) {
     event.preventDefault();
     nuevoCliente();
-
-    // Si quieres cerrar el modal después de guardar el cliente
-/*     let clienteModal = new bootstrap.Modal(document.getElementById('clienteModal'));
-    clienteModal.hide(); */
 });
+
+let botonNuevoCliente = document.getElementById("botonNuevoCliente");
+botonNuevoCliente.addEventListener("click", function (event) {
+    cargarLocalidades();
+    cargarTiposCliente();
+    cargarCondicionFiscal();
+});
+
+
 
 
 
