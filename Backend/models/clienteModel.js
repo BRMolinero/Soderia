@@ -1,9 +1,9 @@
 const db = require('../db/db');
 
 const cliente = {
-  getAll: async () => {
+  getAll: async (filter) => {
     try {
-      const [rows] = await db.query(`
+      let query = `
         SELECT 
           c.idCliente,
           c.nombre,
@@ -29,8 +29,52 @@ const cliente = {
           INNER JOIN localidad l ON z.idLocalidad = l.idLocalidad
           INNER JOIN tipoCliente t ON c.idTipoCliente = t.idTipoCliente
           INNER JOIN condicionFiscal AS cf ON c.idCondicionFiscal = cf.idCondicionFiscal
-      `);
+        WHERE 1=1`;
+      const queryParams = [];
+      if (filter.nombre) {
+        query += `
+          AND (
+            c.nombre LIKE ?
+            OR c.apellido LIKE ?
+            OR c.razonSocial LIKE ?
+          )
+        `;
+        const searchValue = `%${filter.nombre}%`;
+        queryParams.push(searchValue, searchValue, searchValue); // Se aplica el mismo valor a los tres campos
+      }
+      console.log("AAAAAAAAAAAAAAAAA" + filter.NOMBRE)
+      // Filtrar por estado
+      if (filter.estado) {
+        query += ' AND c.estado = ?';
+        queryParams.push(Number(filter.estado)); // Suponiendo que 'estado' es un valor exacto
+      }
+      console.log("AAAAAAAAAAAAAAAAA" + filter.estado)
+
+      // if (filter.localidad) {
+      //   query += ' AND l.nombre = ?';
+      //   queryParams.push(filter.localidad);
+      // }
+
+      // if (filter.zona) {
+      //   query += ' AND z.nombre = ?';
+      //   queryParams.push(filter.zona);
+      // }
+
+      // if (filter.condicionFiscal) {
+      //   query += ' AND cf.nombre = ?';
+      //   queryParams.push(filter.condicionFiscal);
+      // }
+
+      // if (filter.tipoCliente) {
+      //   query += ' AND t.nombre = ?';
+      //   queryParams.push(filter.tipoCliente);
+      // }
+
+      // Ejecutamos la consulta con los parámetros correspondientes
+      const [rows] = await db.query(query, queryParams);
       return rows;
+
+
     } catch (error) {
       console.error('Error en getAll:', error);
       throw error;

@@ -14,7 +14,9 @@ router.post('/', clienteController.createCliente);
 // Actualizar un cliente existente
 router.put('/:id', clienteController.updateCliente);
 
+// Deshabilitar cliente
+router.put('/deshabilitar/:id', clienteController.deshabilitarCliente);
 // Eliminar un cliente
-router.delete('/:id', clienteController.deleteCliente);
+// router.delete('/:id', clienteController.deshabilitarCliente);
 
 module.exports = router;

@@ -1,7 +1,14 @@
-async function cargarClientesTabla() {
+async function cargarClientesTabla(filter = null) {
     try {
-        const response = await axios.get('http://localhost:3000/api/cliente');
-        console.log(response.data); // Verifica que estás recibiendo datos
+        if (filter) {
+            response = await axios.get('http://localhost:3000/api/cliente', {
+                params: filter // Pasamos los filtros como parámetros de la URL
+            });
+            console.log(response.data); // Verifica que estás recibiendo datos
+        } else {
+            response = await axios.get('http://localhost:3000/api/cliente');
+            console.log(response.data); // Verifica que estás recibiendo datos
+        }
 
         const tbody = document.querySelector('#clientesTable tbody');
 
@@ -75,30 +82,70 @@ function agregarFilaCliente(tbody, cliente) {
     celda.textContent = cliente.estado === 1 ? 'Activo' : 'Inactivo';
     fila.appendChild(celda);
 
+    //-------------------------------------
     // Crear celda de acciones
     const celdaAcciones = document.createElement('td');
     celdaAcciones.classList.add('fixed-column');
-    celdaAcciones.innerHTML = `
-        <div class="d-flex align-items-center">
-            <button type="button" class="btn btn-sm btn-outline-primary me-1" title="Editar" data-bs-toggle="modal"
-                        data-bs-target="#editarClienteModal">
-                <i class="bi bi-pencil-square"></i>
-            </button>
-           
 
-            <button class="btn btn-sm btn-outline-danger" title="Eliminar" onclick="eliminarCliente(${cliente.idCliente})">
-                <i class="bi bi-trash"></i>
-            </button>
-        </div>
-    `;
+    // Crear el contenedor para los botones
+    const divBotones = document.createElement('div');
+    divBotones.classList.add('d-flex', 'align-items-center');
+
+    // Crear botón Modificar
+    const botonModificar = document.createElement("button");
+    botonModificar.classList.add('btn', 'btn-sm', 'btn-outline-primary', 'me-1'); // Añadir clases de Bootstrap
+    botonModificar.setAttribute('type', 'button'); // Atributos de tipo
+    botonModificar.setAttribute('title', 'Editar'); // Tooltip
+    botonModificar.setAttribute('data-bs-toggle', 'modal'); // Para abrir modal de Bootstrap
+    botonModificar.setAttribute('data-bs-target', '#clienteModal'); // Target del modal
+
+    // Añadir el icono de Bootstrap dentro del botón Modificar
+    const iconoModificar = document.createElement("i");
+    iconoModificar.classList.add('bi', 'bi-pencil-square'); // Añadir clases de Bootstrap Icons
+    botonModificar.appendChild(iconoModificar);
+
+    // Añadir el evento de clic para modificar
+    botonModificar.addEventListener("click", function () {
+        // Aquí iría la función que maneja la modificación de los datos
+        document.getElementById('clienteModalLabel').innerHTML = '<i class="bi bi-person-plus p-1"></i> Editar Cliente';
+        document.getElementById('clienteModal').setAttribute('data-action', 'editar');
+        document.getElementById('clienteId').value = cliente.idCliente;
+        modificarDatos(cliente);
+    });
+
+    // Crear botón Eliminar
+    const botonEliminar = document.createElement("button");
+    botonEliminar.classList.add('btn', 'btn-sm', 'btn-outline-danger'); // Añadir clases de Bootstrap
+    botonEliminar.setAttribute('title', 'Eliminar'); // Tooltip
+
+    // Añadir el icono de Bootstrap dentro del botón Eliminar
+    const iconoEliminar = document.createElement("i");
+    iconoEliminar.classList.add('bi', 'bi-trash'); // Añadir clases de Bootstrap Icons
+    botonEliminar.appendChild(iconoEliminar);
+
+    // Añadir el evento de clic para eliminar
+    botonEliminar.addEventListener("click", function () {
+        // eliminarCliente(cliente.idCliente);
+        deshabilitarCliente(cliente.idCliente);
+    });
+
+    // Agregar los botones al div contenedor
+    divBotones.appendChild(botonModificar);
+    divBotones.appendChild(botonEliminar);
+
+    // Añadir el contenedor de botones a la celda de acciones
+    celdaAcciones.appendChild(divBotones);
+
+    // Añadir la celda a la fila
     fila.appendChild(celdaAcciones);
 
+    // Finalmente, agregar la fila al tbody
     tbody.appendChild(fila);
-}
 
-/* let formulario = document.getElementById("formularioPersonal"); */
+    //-------------------------------------
+
+}
 let botonGuardar = document.getElementById("guardarBoton");
-/* let botonEditar = document.getElementById("editarClienteModal"); */
 
 
 function nuevoCliente() {
@@ -133,7 +180,7 @@ function obtenerDatosFormulario() {
         calle: document.getElementById('direccion').value,
         numeroCalle: parseInt(document.getElementById('numero').value, 10),
         piso: parseInt(document.getElementById('piso').value, 10),
-        numeroDepartamento: parseInt(document.getElementById('departamento').value, 10),
+        numeroDepartamento: document.getElementById('departamento').value,
         fechaNacimiento: document.getElementById('fechaNacimiento').value,
         DNI: document.getElementById('DNI').value,
         razonSocial: document.getElementById('razonSocial').value,
@@ -157,79 +204,116 @@ function validarDatos(clienteData) {
     return true;
 }
 
-
-function editarCliente(registroConsultado) {
-    let nombre = document.getElementById('nombre');
-    nombre.value = registroConsultado.nombre;
-
-    let apellido = document.getElementById('apellido');
-    apellido.value = registroConsultado.apellido;
-
-    let telefono = document.getElementById('telefono');
-    telefono.value = registroConsultado.telefono;
-
-    let correoElectronico = document.getElementById('email');
-    correoElectronico.value = registroConsultado.correoElectronico;
-
-    let calle = document.getElementById('direccion');
-    calle.value = registroConsultado.calle;
-
-    let numeroCalle = document.getElementById('numero');
-    numeroCalle.value = parseInt(registroConsultado.numeroCalle, 10);
-
-    let piso = document.getElementById('piso');
-    piso.value = parseInt(registroConsultado.piso, 10);
-
-    let numeroDepartamento = document.getElementById('departamento');
-    numeroDepartamento.value = parseInt(registroConsultado.numeroDepartamento, 10);
-
-    let fechaNacimiento = document.getElementById('fechaNacimiento');
-    fechaNacimiento.value = registroConsultado.fechaNacimiento;
-
-    let DNI = document.getElementById('DNI');
-    DNI.value = registroConsultado.DNI;
-
-    let razonSocial = document.getElementById('razonSocial');
-    razonSocial.value = registroConsultado.razonSocial;
-
-    let idCondicionFiscal = document.getElementById('condicionFiscal');
-    idCondicionFiscal.value = parseInt(registroConsultado.idCondicionFiscal, 10);
-
-    let cuitCuil = document.getElementById('cuit');
-    cuitCuil.value = registroConsultado.cuitCuil;
-
-    let idZona = document.getElementById('zona');
-    idZona.value = parseInt(registroConsultado.idZona, 10);
-
-    let idTipoCliente = document.getElementById('tipoCliente');
-    idTipoCliente.value = parseInt(registroConsultado.idTipoCliente, 10);
-
-    let estado = document.getElementById('estado');
-    estado.value = parseInt(registroConsultado.estado, 10);
-
-
-}
-
-
-
-
-
-
-
 botonGuardar.addEventListener("click", function (event) {
     event.preventDefault();
-    nuevoCliente();
+
+    const clienteId = document.getElementById('clienteId').value;
+
+    if (clienteId) {
+        editarCliente(clienteId);
+    } else {
+        nuevoCliente();
+    }
+
 });
+
+function editarCliente(clienteId) {
+    const apiUrl = `http://localhost:3000/api/cliente/${clienteId}`;
+    const clienteData = obtenerDatosFormulario(); // Recoge los datos del formulario
+
+    axios.put(apiUrl, clienteData)
+        .then(response => {
+            if (response.status === 200) {
+                alert("Cliente actualizado con éxito");
+                location.reload(); // Refrescar la página
+            }
+        })
+        .catch(error => {
+            console.error("Error al actualizar el cliente:", error);
+            alert("Error al actualizar el cliente.");
+        });
+}
+
+function deshabilitarCliente(clienteId) {
+    const apiUrl = `http://localhost:3000/api/cliente/deshabilitar/${clienteId}`;
+    const clienteData = { estado: 0 };
+
+    axios.put(apiUrl, clienteData)
+        .then(response => {
+            if (response.status === 200) {
+                alert("Cliente deshabilitado con éxito");
+                location.reload(); // Refrescar la página
+            }
+        })
+        .catch(error => {
+            console.error("Error al deshabilitar el cliente:", error);
+            alert("Error al deshabilitar el cliente.");
+        });
+}
 
 let botonNuevoCliente = document.getElementById("botonNuevoCliente");
 botonNuevoCliente.addEventListener("click", function (event) {
-    cargarLocalidades();
-    cargarTiposCliente();
-    cargarCondicionFiscal();
+    document.getElementById('clienteModalLabel').innerHTML = '<i class="bi bi-person-plus p-1"></i>Nuevo Cliente';
+    cargarLocalidades('crear');
+    cargarTiposCliente('crear');
+    cargarCondicionFiscal('crear');
 });
 
+let botonFiltrar = document.getElementById("btnFiltrar");
+botonFiltrar.addEventListener("click", function (event) {
+    filter = obtenerDatosFiltro();
+    cargarClientesTabla(filter);
+});
+
+function obtenerDatosFiltro() {
+    const nombre = document.getElementById('filtroNombre').value;
+    const estado = parseInt(document.getElementById('filtroEstado').value, 10);
+    // const localidad = document.getElementById('filtroLocalidad').value;
+
+    // Retornamos un objeto con los valores de los filtros
+    return {
+        nombre: nombre || '',
+        estado: estado || '',
+        // localidad: localidad || ''
+    };
+}
 
 
+function modificarDatos(cliente) {
+    console.log(cliente);
+    cargarLocalidades('editar', cliente);
+    cargarTiposCliente('editar', cliente);
+    cargarCondicionFiscal('editar', cliente);
+    precargarDatosCliente(cliente);
+}
 
+//Función para cargar datos del cliente al editar
+
+function precargarDatosCliente(cliente) {
+    document.getElementById('apellido').value = cliente.apellido;
+    document.getElementById('nombre').value = cliente.nombre;
+    document.getElementById('direccion').value = cliente.calle;
+    document.getElementById('numero').value = cliente.numeroCalle;
+    document.getElementById('piso').value = cliente.piso;
+    document.getElementById('departamento').value = cliente.numeroDepartamento;
+    document.getElementById('email').value = cliente.correoElectronico;
+    document.getElementById('cuit').value = cliente.cuitCuil,
+    document.getElementById('razonSocial').value = cliente.razonSocial,
+    document.getElementById('estado').value = cliente.estado,
+    document.getElementById('telefono').value = cliente.telefono,
+    fechaNacimiento = formatearFecha(cliente.fechaNacimiento);
+    document.getElementById('fechaNacimiento').value = fechaNacimiento,
+    document.getElementById('DNI').value = cliente.DNI;
+}
+
+function formatearFecha(fecha) {
+    const partes = fecha.split('-');
+    const dia = partes[0];
+    const mes = partes[1];
+    const anio = partes[2];
+
+    // Retornar en el formato "aaaa-mm-dd"
+    return `${anio}-${mes}-${dia}`;
+}
 
 cargarClientesTabla();
