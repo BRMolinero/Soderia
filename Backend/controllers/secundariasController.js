@@ -82,7 +82,6 @@ exports.getAllCondicionFiscal = async (req, res) => {
   }
 };
 
-
 exports.getCondicionFiscalById = async (req, res) => {
   try {
     const { id } = req.params;
@@ -91,6 +90,126 @@ exports.getCondicionFiscalById = async (req, res) => {
       res.json(condicionFiscal);
     } else {
       res.status(404).json({ message: 'Condición Fiscal no encontrada' });
+    }
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+/* Modo de pago */
+exports.getAllModoPago = async (req, res) => {
+  try {
+    const modoPago = await Secundarias.modoPago.getAll();
+    res.json(modoPago);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+exports.getModoPagoById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const modoPago = await Secundarias.modoPago.getById(id);
+    if (modoPago) {
+      res.json(modoPago);
+    } else {
+      res.status(404).json({ message: 'Modo Pago no encontrado' });
+    }
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+/* Estado de pago */
+exports.getAllEstadoPedido = async (req, res) => {
+  try {
+    const estadoPedido = await Secundarias.estadoPedido.getAll();
+    res.json(estadoPedido);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+exports.getEstadoPedidoById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const estadoPedido = await Secundarias.estadoPedido.getById(id);
+    if (estadoPedido) {
+      res.json(estadoPedido);
+    } else {
+      res.status(404).json({ message: 'Estado Pedido no encontrado' });
+    }
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+/* Dia */
+exports.getAllDia = async (req, res) => {
+  try {
+    const dia = await Secundarias.dia.getAll();
+    res.json(dia);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+exports.getDiaById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const dia = await Secundarias.dia.getById(id);
+    if (dia) {
+      res.json(dia);
+    } else {
+      res.status(404).json({ message: 'Día no encontrado' });
+    }
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+/* Frecuencia */
+exports.getAllFrecuencia = async (req, res) => {
+  try {
+    const frecuencia = await Secundarias.frecuencia.getAll();
+    res.json(frecuencia);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+exports.getFrecuenciaById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const frecuencia = await Secundarias.frecuencia.getById(id);
+    if (frecuencia) {
+      res.json(frecuencia);
+    } else {
+      res.status(404).json({ message: 'Frecuencia no encontrada' });
+    }
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+/* Productos --> despues hacer un archivo propio cuando tenga que hacer el ABM d esto para el final*/
+exports.getAllProducto = async (req, res) => {
+  try {
+    const producto  = await Secundarias.producto.getAll(); 
+    res.json(producto);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+exports.getProductoById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const producto = await Secundarias.producto.getById(id);
+    if (producto) {
+      res.json(producto);
+    } else {
+      res.status(404).json({ message: 'Producto no encontrado' });
     }
   } catch (err) {
     res.status(500).json({ error: err.message });

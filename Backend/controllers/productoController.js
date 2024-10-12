@@ -1,16 +1,15 @@
 const Producto = require('../models/productoModel');
 
-// Obtener todos los producto
-//exports es para permitir q en otro lado se use
-//objeto punto algo es un metodo
 exports.getAllProducto = async (req, res) => {
   try {
-    const producto = await Producto.getAll();
+    const filter = req.query; // Extraemos los filtros de req.query
+    const producto = await Producto.getAll(filter); // Pasamos los filtros al modelo
     res.json(producto);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
+
 
 // Obtener un producto por ID
 exports.getProductoById = async (req, res) => {
@@ -51,11 +50,13 @@ exports.updateProducto = async (req, res) => {
 };
 
 // Eliminar un producto
-exports.deleteProducto = async (req, res) => {
+
+/* ver si hay que cambiarlo */
+exports.deshabilitarProducto = async (req, res) => {
   try {
     const { id } = req.params;
-    await Producto.delete(id);
-    res.status(204).end();
+    const producto = await Producto.delete(id, { estado: 0 }); // Cambiar solo el estado a 0
+    res.json(producto);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

@@ -20,10 +20,36 @@ router.get('/localidad', secundariasController.getAllLocalidad);
 
 router.get('/localidad/:id', secundariasController.getLocalidadById);
 
-
 /* Condicion Fiscal --------------------------------------------------------------------*/
 router.get('/condicion-fiscal', secundariasController.getAllCondicionFiscal);
 
 router.get('/condicion-fiscal/:id', secundariasController.getCondicionFiscalById);
+
+/* Modo de pago */
+router.get('/modo-pago', secundariasController.getAllModoPago);
+
+router.get('/modo-pago/:id', secundariasController.getModoPagoById);
+
+/* Estado de pedido */
+router.get('/estado-pedido', secundariasController.getAllEstadoPedido);
+
+router.get('/estado-pedido/:id', secundariasController.getEstadoPedidoById);
+
+/* Frecuencia */
+router.get('/frecuencia', secundariasController.getAllFrecuencia);
+
+router.get('/frecuencia/:id', secundariasController.getFrecuenciaById);
+
+/* Dias Entrega */
+router.get('/dia', secundariasController.getAllDia);
+
+router.get('/dia/:id', secundariasController.getDiaById);
+
+
+/* Productos */
+router.get('/producto', secundariasController.getAllProducto);
+
+router.get('/producto/:id', secundariasController.getProductoById);
+
 
 module.exports = router;

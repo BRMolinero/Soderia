@@ -1,85 +1,74 @@
-async function cargarClientesTabla(filter = null) {
+async function cargarProductosTabla(filter = null) {
     try {
         if (filter) {
-            response = await axios.get('http://localhost:3000/api/cliente', {
+            response = await axios.get('http://localhost:3000/api/producto', {
                 params: filter // Pasamos los filtros como parámetros de la URL
             });
             console.log(response.data); // Verifica que estás recibiendo datos
         } else {
-            response = await axios.get('http://localhost:3000/api/cliente');
+            response = await axios.get('http://localhost:3000/api/producto');
             console.log(response.data); // Verifica que estás recibiendo datos
         }
 
-        const tbody = document.querySelector('#clientesTable tbody');
+        const tbody = document.querySelector('#productosTable tbody');
 
         // Limpiar el contenido del tbody antes de agregar nuevos datos
         tbody.innerHTML = '';
 
-        // Iterar sobre cada cliente y agregar a la tabla
-        response.data.forEach(cliente => agregarFilaCliente(tbody, cliente));
+        // Iterar sobre cada producto y agregar a la tabla
+        response.data.forEach(producto => agregarFilaProducto(tbody, producto));
     } catch (error) {
-        console.error('Error al cargar los clientes:', error);
+        console.error('Error al cargar los productos:', error);
     }
 }
 
-function agregarFilaCliente(tbody, cliente) {
+function 
+agregarFilaProducto(tbody, producto) {
     const fila = document.createElement('tr');
 
     // Crear y agregar las celdas directamente
+    celda = document.createElement('td');
+    celda.textContent = producto.codigoInterno;
+    fila.appendChild(celda);
+
     let celda = document.createElement('td');
-    celda.textContent = cliente.nombre;
+    celda.textContent = producto.nombre;
     fila.appendChild(celda);
 
     celda = document.createElement('td');
-    celda.textContent = cliente.apellido;
+    celda.textContent = producto.tipo;
     fila.appendChild(celda);
 
     celda = document.createElement('td');
-    celda.textContent = `${cliente.calle} ${cliente.numeroCalle} ${cliente.piso ? ', Piso ' + cliente.piso : ''} ${cliente.numeroDepartamento ? ', Dpto ' + cliente.numeroDepartamento : ''}`;
+    celda.textContent = producto.proveedor;
     fila.appendChild(celda);
 
     celda = document.createElement('td');
-    celda.textContent = cliente.localidad;
+    celda.textContent = producto.presentacion;
     fila.appendChild(celda);
 
     celda = document.createElement('td');
-    celda.textContent = cliente.zona;
+    celda.textContent = producto.stockMinimo;
     fila.appendChild(celda);
 
     celda = document.createElement('td');
-    celda.textContent = cliente.tipoCliente;
+    celda.textContent = producto.stock;
     fila.appendChild(celda);
 
     celda = document.createElement('td');
-    celda.textContent = cliente.razonSocial;
+    celda.textContent = producto.precioMayorista;
     fila.appendChild(celda);
 
     celda = document.createElement('td');
-    celda.textContent = cliente.condicionFiscal;
+    celda.textContent = producto.precioMinorista;
     fila.appendChild(celda);
 
     celda = document.createElement('td');
-    celda.textContent = cliente.cuitCuil;
+    celda.textContent = producto.correoElectronico;
     fila.appendChild(celda);
 
     celda = document.createElement('td');
-    celda.textContent = cliente.correoElectronico;
-    fila.appendChild(celda);
-
-    celda = document.createElement('td');
-    celda.textContent = cliente.telefono;
-    fila.appendChild(celda);
-
-    celda = document.createElement('td');
-    celda.textContent = cliente.fechaNacimiento;
-    fila.appendChild(celda);
-
-    celda = document.createElement('td');
-    celda.textContent = cliente.DNI;
-    fila.appendChild(celda);
-
-    celda = document.createElement('td');
-    celda.textContent = cliente.estado === 1 ? 'Activo' : 'Inactivo';
+    celda.textContent = producto.estado === 1 ? 'Activo' : 'Inactivo';
     fila.appendChild(celda);
 
     //-------------------------------------
@@ -97,7 +86,7 @@ function agregarFilaCliente(tbody, cliente) {
     botonModificar.setAttribute('type', 'button'); // Atributos de tipo
     botonModificar.setAttribute('title', 'Editar'); // Tooltip
     botonModificar.setAttribute('data-bs-toggle', 'modal'); // Para abrir modal de Bootstrap
-    botonModificar.setAttribute('data-bs-target', '#clienteModal'); // Target del modal
+    botonModificar.setAttribute('data-bs-target', '#productoModal'); // Target del modal
 
     // Añadir el icono de Bootstrap dentro del botón Modificar
     const iconoModificar = document.createElement("i");
@@ -107,10 +96,10 @@ function agregarFilaCliente(tbody, cliente) {
     // Añadir el evento de clic para modificar
     botonModificar.addEventListener("click", function () {
         // Aquí iría la función que maneja la modificación de los datos
-        document.getElementById('clienteModalLabel').innerHTML = '<i class="bi bi-person-plus p-1"></i> Editar Cliente';
-        document.getElementById('clienteModal').setAttribute('data-action', 'editar');
-        document.getElementById('clienteId').value = cliente.idCliente;
-        modificarDatos(cliente);
+        document.getElementById('productoModalLabel').innerHTML = '<i class="bi bi-person-plus p-1"></i> Editar Producto';
+        document.getElementById('productoModal').setAttribute('data-action', 'editar');
+        document.getElementById('productoId').value = producto.idProducto;
+        modificarDatos(producto);
     });
 
     // Crear botón Eliminar
@@ -125,8 +114,8 @@ function agregarFilaCliente(tbody, cliente) {
 
     // Añadir el evento de clic para eliminar
     botonEliminar.addEventListener("click", function () {
-        // eliminarCliente(cliente.idCliente);
-        deshabilitarCliente(cliente.idCliente);
+        // eliminarProducto(producto.idProducto);
+        deshabilitarProducto(producto.idProducto);
     });
 
     // Agregar los botones al div contenedor
@@ -148,25 +137,25 @@ function agregarFilaCliente(tbody, cliente) {
 let botonGuardar = document.getElementById("guardarBoton");
 
 
-function nuevoCliente() {
-    const apiUrl = `http://localhost:3000/api/cliente`;
-    const clienteData = obtenerDatosFormulario();
+function nuevoProducto() {
+    const apiUrl = `http://localhost:3000/api/producto`;
+    const productoData = obtenerDatosFormulario();
 
-    // if (!validarDatos(clienteData)) return; // Valida los datos antes de enviarlos
+    // if (!validarDatos(productoData)) return; // Valida los datos antes de enviarlos
 
-    axios.post(apiUrl, clienteData)
+    axios.post(apiUrl, productoData)
         .then(function (response) {
             if (response.status === 200 || response.status === 201) {
-                console.log('Cliente guardado:', response.data);
-                alert("Cliente Guardado");
+                console.log('Producto guardado:', response.data);
+                alert("Producto Guardado");
                 location.reload();
             } else {
-                throw new Error('Error al guardar el cliente: ' + response.status);
+                throw new Error('Error al guardar el producto: ' + response.status);
             }
         })
         .catch(function (error) {
-            console.error('Error al guardar el cliente:', error.response ? error.response.data : error.message);
-            alert('Error al guardar el cliente. Intenta nuevamente.');
+            console.error('Error al guardar el producto:', error.response ? error.response.data : error.message);
+            alert('Error al guardar el producto. Intenta nuevamente.');
         });
 
 }
@@ -187,16 +176,16 @@ function obtenerDatosFormulario() {
         idCondicionFiscal: parseInt(document.getElementById('condicionFiscal').value, 10),
         cuitCuil: document.getElementById('cuit').value,
         idZona: parseInt(document.getElementById('zona').value, 10),
-        idTipoCliente: parseInt(document.getElementById('tipoCliente').value, 10),
+        idTipoProducto: parseInt(document.getElementById('tipoProducto').value, 10),
         estado: parseInt(document.getElementById('estado').value, 10)
     };
 }
 
 // ver si la uso
-function validarDatos(clienteData) {
-    const camposObligatorios = ['nombre', 'apellido', 'telefono', 'correoElectronico', 'calle', 'numeroCalle', 'fechaNacimiento', 'idZona', 'idTipoCliente'];
+function validarDatos(productoData) {
+    const camposObligatorios = ['nombre', 'apellido', 'telefono', 'correoElectronico', 'calle', 'numeroCalle', 'fechaNacimiento', 'idZona', 'idTipoProducto'];
     for (const campo of camposObligatorios) {
-        if (!clienteData[campo]) {
+        if (!productoData[campo]) {
             alert(`Falta completar el campo: ${campo}`);
             return false;
         }
@@ -207,62 +196,62 @@ function validarDatos(clienteData) {
 botonGuardar.addEventListener("click", function (event) {
     event.preventDefault();
 
-    const clienteId = document.getElementById('clienteId').value;
+    const productoId = document.getElementById('productoId').value;
 
-    if (clienteId) {
-        editarCliente(clienteId);
+    if (productoId) {
+        editarProducto(productoId);
     } else {
-        nuevoCliente();
+        nuevoProducto();
     }
 
 });
 
-function editarCliente(clienteId) {
-    const apiUrl = `http://localhost:3000/api/cliente/${clienteId}`;
-    const clienteData = obtenerDatosFormulario(); // Recoge los datos del formulario
+function editarProducto(productoId) {
+    const apiUrl = `http://localhost:3000/api/producto/${productoId}`;
+    const productoData = obtenerDatosFormulario(); // Recoge los datos del formulario
 
-    axios.put(apiUrl, clienteData)
+    axios.put(apiUrl, productoData)
         .then(response => {
             if (response.status === 200) {
-                alert("Cliente actualizado con éxito");
+                alert("Producto actualizado con éxito");
                 location.reload(); // Refrescar la página
             }
         })
         .catch(error => {
-            console.error("Error al actualizar el cliente:", error);
-            alert("Error al actualizar el cliente.");
+            console.error("Error al actualizar el producto:", error);
+            alert("Error al actualizar el producto.");
         });
 }
 
-function deshabilitarCliente(clienteId) {
-    const apiUrl = `http://localhost:3000/api/cliente/deshabilitar/${clienteId}`;
-    const clienteData = { estado: 0 };
+function deshabilitarProducto(productoId) {
+    const apiUrl = `http://localhost:3000/api/producto/deshabilitar/${productoId}`;
+    const productoData = { estado: 0 };
 
-    axios.put(apiUrl, clienteData)
+    axios.put(apiUrl, productoData)
         .then(response => {
             if (response.status === 200) {
-                alert("Cliente deshabilitado con éxito");
+                alert("Producto deshabilitado con éxito");
                 location.reload(); // Refrescar la página
             }
         })
         .catch(error => {
-            console.error("Error al deshabilitar el cliente:", error);
-            alert("Error al deshabilitar el cliente.");
+            console.error("Error al deshabilitar el producto:", error);
+            alert("Error al deshabilitar el producto.");
         });
 }
 
-let botonNuevoCliente = document.getElementById("botonNuevoCliente");
-botonNuevoCliente.addEventListener("click", function (event) {
-    document.getElementById('clienteModalLabel').innerHTML = '<i class="bi bi-person-plus p-1"></i>Nuevo Cliente';
+let botonNuevoProducto = document.getElementById("botonNuevoProducto");
+botonNuevoProducto.addEventListener("click", function (event) {
+    document.getElementById('productoModalLabel').innerHTML = '<i class="bi bi-person-plus p-1"></i>Nuevo Producto';
     cargarLocalidades('crear');
-    cargarTiposCliente('crear');
+    cargarTiposProducto('crear');
     cargarCondicionFiscal('crear');
 });
 
 let botonFiltrar = document.getElementById("btnFiltrar");
 botonFiltrar.addEventListener("click", function (event) {
     filter = obtenerDatosFiltro();
-    cargarClientesTabla(filter);
+    cargarProductosTabla(filter);
 });
 
 function obtenerDatosFiltro() {
@@ -277,31 +266,31 @@ function obtenerDatosFiltro() {
 }
 
 
-function modificarDatos(cliente) {
-    console.log(cliente);
-    cargarLocalidades('editar', cliente);
-    cargarTiposCliente('editar', cliente);
-    cargarCondicionFiscal('editar', cliente);
-    precargarDatosCliente(cliente);
+function modificarDatos(producto) {
+    console.log(producto);
+    cargarLocalidades('editar', producto);
+    cargarTiposProducto('editar', producto);
+    cargarCondicionFiscal('editar', producto);
+    precargarDatosProducto(producto);
 }
 
-//Función para cargar datos del cliente al editar
+//Función para cargar datos del producto al editar
 
-function precargarDatosCliente(cliente) {
-    document.getElementById('apellido').value = cliente.apellido;
-    document.getElementById('nombre').value = cliente.nombre;
-    document.getElementById('direccion').value = cliente.calle;
-    document.getElementById('numero').value = cliente.numeroCalle;
-    document.getElementById('piso').value = cliente.piso;
-    document.getElementById('departamento').value = cliente.numeroDepartamento;
-    document.getElementById('email').value = cliente.correoElectronico;
-    document.getElementById('cuit').value = cliente.cuitCuil,
-    document.getElementById('razonSocial').value = cliente.razonSocial,
-    document.getElementById('estado').value = cliente.estado,
-    document.getElementById('telefono').value = cliente.telefono,
-    fechaNacimiento = formatearFecha(cliente.fechaNacimiento);
+function precargarDatosProducto(producto) {
+    document.getElementById('apellido').value = producto.apellido;
+    document.getElementById('nombre').value = producto.nombre;
+    document.getElementById('direccion').value = producto.calle;
+    document.getElementById('numero').value = producto.numeroCalle;
+    document.getElementById('piso').value = producto.piso;
+    document.getElementById('departamento').value = producto.numeroDepartamento;
+    document.getElementById('email').value = producto.correoElectronico;
+    document.getElementById('cuit').value = producto.cuitCuil,
+    document.getElementById('razonSocial').value = producto.razonSocial,
+    document.getElementById('estado').value = producto.estado,
+    document.getElementById('telefono').value = producto.telefono,
+    fechaNacimiento = formatearFecha(producto.fechaNacimiento);
     document.getElementById('fechaNacimiento').value = fechaNacimiento,
-    document.getElementById('DNI').value = cliente.DNI;
+    document.getElementById('DNI').value = producto.DNI;
 }
 
 function formatearFecha(fecha) {
@@ -314,4 +303,4 @@ function formatearFecha(fecha) {
     return `${anio}-${mes}-${dia}`;
 }
 
-cargarClientesTabla();
+cargarProductosTabla();
