@@ -556,3 +556,17 @@ tr {
     display: flex;
     align-items: center;
 }
+
+.error-message {
+    color: rgb(220, 55, 55);
+    font-size: 0.875em; /* Puedes ajustar el tamaño según tu diseño */
+    margin-top: 4px; /* Espacio entre el campo y el mensaje de error */
+}
+
+.cliente-inactivo {
+    background-color: #f8d7da !important; /* Rojo claro para clientes inactivos */
+    color: #721c24 !important; /* Texto en rojo oscuro */
+}
+
+
+

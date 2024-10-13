@@ -1,12 +1,43 @@
+let botonNuevoCliente = document.getElementById("botonNuevoCliente");
+botonNuevoCliente.addEventListener("click", function (event) {
+    document.getElementById('clienteModalLabel').innerHTML = '<i class="bi bi-person-plus p-1"></i>Nuevo Cliente';
+    cargarLocalidades('crear');
+    cargarTiposCliente('crear');
+    cargarCondicionFiscal('crear');
+});
+
+let botonGuardar = document.getElementById("guardarBoton");
+botonGuardar.addEventListener("click", function (event) {
+    event.preventDefault();
+
+    const clienteId = document.getElementById('clienteId').value;
+
+    if (clienteId) {
+        editarCliente(clienteId);
+    } else {
+        nuevoCliente();
+    }
+
+});
+
+let botonFiltrar = document.getElementById("btnFiltrar");
+botonFiltrar.addEventListener("click", function (event) {
+    filter = obtenerDatosFiltro();
+    cargarClientesTabla(filter);
+});
+
+cargarClientesTabla();
+
 async function cargarClientesTabla(filter = null) {
     try {
-        let response;
         if (filter) {
             response = await axios.get('http://localhost:3000/api/cliente', {
                 params: filter // Pasamos los filtros como parámetros de la URL
             });
+            console.log(response.data); // Verifica que estás recibiendo datos
         } else {
             response = await axios.get('http://localhost:3000/api/cliente');
+            console.log(response.data); // Verifica que estás recibiendo datos
         }
 
         const tbody = document.querySelector('#clientesTable tbody');
@@ -14,18 +45,8 @@ async function cargarClientesTabla(filter = null) {
         // Limpiar el contenido del tbody antes de agregar nuevos datos
         tbody.innerHTML = '';
 
-        // Ordenar los clientes primero por estado y luego por apellido
-        const clientesOrdenados = response.data.sort((a, b) => {
-            // Ordenar por estado (1 para activos primero)
-            if (a.estado !== b.estado) {
-                return b.estado - a.estado; // Clientes activos (estado = 1) primero
-            }
-            // Si tienen el mismo estado, ordenar por apellido alfabéticamente
-            return a.apellido.localeCompare(b.apellido);
-        });
-
         // Iterar sobre cada cliente y agregar a la tabla
-        clientesOrdenados.forEach(cliente => agregarFilaCliente(tbody, cliente));
+        response.data.forEach(cliente => agregarFilaCliente(tbody, cliente));
     } catch (error) {
         console.error('Error al cargar los clientes:', error);
     }
@@ -33,11 +54,6 @@ async function cargarClientesTabla(filter = null) {
 
 function agregarFilaCliente(tbody, cliente) {
     const fila = document.createElement('tr');
-
-    // Asignar una clase de Bootstrap para diferenciar clientes activos de inactivos
-    if (cliente.estado === 0) {
-        fila.classList.add('table-secondary');
-    }
 
     // Crear y agregar las celdas directamente
     let celda = document.createElement('td');
@@ -130,32 +146,18 @@ function agregarFilaCliente(tbody, cliente) {
     // Crear botón Eliminar
     const botonEliminar = document.createElement("button");
     botonEliminar.classList.add('btn', 'btn-sm', 'btn-outline-danger'); // Añadir clases de Bootstrap
-    botonEliminar.setAttribute('title', 'Deshabilitar'); // Tooltip
+    botonEliminar.setAttribute('title', 'Eliminar'); // Tooltip
 
     // Añadir el icono de Bootstrap dentro del botón Eliminar
     const iconoEliminar = document.createElement("i");
     iconoEliminar.classList.add('bi', 'bi-trash'); // Añadir clases de Bootstrap Icons
     botonEliminar.appendChild(iconoEliminar);
 
-    // Si el cliente está inactivo, cambiar el comportamiento del botón eliminar
-    if (cliente.estado === 0) { // estado 0 es inactivo
-        botonEliminar.setAttribute('title', 'Edite para Activarlo'); // Tooltip
-        botonEliminar.style.opacity = '0.5'; // Reducir la opacidad
-        /* botonEliminar.style.pointerEvents = 'none'; */ // Evitar que el botón sea clickeable
-        botonEliminar.style.cursor = 'default'; // Mantener el cursor en 'default', sin cambiar a la mano
-
-        // Prevenir la acción de eliminar en clientes inactivos
-        botonEliminar.addEventListener("click", function (e) {
-            e.preventDefault(); // Evitar la acción de eliminar
-        });
-
-
-    } else {
-        // Si el cliente está activo, permitir la eliminación
-        botonEliminar.addEventListener("click", function () {
-            deshabilitarCliente(cliente.idCliente);
-        });
-    }
+    // Añadir el evento de clic para eliminar
+    botonEliminar.addEventListener("click", function () {
+        // eliminarCliente(cliente.idCliente);
+        deshabilitarCliente(cliente.idCliente);
+    });
 
     // Agregar los botones al div contenedor
     divBotones.appendChild(botonModificar);
@@ -173,53 +175,88 @@ function agregarFilaCliente(tbody, cliente) {
     //-------------------------------------
 
 }
-let botonGuardar = document.getElementById("guardarBoton");
 
-async function nuevoCliente() {
+/* function nuevoCliente() {
+    const apiUrl = `http://localhost:3000/api/cliente`;
+    const clienteData = obtenerDatosFormulario();
+
+    if (!validacionCampos()) return;
+
+    axios.post(apiUrl, clienteData)
+        .then(function (response) {
+            if (response.status === 200 || response.status === 201) {
+                console.log('Cliente guardado:', response.data);
+                alert("Cliente Guardado");
+                location.reload();
+            } else {
+                throw new Error('Error al guardar el cliente: ' + response.status);
+            }
+        })
+        .catch(function (error) {
+            console.error('Error al guardar el cliente:', error.response ? error.response.data : error.message);
+            alert('Error al guardar el cliente. Intenta nuevamente.');
+        });
+} */
+
+
+function nuevoCliente() {
     const apiUrl = `http://localhost:3000/api/cliente`;
     const clienteData = obtenerDatosFormulario();
 
     if (!validacionCampos()) return;
 
     // Primero, consulta si el cliente ya existe
-    const consultaUrl = `${apiUrl}?nombre=${encodeURIComponent(clienteData.nombre)}&apellido=${encodeURIComponent(clienteData.apellido)}&direccion=${encodeURIComponent(clienteData.direccion)}&numero=${encodeURIComponent(clienteData.numero)}&piso=${encodeURIComponent(clienteData.piso)}&departamento=${encodeURIComponent(clienteData.departamento)}&ciudad=${encodeURIComponent(clienteData.ciudad)}`;
+    const consultaUrl = `${apiUrl}?nombre=${clienteData.nombre}&apellido=${clienteData.apellido}&direccion=${clienteData.direccion}&numero=${clienteData.numero}&piso=${clienteData.piso}&departamento=${clienteData.departamento}&ciudad=${clienteData.ciudad}`;
 
-    try {
-        const response = await axios.get(consultaUrl);
-        if (response.data.length > 0) {
-            // Si hay resultados, el cliente ya existe
-            Swal.fire({
-                icon: 'warning',
-                title: 'Cliente ya existente',
-                text: 'Ya existe un cliente con los mismos datos.',
-                confirmButtonText: 'Entendido'
-            });
-        } else {
-            // Si no existe, procede a guardar el nuevo cliente
-            const saveResponse = await axios.post(apiUrl, clienteData);
-            if (saveResponse.status === 200 || saveResponse.status === 201) {
-                console.log('Cliente guardado:', saveResponse.data);
+    axios.get(consultaUrl)
+        .then(response => {
+            // Verifica si la respuesta contiene datos
+            if (response.data.length > 0) {
+                // Si hay resultados, el cliente ya existe
                 Swal.fire({
-                    icon: 'success',
-                    title: 'Cliente Guardado',
-                    text: 'El cliente se ha guardado correctamente.',
+                    icon: 'warning',
+                    title: 'Cliente ya existente',
+                    text: 'Ya existe un cliente con los mismos datos.',
                     confirmButtonText: 'Entendido'
-                }).then(() => {
-                    location.reload();
                 });
             } else {
-                throw new Error('Error al guardar el cliente: ' + saveResponse.status);
+                // Si no existe, procede a guardar el nuevo cliente
+                axios.post(apiUrl, clienteData)
+                    .then(function (response) {
+                        if (response.status === 200 || response.status === 201) {
+                            console.log('Cliente guardado:', response.data);
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Cliente Guardado',
+                                text: 'El cliente se ha guardado correctamente.',
+                                confirmButtonText: 'Entendido'
+                            }).then(() => {
+                                location.reload();
+                            });
+                        } else {
+                            throw new Error('Error al guardar el cliente: ' + response.status);
+                        }
+                    })
+                    .catch(function (error) {
+                        console.error('Error al guardar el cliente:', error.response ? error.response.data : error.message);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error al guardar el cliente',
+                            text: 'Intenta nuevamente.',
+                            confirmButtonText: 'Entendido'
+                        });
+                    });
             }
-        }
-    } catch (error) {
-        console.error('Error al procesar la solicitud:', error.response ? error.response.data : error.message);
-        Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Hubo un problema al procesar tu solicitud. Por favor, intenta nuevamente.',
-            confirmButtonText: 'Entendido'
+        })
+        .catch(error => {
+            console.error('Error al verificar el cliente:', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error de conexión',
+                text: 'No se pudo verificar la existencia del cliente.',
+                confirmButtonText: 'Entendido'
+            });
         });
-    }
 }
 
 function obtenerDatosFormulario() {
@@ -243,142 +280,105 @@ function obtenerDatosFormulario() {
     };
 }
 
-// ver si la uso
-/* function validarDatos(clienteData) {
-    const camposObligatorios = ['nombre', 'apellido', 'telefono', 'correoElectronico', 'calle', 'numeroCalle', 'fechaNacimiento', 'idZona', 'idTipoCliente'];
-    for (const campo of camposObligatorios) {
-        if (!clienteData[campo]) {
-            alert(`Falta completar el campo: ${campo}`);
-            return false;
-        }
-    }
-    return true;
-} */
-
-botonGuardar.addEventListener("click", function (event) {
-    event.preventDefault();
-
-    const clienteId = document.getElementById('clienteId').value;
-
-    if (clienteId) {
-        editarCliente(clienteId);
-    } else {
-        nuevoCliente();
-    }
-
-});
-
 function editarCliente(clienteId) {
-    // Mostrar una alerta de confirmación antes de proceder
-    Swal.fire({
-        title: '¿Estás seguro?',
-        text: "¿Deseas guardar los cambios realizados?",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Sí, guardar cambios',
-        cancelButtonText: 'Cancelar'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            // Si el usuario confirma, proceder con la actualización del cliente
-            const apiUrl = `http://localhost:3000/api/cliente/${clienteId}`;
-            const clienteData = obtenerDatosFormulario(); // Llama a la función para obtener los datos del formulario
+    const apiUrl = `http://localhost:3000/api/cliente/${clienteId}`;
+    const clienteData = obtenerDatosFormulario(); // 
 
-            axios.put(apiUrl, clienteData)
-                .then(response => {
-                    if (response.status === 200) {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Cliente actualizado',
-                            text: 'El cliente ha sido actualizado con éxito.',
-                            confirmButtonText: 'Entendido'
-                        }).then(() => {
-                            location.reload(); // Refrescar la página después de que el usuario cierre el SweetAlert
-                        });
-                    }
-                })
-                .catch(error => {
-                    console.error("Error al actualizar el cliente:", error);
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error al actualizar',
-                        text: 'No se pudo actualizar el cliente. Intenta nuevamente.',
-                        confirmButtonText: 'Entendido'
-                    });
+    axios.put(apiUrl, clienteData)
+        .then(response => {
+            if (response.status === 200) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Cliente actualizado',
+                    text: 'El cliente ha sido actualizado con éxito.',
+                    confirmButtonText: 'Entendido'
+                }).then(() => {
+                    location.reload(); 
                 });
-        }
-    });
+            }
+        })
+        .catch(error => {
+            console.error("Error al actualizar el cliente:", error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error al actualizar',
+                text: 'No se pudo actualizar el cliente. Intenta nuevamente.',
+                confirmButtonText: 'Entendido'
+            });
+        });
 }
 
 function deshabilitarCliente(clienteId) {
-    // Mostrar una alerta de confirmación antes de proceder
-    Swal.fire({
-        title: '¿Estás seguro?',
-        text: "¿Deseas deshabilitar este cliente?",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Sí, deshabilitar',
-        cancelButtonText: 'Cancelar'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            // Si el usuario confirma, proceder con la deshabilitación del cliente
-            const apiUrl = `http://localhost:3000/api/cliente/deshabilitar/${clienteId}`;
-            const clienteData = { estado: 0 };
+    const apiUrl = `http://localhost:3000/api/cliente/deshabilitar/${clienteId}`;
+    const clienteData = { estado: 0 };
 
-            axios.put(apiUrl, clienteData)
-                .then(response => {
-                    if (response.status === 200) {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Cliente deshabilitado',
-                            text: 'El cliente ha sido deshabilitado con éxito.',
-                            confirmButtonText: 'Entendido'
-                        }).then(() => {
-                            location.reload(); // Refrescar la página después de que el usuario cierre el SweetAlert
-                        });
-                    }
-                })
-                .catch(error => {
-                    console.error("Error al deshabilitar el cliente:", error);
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error al deshabilitar',
-                        text: 'No se pudo deshabilitar el cliente. Intenta nuevamente.',
-                        confirmButtonText: 'Entendido'
-                    });
+    axios.put(apiUrl, clienteData)
+        .then(response => {
+            if (response.status === 200) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Cliente deshabilitado',
+                    text: 'El cliente ha sido deshabilitado con éxito.',
+                    confirmButtonText: 'Entendido'
+                }).then(() => {
+                    location.reload(); // Refrescar la página después de que el usuario cierre el SweetAlert
                 });
-        }
-    });
+            }
+        })
+        .catch(error => {
+            console.error("Error al deshabilitar el cliente:", error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error al deshabilitar',
+                text: 'No se pudo deshabilitar el cliente. Intenta nuevamente.',
+                confirmButtonText: 'Entendido'
+            });
+        });
 }
 
-let botonNuevoCliente = document.getElementById("botonNuevoCliente");
-botonNuevoCliente.addEventListener("click", function (event) {
-    document.getElementById('clienteModalLabel').innerHTML = '<i class="bi bi-person-plus p-1"></i>Nuevo Cliente';
-    cargarLocalidades('crear');
-    cargarTiposCliente('crear');
-    cargarCondicionFiscal('crear');
-});
+/* function editarCliente(clienteId) {
+    const apiUrl = `http://localhost:3000/api/cliente/${clienteId}`;
+    const clienteData = obtenerDatosFormulario(); 
+    axios.put(apiUrl, clienteData)
+        .then(response => {
+            if (response.status === 200) {
+                alert("Cliente actualizado con éxito");
+                location.reload(); 
+            }
+        })
+        .catch(error => {
+            console.error("Error al actualizar el cliente:", error);
+            alert("Error al actualizar el cliente.");
+        });
+}
 
-let botonFiltrar = document.getElementById("btnFiltrar");
-botonFiltrar.addEventListener("click", function (event) {
-    filter = obtenerDatosFiltro();
-    cargarClientesTabla(filter);
-});
+function deshabilitarCliente(clienteId) {
+    const apiUrl = `http://localhost:3000/api/cliente/deshabilitar/${clienteId}`;
+    const clienteData = { estado: 0 };
 
+    axios.put(apiUrl, clienteData)
+        .then(response => {
+            if (response.status === 200) {
+                alert("Cliente deshabilitado con éxito");
+                location.reload(); // Refrescar la página
+            }
+        })
+        .catch(error => {
+            console.error("Error al deshabilitar el cliente:", error);
+            alert("Error al deshabilitar el cliente.");
+        });
+}
+ */
+
+/* ver si esto se usa */
 function obtenerDatosFiltro() {
-
     const nombre = document.getElementById('filtroNombre').value;
-    //const estado = parseInt(document.getElementById('filtroEstado').value, 10);
-    // const localidad = document.getElementById('filtroLocalidad').value;
+    const estado = parseInt(document.getElementById('filtroEstado').value, 10);
 
     // Retornamos un objeto con los valores de los filtros
     return {
         nombre: nombre || '',
-        //estado: estado || '',
-        // localidad: localidad || ''
+        estado: estado || '',
     };
 }
 
@@ -390,7 +390,7 @@ function modificarDatos(cliente) {
     precargarDatosCliente(cliente);
 }
 
-//Función para cargar datos del cliente al editar
+//Función para cargar datos del cliente al editar/modificar
 
 function precargarDatosCliente(cliente) {
     document.getElementById('apellido').value = cliente.apellido;
@@ -402,8 +402,6 @@ function precargarDatosCliente(cliente) {
     document.getElementById('email').value = cliente.correoElectronico;
     document.getElementById('cuit').value = cliente.cuitCuil,
         document.getElementById('razonSocial').value = cliente.razonSocial,
-        document.getElementById('estado').value = cliente.estado,
-        document.getElementById('telefono').value = cliente.telefono,
         fechaNacimiento = formatearFecha(cliente.fechaNacimiento);
     document.getElementById('fechaNacimiento').value = fechaNacimiento,
         document.getElementById('DNI').value = cliente.DNI;
@@ -418,8 +416,6 @@ function formatearFecha(fecha) {
     // Retornar en el formato "aaaa-mm-dd"
     return `${anio}-${mes}-${dia}`;
 }
-
-cargarClientesTabla();
 
 /* Validaciones en carga de cliente----------------------------------------------------------- */
 function validacionCampos() {
@@ -599,7 +595,70 @@ function validacionCampos() {
     return !error; // Retorna false si hay errores
 }
 
+/* function validacionGuardar(event) {
+    event.preventDefault();
 
+    if (validacionCampos()) {
+        let nombre = document.getElementById("nombre").value;
+        let apellido = document.getElementById("apellido").value;
+        let direccion = document.getElementById("direccion").value;
+        let numero = document.getElementById("numero").value;
+        let piso = document.getElementById("piso").value;
+        let departamento = document.getElementById("departamento").value;
+        let ciudad = document.getElementById("ciudad").value;
+
+        let nuevoRegistro = {
+            nombre: primeraMayuscula(nombre),
+            apellido: primeraMayuscula(apellido),
+            direccion: primeraMayuscula(direccion),
+            numero: numero,
+            piso: piso,
+            departamento: departamento,
+            ciudad: ciudad
+        };
+
+        if (registros.length < 3) {
+            let registroExistente = registros.some(registro =>
+                registro.nombre === nombre &&
+                registro.apellido === apellido &&
+                registro.direccion === direccion &&
+                registro.numero === numero &&
+                registro.piso === piso &&
+                registro.departamento === departamento &&
+                registro.ciudad === ciudad
+            );
+
+            if (!registroExistente) {
+                nuevoRegistro.sector = asignarSectorAleatorio();
+                registros.push(nuevoRegistro);
+
+                Swal.fire({
+                    position: "center",
+                    icon: "success",
+                    title: "Formulario guardado con éxito.",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+
+                document.getElementById("formularioPersonal").reset();
+
+                estadoBotonGuardar();
+                estadoBotonListar();
+
+            } else {
+                alertaRegistroRepetido();
+            }
+        }
+    }
+} */
+
+function alertaRegistroRepetido() {
+    Swal.fire({
+        icon: "error",
+        title: "Registro repetido",
+        text: "Esta persona ya fue cargada."
+    });
+}
 
 function primeraMayuscula(cadena) {
     if (cadena.length === 0) {
@@ -652,8 +711,8 @@ function validarDireccion() {
         mensajeError = "* Campo obligatorio";
     } else if (direccion.length > 30) {
         mensajeError = "No superar los 30 caracteres";
-    } else if (!/^[a-zA-ZÀ-ÿ0-9\s]+$/.test(direccion)) {  // Actualización para permitir acentos
-        mensajeError = "Ingrese solo letras y números";
+    } else if (!/^[a-zA-Z0-9\s]+$/.test(direccion)) {
+        mensajeError = "Ingrese solo letras";
     }
 
     errorMessageElement.textContent = mensajeError;
@@ -738,10 +797,8 @@ function validarRazonSocial() {
     const errorMessageElement = document.getElementById('error-razonSocial');
     let mensajeError = "";
 
-    if (razonSocial.length > 50) {  // Limite de 50 caracteres
+    if (razonSocial && razonSocial.length > 40) {
         mensajeError = "No superar los 50 caracteres";
-    } else if (razonSocial && !/^[a-zA-ZÀ-ÿ0-9\s]+$/.test(razonSocial)) {  
-        mensajeError = "Ingrese solo letras y números";
     }
 
     errorMessageElement.textContent = mensajeError;
@@ -917,8 +974,4 @@ document.getElementById('DNI').addEventListener('input', () => {
 document.getElementById('estado').addEventListener('blur', validarEstado);
 document.getElementById('estado').addEventListener('input', () => {
     document.getElementById('error-estado').textContent = "";
-});
-
-document.querySelector('.btn-close').addEventListener('click', function () {
-    location.reload();
 });

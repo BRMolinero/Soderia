@@ -129,7 +129,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
 /* Cliente */
 /* Traer los datos del cliente, eso ya debería estar*/
+/* pero hay que concatenar el apellido y el nombre */
 
 /* el resto que hay que traer está en secundarias */
+
 
 

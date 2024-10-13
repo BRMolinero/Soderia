@@ -18,6 +18,7 @@
     <script src="./js/barras.js" defer></script>
     <script src="./js/scripts.js" defer></script>
     <script src="./js/secundarias.js" defer></script>
+    <!-- <script src="./js/prueba.js" defer></script> -->
     <script src="./js/clientes.js" defer></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
@@ -46,25 +47,27 @@
 
                 <div class="row ">
                     <!-- Contenedor para los filtros -->
-                    <div class="col-lg-4 col-md-5 col-sm-8 col-8">
+                    <div class="col-lg-4 col-md-8 col-sm-8 col-8">
                         <div class="d-flex flex-column scale">
                             <div class="input-group">
                                 <div class="search-container text-primary">
-                                    <input type="text" id="filtroNombre" class="form-control" placeholder="Nombre, Apellido, Razón Social">
+                                    <input type="text" id="filtroNombre" class="form-control"
+                                        placeholder="Nombre, Apellido, Razón Social">
                                     <div class="scale mt-2">
-                                        <button id="btnFiltrar" class="btn btn-outline-primary small" style="width: 45px; height: 45px;"><i class="bi bi-search"></i></button>
+                                        <button id="btnFiltrar" class="btn btn-outline-primary small"
+                                            style="width: 45px; height: 45px;"><i class="bi bi-search"></i></button>
                                     </div>
-                                    
+
                                 </div>
-                                
-                                
+
+
                             </div>
                             <div class="col">
                                 <!-- Botón de Filtrar -->
-                                
+
                             </div>
                         </div>
-
+                 
                         <!-- Filtro por Estado -->
                         <!--    <div class="d-flex flex-column scale">
                             <select id="filtroEstado" class="form-select custom-select">
@@ -82,7 +85,7 @@
                                 <option value="rosario">Rosario</option>
                             </select>
                         </div> -->
-                     
+
 
                     </div>
                 </div>
@@ -91,27 +94,7 @@
                 <table id="tablaClientes" class="table">
                     <!-- Aquí va la tabla que se completa con la base de datos -->
                 </table>
-                <!-- Contenedor para el select y la paginación -->
-                <!-- <div class="row align-items-center justify-content-end me-1">
 
-                    <div class="col-lg-8 col-md-7 col-sm-4 col-4 d-flex align-items-center justify-content-end">
-                        <div class="d-flex  me-2 mt-3">
-                            <select id="rowsPerPage" class="form-select text-primary scale">
-                                <option value="5">5</option>
-                                <option value="10" selected>10</option>
-                                <option value="15">15</option>
-                                <option value="20">20</option>
-                                <option value="50">50</option>
-                            </select>
-                        </div>
-
-                        <nav aria-label="Page navigation scale">
-                            <ul class="pagination scale" id="pagination">
-
-                            </ul>
-                        </nav>
-                    </div>
-                </div> -->
             </div>
 
 
@@ -171,37 +154,43 @@
                         <input type="hidden" id="clienteId">
                         <div class="col-md-6 col-sm-6 col-6 mb-3">
                             <label for="apellido" class="required">Apellidos</label>
-                            <input class="form-control" id="apellido" placeholder="Pérez" required>
+                            <input class="form-control" id="apellido" required>
+                            <div class="error-message" id="error-apellido"></div>
                         </div>
                         <div class="col-md-6 col-sm-6 col-6 mb-3">
                             <label for="nombre" class="required">Nombres</label>
-                            <input class="form-control" id="nombre" placeholder="Juan" required>
+                            <input class="form-control" id="nombre" required>
+                            <div class="error-message" id="error-nombre"></div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6 col-sm-9 mb-3">
                             <label for="direccion" class="required">Calle</label>
-                            <input class="form-control" id="direccion" placeholder="Vélez Sarsfield" required>
+                            <input class="form-control" id="direccion" required>
+                            <div class="error-message" id="error-direccion"></div>
                         </div>
                         <div class="col-md-2 col-sm-3 col-4 col-xs-1 mb-3">
                             <label for="numero" class="required">Número</label>
-                            <input class="form-control" id="numero" placeholder="123" required>
+                            <input class="form-control" id="numero" required>
+                            <div class="error-message" id="error-numero"></div>
                         </div>
                         <div class="col-md-2 col-sm-2 col-4 mb-3">
                             <label for="piso" class="">Piso</label>
-                            <input class="form-control" id="piso" placeholder="4">
+                            <input class="form-control" id="piso">
+                            <div class="error-message" id="error-piso"></div>
                         </div>
                         <div class="col-md-2 col-sm-3 col-4 mb-3">
                             <label for="departamento" class="">N° Dpto.</label>
-                            <input class="form-control" id="departamento" placeholder="5A">
+                            <input class="form-control" id="departamento">
+                            <div class="error-message" id="error-departamento"></div>
                         </div>
 
-                        <!--  -->
                         <div class="dropdown-container col-md-4 col-sm-7 col-6 mb-3">
                             <label for="ciudad" class="required">Localidad</label>
                             <select class="form-select custom-select" id="ciudad" required>
                                 <!-- <option value="" selected disabled>Seleccione Localidad</option> -->
                             </select>
+                            <div class="error-message" id="error-ciudad"></div>
                         </div>
 
                         <div class="dropdown-container col-md-4 col-sm-6 col-6 mb-3">
@@ -209,6 +198,7 @@
                             <select class="form-select custom-select" id="zona" required disabled>
                                 <option value="" selected disabled>Seleccione una Zona</option>
                             </select>
+                            <div class="error-message" id="error-zona"></div>
                         </div>
 
                         <div class="dropdown-container col-md-4 col-sm-6 col-6 mb-3">
@@ -216,12 +206,13 @@
                             <select class="form-select custom-select" id="tipoCliente" required>
                                 <!-- <option value="" selected disabled>Seleccione Tipo</option> -->
                             </select>
+                            <div class="error-message" id="error-tipoCliente"></div>
                         </div>
-                        <!--  -->
 
                         <div class="col-md-4 col-sm-12 col-6 mb-3">
                             <label for="razonSocial" class="">Razón Social</label>
-                            <input class="form-control" id="razonSocial" placeholder="Nombre de la Empresa">
+                            <input class="form-control" id="razonSocial">
+                            <div class="error-message" id="error-razonSocial"></div>
                         </div>
 
                         <div class="dropdown-container col-md-4 col-sm-6 col-7 mb-3">
@@ -229,28 +220,39 @@
                             <select class="form-select custom-select" id="condicionFiscal" required>
                                 <option value="" selected disabled>Seleccione Cond. Fiscal</option>
                             </select>
+                            <div class="error-message" id="error-condicionFiscal"></div>
                         </div>
 
                         <div class="col-md-4 col-sm-6 col-5 mb-3">
                             <label for="cuit" class="">CUIT/CUIL</label>
-                            <input class="form-control" id="cuit" placeholder="20-12345678-9" required>
+                            <input class="form-control" id="cuit" required>
+                            <div class="error-message" id="error-cuit"></div>
                         </div>
+
                         <div class="col-md-4 col-sm-8 col-7 mb-3">
                             <label for="email" class="">Correo Electrónico</label>
-                            <input class="form-control" id="email" placeholder="juanperez@gmail.com" required>
+                            <input class="form-control" id="email" required>
+                            <div class="error-message" id="error-email"></div>
                         </div>
+
                         <div class="col-md-3 col-sm-4 col-5 mb-3">
                             <label for="telefono" class="required">Celular</label>
-                            <input class="form-control" id="telefono" placeholder="35646543210" required>
+                            <input class="form-control" id="telefono" required>
+                            <div class="error-message" id="error-telefono"></div>
                         </div>
+
                         <div class="col-md-3 col-sm-6 col-7 mb-3">
                             <label for="fechaNacimiento" class="required">Fecha de Nacimiento</label>
                             <input class="form-control" id="fechaNacimiento" type="date" required>
+                            <div class="error-message" id="error-fechaNacimiento"></div>
                         </div>
+
                         <div class="col-md-2 col-sm-6 col-5 mb-3">
                             <label for="DNI" class="">DNI</label>
-                            <input class="form-control" id="DNI" placeholder="12345678" required>
+                            <input class="form-control" id="DNI" required>
+                            <div class="error-message" id="error-DNI"></div>
                         </div>
+
                         <div class="dropdown-container col-md-4 col-sm-6 col-7 mb-3">
                             <label for="estado" class="required">Estado</label>
                             <select class="form-select custom-select" id="estado" required>
@@ -258,10 +260,11 @@
                                 <option value="1">Activo</option>
                                 <option value="0">Inactivo</option>
                             </select>
+                            <div class="error-message" id="error-estado"></div>
                         </div>
                     </div>
-
                 </form>
+
             </div>
             <div class="modal-footer">
 
@@ -274,7 +277,6 @@
         </div>
     </div>
 </div>
-
 
 <!-- Modal de Colsulta de Datos -->
 <div class="modal fade scale" id="editarClienteModal" tabindex="-1" aria-labelledby="edtarClienteModalLabel"
@@ -293,36 +295,35 @@
                     <div class="row">
                         <div class="col-md-6 col-sm-6 col-6 mb-3">
                             <label for="apellido" class="required">Apellidos</label>
-                            <input class="form-control" id="apellido" placeholder="Pérez" required>
+                            <input class="form-control" id="apellido" required>
                         </div>
                         <div class="col-md-6 col-sm-6 col-6 mb-3">
                             <label for="nombre" class="required">Nombres</label>
-                            <input class="form-control" id="nombre" placeholder="Juan" required>
+                            <input class="form-control" id="nombre" required>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6 col-sm-9 mb-3">
                             <label for="direccion" class="required">Calle</label>
-                            <input class="form-control" id="direccion" placeholder="Vélez Sarsfield" required>
+                            <input class="form-control" id="direccion" required>
                         </div>
                         <div class="col-md-2 col-sm-3 col-4 col-xs-1 mb-3">
                             <label for="numero" class="required">Número</label>
-                            <input class="form-control" id="numero" placeholder="123" required>
+                            <input class="form-control" id="numero" required>
                         </div>
                         <div class="col-md-2 col-sm-2 col-4 mb-3">
                             <label for="piso" class="">Piso</label>
-                            <input class="form-control" id="piso" placeholder="4">
+                            <input class="form-control" id="piso">
                         </div>
                         <div class="col-md-2 col-sm-3 col-4 mb-3">
                             <label for="departamento" class="">N° Dpto.</label>
-                            <input class="form-control" id="departamento" placeholder="5A">
+                            <input class="form-control" id="departamento">
                         </div>
 
-                        <!--  -->
                         <div class="dropdown-container col-md-4 col-sm-7 col-6 mb-3">
                             <label for="ciudad" class="required">Localidad</label>
                             <select class="form-select custom-select" id="ciudad" required>
-                                <!-- <option value="" selected disabled>Seleccione Localidad</option> -->
+
                             </select>
                         </div>
 
@@ -336,14 +337,13 @@
                         <div class="dropdown-container col-md-4 col-sm-6 col-6 mb-3">
                             <label for="tipoCliente" class="required">Tipo de Cliente</label>
                             <select class="form-select custom-select" id="tipoCliente" required>
-                                <!-- <option value="" selected disabled>Seleccione Tipo</option> -->
+
                             </select>
                         </div>
-                        <!--  -->
 
                         <div class="col-md-4 col-sm-12 col-6 mb-3">
                             <label for="razonSocial" class="">Razón Social</label>
-                            <input class="form-control" id="razonSocial" placeholder="Nombre de la Empresa">
+                            <input class="form-control" id="razonSocial">
                         </div>
 
                         <div class="dropdown-container col-md-4 col-sm-6 col-7 mb-3">
@@ -355,15 +355,15 @@
 
                         <div class="col-md-4 col-sm-6 col-5 mb-3">
                             <label for="cuit" class="">CUIT/CUIL</label>
-                            <input class="form-control" id="cuit" placeholder="20-12345678-9" required>
+                            <input class="form-control" id="cuit">
                         </div>
                         <div class="col-md-4 col-sm-8 col-7 mb-3">
                             <label for="email" class="">Correo Electrónico</label>
-                            <input class="form-control" id="email" placeholder="juanperez@gmail.com" required>
+                            <input class="form-control" id="email" required>
                         </div>
                         <div class="col-md-3 col-sm-4 col-5 mb-3">
                             <label for="telefono" class="required">Celular</label>
-                            <input class="form-control" id="telefono" placeholder="35646543210" required>
+                            <input class="form-control" id="telefono" required>
                         </div>
                         <div class="col-md-3 col-sm-6 col-7 mb-3">
                             <label for="fechaNacimiento" class="required">Fecha de Nacimiento</label>
@@ -371,7 +371,7 @@
                         </div>
                         <div class="col-md-2 col-sm-6 col-5 mb-3">
                             <label for="DNI" class="">DNI</label>
-                            <input class="form-control" id="DNI" placeholder="12345678" required>
+                            <input class="form-control" id="DNI">
                         </div>
                         <div class="dropdown-container col-md-4 col-sm-6 col-7 mb-3">
                             <label for="estado" class="required">Estado</label>
@@ -397,127 +397,6 @@
         </div>
     </div>
 </div>
-
-<!-- Modal de Edición -->
-<!-- <div class="modal fade scale" id="editarClienteModal" tabindex="-1" aria-labelledby="editarClienteModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="editarClienteModalLabel">
-                    <i class="bi bi-pencil-square p-1"></i> Editar Cliente
-                </h4>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-
-                <form id="editarFormularioPersonal" class="formularioPersonal">
-                    <div class="row">
-                        <div class="col-md-6 col-sm-6 col-6 mb-3">
-                            <label for="apellido" class="required">Apellidos</label>
-                            <input class="form-control" id="apellido" placeholder="Pérez" required>
-                        </div>
-                        <div class="col-md-6 col-sm-6 col-6 mb-3">
-                            <label for="nombre" class="required">Nombres</label>
-                            <input class="form-control" id="nombre" placeholder="Juan" required>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 col-sm-9 mb-3">
-                            <label for="direccion" class="required">Calle</label>
-                            <input class="form-control" id="direccion" placeholder="Vélez Sarsfield" required>
-                        </div>
-                        <div class="col-md-2 col-sm-3 col-4 col-xs-1 mb-3">
-                            <label for="numero" class="required">Número</label>
-                            <input class="form-control" id="numero" placeholder="123" required>
-                        </div>
-                        <div class="col-md-2 col-sm-2 col-4 mb-3">
-                            <label for="piso" class="">Piso</label>
-                            <input class="form-control" id="piso" placeholder="4">
-                        </div>
-                        <div class="col-md-2 col-sm-3 col-4 mb-3">
-                            <label for="departamento" class="">N° Dpto.</label>
-                            <input class="form-control" id="departamento" placeholder="5A">
-                        </div>
-
-                       
-                        <div class="dropdown-container col-md-4 col-sm-7 col-6 mb-3">
-                            <label for="ciudad" class="required">Localidad</label>
-                            <select class="form-select custom-select" id="ciudad" required>
-                                
-                            </select>
-                        </div>
-
-                        <div class="dropdown-container col-md-4 col-sm-6 col-6 mb-3">
-                            <label for="zona" class="required">Zona</label>
-                            <select class="form-select custom-select" id="zona" required disabled>
-                                <option value="" selected disabled>Seleccione una Zona</option>
-                            </select>
-                        </div>
-
-                        <div class="dropdown-container col-md-4 col-sm-6 col-6 mb-3">
-                            <label for="tipoCliente" class="required">Tipo de Cliente</label>
-                            <select class="form-select custom-select" id="tipoCliente" required>
-                              
-                            </select>
-                        </div>
-                  
-
-                        <div class="col-md-4 col-sm-12 col-6 mb-3">
-                            <label for="razonSocial" class="">Razón Social</label>
-                            <input class="form-control" id="razonSocial" placeholder="Nombre de la Empresa">
-                        </div>
-
-                        <div class="dropdown-container col-md-4 col-sm-6 col-7 mb-3">
-                            <label for="condicionFiscal" class="required">Condición Fiscal</label>
-                            <select class="form-select custom-select" id="condicionFiscal" required>
-                                <option value="" selected disabled>Seleccione Cond. Fiscal</option>
-                            </select>
-                        </div>
-
-                        <div class="col-md-4 col-sm-6 col-5 mb-3">
-                            <label for="cuit" class="">CUIT/CUIL</label>
-                            <input class="form-control" id="cuit" placeholder="20-12345678-9" required>
-                        </div>
-                        <div class="col-md-4 col-sm-8 col-7 mb-3">
-                            <label for="email" class="">Correo Electrónico</label>
-                            <input class="form-control" id="email" placeholder="juanperez@gmail.com" required>
-                        </div>
-                        <div class="col-md-3 col-sm-4 col-5 mb-3">
-                            <label for="telefono" class="required">Celular</label>
-                            <input class="form-control" id="telefono" placeholder="35646543210" required>
-                        </div>
-                        <div class="col-md-3 col-sm-6 col-7 mb-3">
-                            <label for="fechaNacimiento" class="required">Fecha de Nacimiento</label>
-                            <input class="form-control" id="fechaNacimiento" type="date" required>
-                        </div>
-                        <div class="col-md-2 col-sm-6 col-5 mb-3">
-                            <label for="DNI" class="">DNI</label>
-                            <input class="form-control" id="DNI" placeholder="12345678" required>
-                        </div>
-                        <div class="dropdown-container col-md-4 col-sm-6 col-7 mb-3">
-                            <label for="estado" class="required">Estado</label>
-                            <select class="form-select custom-select" id="estado" required>
-                                <option value="" selected disabled>Seleccione Estado</option>
-                                <option value="1">Activo</option>
-                                <option value="0">Inactivo</option>
-                            </select>
-                        </div>
-                    </div>
-
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary bg-gradient" id="guardarBotonEditar"
-                    data-bs-dismiss="modal">
-                    <i class="bi bi-save"></i> Guardar
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
- -->
-
 
 </div>
 </div>
