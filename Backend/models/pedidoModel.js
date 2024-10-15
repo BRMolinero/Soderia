@@ -96,12 +96,48 @@ const pedido = {
         idFrecuencia,
         idModoPago,
         idEstadoPedido,
+        detallesPedido
       } = pedido;
+
+      const [clienteResult] = await db.query(
+        'SELECT idTipoCliente FROM cliente WHERE idCliente = ?',
+        [idCliente]
+      );
+
+      if (clienteResult.length === 0) {
+        throw new Error(`No se encontró el cliente con idCliente ${idCliente}`);
+      }
+
+      const idTipoCliente = clienteResult[0].idTipoCliente;
 
       const [result] = await db.query(
         'INSERT INTO pedido (numeroPedido, fechaPedido, idCliente, direccionEntregaDiferente, recurrente, idDiaEntrega, idFrecuencia, idModoPago, idEstadoPedido) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
         [numeroPedido, fechaPedido, idCliente, direccionEntregaDiferente, recurrente, idDiaEntrega, idFrecuencia, idModoPago, idEstadoPedido]
       );
+
+      const idPedido = result.insertId;
+
+      for (const detalle of detallesPedido) {
+        const { idProducto, cantidad } = detalle;
+
+        // Buscar el idPrecioUnitario más reciente y activo para el producto dado y el idTipoCliente del cliente
+        const [precioResult] = await db.query(
+          'SELECT idPrecioUnitario FROM preciounitario WHERE idProducto = ? AND idTipoCliente = ? AND estado = 1 ORDER BY fechaActualizacion DESC LIMIT 1',
+          [idProducto, idTipoCliente]
+        );
+
+        if (precioResult.length === 0) {
+          throw new Error(`No se encontró un idPrecioUnitario activo para el producto con idProducto ${idProducto} y idTipoCliente ${idTipoCliente}`);
+        }
+
+        const idPrecioUnitario = precioResult[0].idPrecioUnitario;
+
+        // Insertar el detalle del pedido con el idPrecioUnitario encontrado
+        await db.query(
+          'INSERT INTO detallePedido (idPedido, idPrecioUnitario, cantidad) VALUES (?, ?, ?)',
+          [idPedido, idPrecioUnitario, cantidad]
+        );
+      }
 
       return { id: result.insertId, ...pedido };
     } catch (error) {

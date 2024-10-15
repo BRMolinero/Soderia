@@ -8,6 +8,7 @@ const pedidoRoutes = require('./routes/pedidoRoutes');
 /* const recorridoRoutes = require('./routes/recorridoRoutes');
 const usuarioRoutes = require('./routes/usuarioRoutes'); */
 const secundariasRoutes = require('./routes/secundariasRoutes');
+const productosRoutes = require('./routes/productosRoutes');
 
 const app = express();
 
@@ -17,7 +18,8 @@ app.use(bodyParser.json());
 
 // Rutas
 app.use('/api/cliente', clienteRoutes);
-app.use('/api/pedido', pedidoRoutes); 
+app.use('/api/pedido', pedidoRoutes);
+app.use('/api/producto', productosRoutes);
 //app.use('/api/producto', productoRoutes); 
 /* app.use('/api/recorrido', recorridoRoutes);
 app.use('/api/usuario', usuarioRoutes); */

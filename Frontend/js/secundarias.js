@@ -154,3 +154,92 @@ async function cargarCondicionFiscal(action, cliente = null) {
         console.error('Error al cargar las condiciones fiscales:', error);
     }
 }
+
+/* Frecuencia */
+
+async function cargarFrecuencia() {
+    try {
+        const response = await axios.get('http://localhost:3000/api/secundarias/frecuencia');
+        
+        const selectElement = document.getElementById('frecuenciaSelect');
+        selectElement.innerHTML = ''; // Limpiar las opciones actuales del select
+
+        const FrecuenciasActivas = response.data.filter(frecuencia => frecuencia.estado === 1);
+
+        FrecuenciasActivas.forEach(frecuencia => {
+            const option = document.createElement('option');
+            option.value = frecuencia.idFrecuencia;
+            option.textContent = frecuencia.frecuencia;
+            selectElement.appendChild(option);
+        });
+    } catch (error) {
+        console.error('Error al cargar las frecuencias:', error);
+    }
+}
+
+/* Estado Pedido */
+async function cargarEstadoPedido() {
+    try {
+        const response = await axios.get('http://localhost:3000/api/secundarias/estado-pedido');
+        
+        const selectElement = document.getElementById('estadoSelect');
+        selectElement.innerHTML = ''; // Limpiar las opciones actuales del select
+
+        response.data.forEach(estadoPedido => {
+            const option = document.createElement('option');
+            option.value = estadoPedido.idEstadoPedido;
+            option.textContent = estadoPedido.estadoPedido;
+            selectElement.appendChild(option);
+        });
+    } catch (error) {
+        console.error('Error al cargar los estados de pedido:', error);
+    }
+}
+
+/* DiaEntrega */
+
+async function cargarDiaDeEntrega() {
+    try {
+        const response = await axios.get('http://localhost:3000/api/secundarias/dia');
+        
+        const selectElement = document.getElementById('diaPedido');
+        selectElement.innerHTML = ''; // Limpiar las opciones actuales del select
+
+        const DiasDeEntregaActivos = response.data.filter(diaEntrega => diaEntrega.estado === 1);
+
+        DiasDeEntregaActivos.forEach(diaEntrega => {
+            const option = document.createElement('option');
+            option.value = diaEntrega.idDiaEntrega;
+            option.textContent = diaEntrega.diaEntrega;
+            selectElement.appendChild(option);
+        });
+    } catch (error) {
+        console.error('Error al cargar los días de entrega:', error);
+    }
+}
+
+/* ModoPago */
+
+async function cargarModoPago() {
+    try {
+        const response = await axios.get('http://localhost:3000/api/secundarias/modo-pago');
+        
+        const selectElement = document.getElementById('medioPagoSelect');
+        selectElement.innerHTML = ''; // Limpiar las opciones actuales del select
+
+        const ModoPagoActivos = response.data.filter(cliente => cliente.estado === 1);
+
+        ModoPagoActivos.forEach(modoPago => {
+            const option = document.createElement('option');
+            option.value = modoPago.idModoPago;
+            option.textContent = modoPago.modoPago;
+            selectElement.appendChild(option);
+        });
+    } catch (error) {
+        console.error('Error al cargar los modos de pago:', error);
+    }
+}
+
+
+/* Estado Pago */
+

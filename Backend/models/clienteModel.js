@@ -39,16 +39,19 @@ const cliente = {
             OR c.razonSocial LIKE ?
           )
         `;
+        query += `
+          order by c.apellido asc
+        `;
         const searchValue = `%${filter.nombre}%`;
         queryParams.push(searchValue, searchValue, searchValue); // Se aplica el mismo valor a los tres campos
       }
-      console.log("AAAAAAAAAAAAAAAAA" + filter.NOMBRE)
+     /*  console.log("AAAAAAAAAAAAAAAAA" + filter.NOMBRE) */
       // Filtrar por estado
       if (filter.estado) {
         query += ' AND c.estado = ?';
         queryParams.push(Number(filter.estado)); // Suponiendo que 'estado' es un valor exacto
       }
-      console.log("AAAAAAAAAAAAAAAAA" + filter.estado)
+    /*   console.log("AAAAAAAAAAAAAAAAA" + filter.estado) */
 
       // if (filter.localidad) {
       //   query += ' AND l.nombre = ?';

@@ -18,6 +18,8 @@
 
     <script src="./js/barras.js" defer></script>
     <script src="./js/scripts.js" defer></script>
+    <script src="./js/secundarias.js" defer></script>
+    <script src="./js/productos.js" defer></script>
     <script src="./js/pedido.js" defer></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
@@ -25,6 +27,7 @@
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" defer></script>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
 </head>
 
@@ -38,7 +41,7 @@
 
                     <!-- Botón para abrir el modal -->
                     <div class="d-flex justify-content-start mb-2">
-                        <button type="button" class="btn btn-primary me-3" data-bs-toggle="modal"
+                        <button id="nuevoPedido" type="button" class="btn btn-primary me-3" data-bs-toggle="modal"
                             data-bs-target="#pedidoModal">
                             <i class="fas fa-clipboard-list"></i> Nuevo
                         </button>
@@ -115,7 +118,7 @@
                 </div>
 
                 <div class="table-container table-responsive">
-                    <table class="table table-striped table-hover table-bordered" id="clientesTable">
+                    <table class="table table-striped table-hover table-bordered" id="pedidosTable">
                         <thead>
                             <tr class="fixed-row">
                                 <th>Numero Pedido</th>

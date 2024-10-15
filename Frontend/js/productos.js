@@ -22,8 +22,8 @@ async function cargarProductosTabla(filter = null) {
     }
 }
 
-function 
-agregarFilaProducto(tbody, producto) {
+function
+    agregarFilaProducto(tbody, producto) {
     const fila = document.createElement('tr');
 
     // Crear y agregar las celdas directamente
@@ -285,12 +285,12 @@ function precargarDatosProducto(producto) {
     document.getElementById('departamento').value = producto.numeroDepartamento;
     document.getElementById('email').value = producto.correoElectronico;
     document.getElementById('cuit').value = producto.cuitCuil,
-    document.getElementById('razonSocial').value = producto.razonSocial,
-    document.getElementById('estado').value = producto.estado,
-    document.getElementById('telefono').value = producto.telefono,
-    fechaNacimiento = formatearFecha(producto.fechaNacimiento);
+        document.getElementById('razonSocial').value = producto.razonSocial,
+        document.getElementById('estado').value = producto.estado,
+        document.getElementById('telefono').value = producto.telefono,
+        fechaNacimiento = formatearFecha(producto.fechaNacimiento);
     document.getElementById('fechaNacimiento').value = fechaNacimiento,
-    document.getElementById('DNI').value = producto.DNI;
+        document.getElementById('DNI').value = producto.DNI;
 }
 
 function formatearFecha(fecha) {
@@ -304,3 +304,22 @@ function formatearFecha(fecha) {
 }
 
 cargarProductosTabla();
+
+async function getProductosPedido(selectId = 'productoSelect0') {
+    try {
+        const response = await axios.get('http://localhost:3000/api/secundarias/producto');
+        console.log(response.data);
+
+        const selectElement = document.getElementById(selectId);
+        selectElement.innerHTML = '<option value="" disabled selected>Seleccione Producto</option>'; // Limpiar las opciones actuales del select
+
+        response.data.forEach(producto => {
+            const option = document.createElement('option');
+            option.value = producto.idProducto;
+            option.textContent = producto.nombre;
+            selectElement.appendChild(option);
+        });
+    } catch (error) {
+        console.error('Error al cargar los productos:', error);
+    }
+}
