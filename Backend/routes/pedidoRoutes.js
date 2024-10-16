@@ -8,6 +8,9 @@ router.get('/', pedidoController.getAllPedido);
 // Obtener un Pedido por ID
 router.get('/:id', pedidoController.getPedidoById);
 
+// Obtener detalles de un Pedido por ID
+router.get('/:id/detalles', pedidoController.getDetallesPedidoByIdPedido);
+
 // Crear un nuevo Pedido
 router.post('/', pedidoController.createPedido);
 

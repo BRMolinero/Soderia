@@ -6,62 +6,32 @@ const pedido = {
       let query = `
       SELECT
         p.idPedido,
+        p.idCliente,
         p.numeroPedido,
         DATE_FORMAT(p.fechaPedido, '%d-%m-%Y') AS fechaPedido, 
         c.nombre as nombreCliente,
+        c.apellido as apellidoCliente,
         p.direccionEntregaDiferente,
         p.recurrente,
         de.nombre as diaEntrega,
         f.nombre as frecuencia,
         mp.nombre as modoPago,
-        ep.nombre as estadoPedido
+        ep.nombre as estadoPedido,
+        c.calle as calle,
+        c.numeroCalle as numeroCalle,
+        c.piso as piso,
+        c.numeroDepartamento as numeroDepartamento,
+        p.idEstadoPedido as idEstadoPedido
       FROM 
         pedido as p
         INNER JOIN cliente as c ON c.idCliente = p.idCliente
-        INNER JOIN diaEntrega as de ON p.idDiaEntrega = de.idDiaEntrega
-        INNER JOIN frecuencia as f ON p.idFrecuencia = f.idFrecuencia
+        LEFT JOIN diaEntrega as de ON p.idDiaEntrega = de.idDiaEntrega
+        LEFT JOIN frecuencia as f ON p.idFrecuencia = f.idFrecuencia
         INNER JOIN modoPago as mp ON p.idModoPago = mp.idModoPago
         INNER JOIN estadoPedido as ep ON p.idEstadoPedido = ep.idEstadoPedido
-      WHERE 1=1`;
+      WHERE 1=1
+      order by p.idEstadoPedido asc, p.fechaPedido asc`;
       const queryParams = [];
-      /* if (filter.nombre) {
-        query += `
-          AND (
-            c.nombre LIKE ?
-            OR c.apellido LIKE ?
-            OR c.razonSocial LIKE ?
-          )
-        `;
-        const searchValue = `%${filter.nombre}%`;
-        queryParams.push(searchValue, searchValue, searchValue); 
-      }
-      console.log("AAAAAAAAAAAAAAAAA" + filter.NOMBRE)
- 
-      if (filter.estado) {
-        query += ' AND c.estado = ?';
-        queryParams.push(Number(filter.estado)); 
-      }
-      console.log("AAAAAAAAAAAAAAAAA" + filter.estado) */
-
-      // if (filter.localidad) {
-      //   query += ' AND l.nombre = ?';
-      //   queryParams.push(filter.localidad);
-      // }
-
-      // if (filter.zona) {
-      //   query += ' AND z.nombre = ?';
-      //   queryParams.push(filter.zona);
-      // }
-
-      // if (filter.condicionFiscal) {
-      //   query += ' AND cf.nombre = ?';
-      //   queryParams.push(filter.condicionFiscal);
-      // }
-
-      // if (filter.tipoCliente) {
-      //   query += ' AND t.nombre = ?';
-      //   queryParams.push(filter.tipoCliente);
-      // }
 
       // Ejecutamos la consulta con los parámetros correspondientes
       const [rows] = await db.query(query, queryParams);
@@ -77,6 +47,46 @@ const pedido = {
   getById: async (id) => {
     const [rows] = await db.query('SELECT * FROM pedido WHERE idPedido = ? ', [id]);
     return rows[0];
+  },
+
+  getDetallesPedido: async (idPedido, idTipoCliente) => {
+    try {
+      // Paso 1: Obtener los detalles del pedido
+      const query = `
+        SELECT 
+          dp.cantidad,
+          pu.idProducto,
+          pu.monto,
+          p.nombre
+        FROM 
+          DetallePedido as dp
+        INNER JOIN 
+          PrecioUnitario as pu ON dp.idPrecioUnitario = pu.idPrecioUnitario
+        INNER JOIN 
+          Producto as p ON pu.idProducto = p.idProducto
+        WHERE 
+          dp.idPedido = ? AND pu.idTipoCliente = ?
+      `;
+  
+      const [detalles] = await db.query(query, [idPedido, idTipoCliente]);
+  
+      // Verificar si se encontraron detalles
+      if (!detalles || detalles.length === 0) {
+        return null; // O lanzar un error, según lo que prefieras
+      }
+  
+      // Formar el resultado
+      const detallesCompletos = detalles.map(detalle => ({
+        producto: detalle.nombre || 'Producto no encontrado',
+        cantidad: detalle.cantidad,
+        precioUnitario: detalle.monto,
+        subtotal: detalle.cantidad * detalle.monto,
+      }));
+  
+      return detallesCompletos;
+    } catch (err) {
+      throw new Error(err.message); // Manejo de errores
+    }
   },
 
   create: async (pedido) => {

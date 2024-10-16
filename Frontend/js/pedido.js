@@ -167,6 +167,7 @@ function agregarOptionCliente(cliente) {
 
 botonNuevoPedido = document.getElementById("nuevoPedido");
 botonNuevoPedido.addEventListener("click", function () {
+    document.getElementById('pedidoModalLabel').innerHTML = '<i class="bi bi-person-plus p-1"></i>Nuevo Pedido';
     buscarClientes();
     cargarModoPago();
     cargarEstadoPedido();
@@ -177,7 +178,7 @@ botonNuevoPedido.addEventListener("click", function () {
 
 botonGuardarPedido = document.getElementById("savePedido");
 botonGuardarPedido.addEventListener("click", function () {
-
+    nuevoPedido();
 });
 
 async function nuevoPedido() {
@@ -187,32 +188,22 @@ async function nuevoPedido() {
     // if (!validacionCampos()) return;
 
     try {
-        const response = await axios.get(consultaUrl);
-        if (response.data.length > 0) {
-            // Si hay resultados, el cliente ya existe
+        // Si no existe, procede a guardar el nuevo cliente
+        const saveResponse = await axios.post(apiUrl, clienteData);
+        if (saveResponse.status === 200 || saveResponse.status === 201) {
+            console.log('Cliente guardado:', saveResponse.data);
             Swal.fire({
-                icon: 'warning',
-                title: 'Cliente ya existente',
-                text: 'Ya existe un cliente con los mismos datos.',
+                icon: 'success',
+                title: 'Pedido Guardado',
+                text: 'El pedido se ha guardado correctamente.',
                 confirmButtonText: 'Entendido'
+            }).then(() => {
+                location.reload();
             });
         } else {
-            // Si no existe, procede a guardar el nuevo cliente
-            const saveResponse = await axios.post(apiUrl, clienteData);
-            if (saveResponse.status === 200 || saveResponse.status === 201) {
-                console.log('Cliente guardado:', saveResponse.data);
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Pedido Guardado',
-                    text: 'El pedido se ha guardado correctamente.',
-                    confirmButtonText: 'Entendido'
-                }).then(() => {
-                    location.reload();
-                });
-            } else {
-                throw new Error('Error al guardar el pedido: ' + saveResponse.status);
-            }
+            throw new Error('Error al guardar el pedido: ' + saveResponse.status);
         }
+
     } catch (error) {
         console.error('Error al procesar la solicitud:', error.response ? error.response.data : error.message);
         Swal.fire({
@@ -229,18 +220,23 @@ function obtenerDatosPedido() {
     const productosElements = document.querySelectorAll('.producto-row');
 
     // Iterar sobre cada producto en la sección de detalle del pedido
-    productosElements.forEach((productoRow, index) => {
+    productosElements.forEach((productoRow) => {
         const productoSelect = productoRow.querySelector('.producto-select');
         const cantidadInput = productoRow.querySelector('.cantidad-input');
 
         const idProducto = parseInt(productoSelect.value, 10);
         const cantidad = parseInt(cantidadInput.value, 10);
 
-        productos.push({ idProducto, cantidad });
+        // Solo agregar productos que tengan un ID válido y una cantidad mayor a cero
+        if (!isNaN(idProducto) && !isNaN(cantidad) && cantidad > 0) {
+            productos.push({ idProducto, cantidad });
+        }
     });
 
-    return {
-        numeroPedido: '', // Puedes asignar un valor o generar uno dinámicamente si es necesario
+    // Formatear el objeto para que coincida con el formato esperado por Postman
+
+    const datosPedido = {
+        numeroPedido: (Math.floor(Math.random() * 1000000)).toString(),
         fechaPedido: document.getElementById('fechaPedido').value,
         idCliente: parseInt(document.getElementById('clienteSelect').value, 10),
         direccionEntregaDiferente: document.getElementById('diferenteDireccionCheck').checked ? document.getElementById('direccionEntrega').value : null,
@@ -249,32 +245,38 @@ function obtenerDatosPedido() {
         idFrecuencia: document.getElementById('recurrenteCheck').checked ? parseInt(document.getElementById('frecuenciaSelect').value, 10) : null,
         idModoPago: parseInt(document.getElementById('medioPagoSelect').value, 10),
         idEstadoPedido: parseInt(document.getElementById('estadoSelect').value, 10),
-        productos: productos // Lista de productos seleccionados
+        detallesPedido: productos // Lista de productos seleccionados
     };
+
+    console.log('Datos del pedido formateados:', datosPedido); // Para verificar que los datos estén correctos
+
+    console.log(datosPedido);
+    return datosPedido;
+    // const clienteData = {
+    //     "numeroPedido": "777",
+    //     "fechaPedido": "2024-10-15",
+    //     "idCliente": 27,
+    //     "direccionEntregaDiferente": "Calle Falsa 123",
+    //     "recurrente": true,
+    //     "idDiaEntrega": 3,
+    //     "idFrecuencia": 1,
+    //     "idModoPago": 2,
+    //     "idEstadoPedido": 1,
+    //     "detallesPedido": [
+    //         {
+    //             "idProducto": 27,
+    //             "cantidad": 1
+    //         },
+    //         {
+    //             "idProducto": 26,
+    //             "cantidad": 2
+    //         }
+    //     ]
+    // };
+
+    // return clienteData;
 }
 
-
-
-// function obtenerDatosPedido() {
-//     return {
-//         nombre: document.getElementById('nombre').value,
-//         apellido: document.getElementById('apellido').value,
-//         telefono: document.getElementById('telefono').value,
-//         correoElectronico: document.getElementById('email').value,
-//         calle: document.getElementById('direccion').value,
-//         numeroCalle: parseInt(document.getElementById('numero').value, 10),
-//         piso: parseInt(document.getElementById('piso').value, 10),
-//         numeroDepartamento: document.getElementById('departamento').value,
-//         fechaNacimiento: document.getElementById('fechaNacimiento').value,
-//         DNI: document.getElementById('DNI').value,
-//         razonSocial: document.getElementById('razonSocial').value,
-//         idCondicionFiscal: parseInt(document.getElementById('condicionFiscal').value, 10),
-//         cuitCuil: document.getElementById('cuit').value,
-//         idZona: parseInt(document.getElementById('zona').value, 10),
-//         idTipoCliente: parseInt(document.getElementById('tipoCliente').value, 10),
-//         estado: parseInt(document.getElementById('estado').value, 10)
-//     };
-// }
 
 async function cargarPedidosTabla(filter = null) {
     try {
@@ -305,9 +307,11 @@ async function cargarPedidosTabla(filter = null) {
         // Iterar sobre cada cliente y agregar a la tabla
         pedidosOrdenados.forEach(pedido => agregarFilaPedido(tbody, pedido));
     } catch (error) {
-        console.error('Error al cargar los clientes:', error);
+        console.error('Error al cargar los pedidos:', error);
     }
 }
+
+cargarPedidosTabla();
 
 function agregarFilaPedido(tbody, pedido) {
     const fila = document.createElement('tr');
@@ -327,11 +331,15 @@ function agregarFilaPedido(tbody, pedido) {
     fila.appendChild(celda);
 
     celda = document.createElement('td');
-    celda.textContent = pedido.nombreCliente;
+    celda.textContent = pedido.apellidoCliente + ", " + pedido.nombreCliente;
     fila.appendChild(celda);
 
     celda = document.createElement('td');
-    celda.textContent = pedido.direccionEntregaDiferente ? 'Sí' : 'No';
+    celda.textContent = pedido.estadoPedido;
+    fila.appendChild(celda);
+
+    celda = document.createElement('td');
+    celda.textContent = pedido.direccionEntregaDiferente ? pedido.direccionEntregaDiferente : '-';
     fila.appendChild(celda);
 
     celda = document.createElement('td');
@@ -339,20 +347,23 @@ function agregarFilaPedido(tbody, pedido) {
     fila.appendChild(celda);
 
     celda = document.createElement('td');
-    celda.textContent = pedido.diaEntrega;
+    celda.textContent = pedido.frecuencia ? pedido.frecuencia : '-';
     fila.appendChild(celda);
 
     celda = document.createElement('td');
-    celda.textContent = pedido.frecuencia;
+    celda.textContent = pedido.diaEntrega ? pedido.diaEntrega : '-';
     fila.appendChild(celda);
 
     celda = document.createElement('td');
     celda.textContent = pedido.modoPago;
     fila.appendChild(celda);
 
-    celda = document.createElement('td');
-    celda.textContent = pedido.estadoPedido;
-    fila.appendChild(celda);
+    const valoresPedido = [
+        pedido.estadoPedido,
+        pedido.diaEntrega,
+        pedido.frecuencia,
+        pedido.modoPago
+    ];
 
     //-------------------------------------
     // Crear celda de acciones
@@ -362,6 +373,23 @@ function agregarFilaPedido(tbody, pedido) {
     // Crear el contenedor para los botones
     const divBotones = document.createElement('div');
     divBotones.classList.add('d-flex', 'align-items-center');
+
+    //Crear botón Más Información
+    const botonDetallePedido = document.createElement("button");
+    botonDetallePedido.classList.add('btn', 'btn-sm', 'btn-outline-primary', 'me-1'); // Añadir clases de Bootstrap
+    botonDetallePedido.setAttribute('type', 'button'); // Atributos de tipo
+    botonDetallePedido.setAttribute('title', 'Detalle Pedido'); // Tooltip
+    botonDetallePedido.setAttribute('data-bs-toggle', 'modal'); // Para abrir modal de Bootstrap
+    botonDetallePedido.setAttribute('data-bs-target', '#infoModal'); // Target del modal
+    botonDetallePedido.setAttribute('data-id-pedido', pedido.idPedido);
+
+    botonDetallePedido.addEventListener('click', () => llenarModalConDatos(valoresPedido, pedido.idPedido, pedido.idCliente));
+
+    const icono = document.createElement("i");
+    icono.classList.add('bi', 'bi-info-circle');
+
+    // Añadir el ícono al botón
+    botonDetallePedido.appendChild(icono);
 
     // Crear botón Modificar
     const botonModificar = document.createElement("button");
@@ -411,6 +439,7 @@ function agregarFilaPedido(tbody, pedido) {
     }
 
     // Agregar los botones al div contenedor
+    divBotones.appendChild(botonDetallePedido);
     divBotones.appendChild(botonModificar);
     divBotones.appendChild(botonEliminar);
 
@@ -424,166 +453,95 @@ function agregarFilaPedido(tbody, pedido) {
     tbody.appendChild(fila);
 }
 
+async function llenarModalConDatos(valoresPedido, idPedido, idCliente) {
 
-//JSON de ejemplo para cargar pedidos
-/* 
-[
-    {
-        "idPedido": 19,
-        "numeroPedido": 1009,
-        "fechaPedido": "14-10-2024",
-        "nombreCliente": "Ana",
-        "direccionEntregaDiferente": 1,
-        "recurrente": 0,
-        "diaEntrega": "Viernes",
-        "frecuencia": "Mensual",
-        "modoPago": "Transferencia",
-        "estadoPedido": "Pendiente"
-    },
-    {
-        "idPedido": 20,
-        "numeroPedido": 1010,
-        "fechaPedido": "14-10-2024",
-        "nombreCliente": "Juan",
-        "direccionEntregaDiferente": 0,
-        "recurrente": 1,
-        "diaEntrega": "Lunes",
-        "frecuencia": "Semanal",
-        "modoPago": "Efectivo",
-        "estadoPedido": "Entregado"
-    },
-    {
-        "idPedido": 21,
-        "numeroPedido": 1011,
-        "fechaPedido": "14-10-2024",
-        "nombreCliente": "María",
-        "direccionEntregaDiferente": 1,
-        "recurrente": 0,
-        "diaEntrega": "Miércoles",
-        "frecuencia": "Quincenal",
-        "modoPago": "Tarjeta",
-        "estadoPedido": "En Proceso"
-    },
-    {
-        "idPedido": 22,
-        "numeroPedido": 1012,
-        "fechaPedido": "14-10-2024",
-        "nombreCliente": "Carlos",
-        "direccionEntregaDiferente": 0,
-        "recurrente": 1,
-        "diaEntrega": "Martes",
-        "frecuencia": "Mensual",
-        "modoPago": "Transferencia",
-        "estadoPedido": "Pendiente"
-    },
-    {
-        "idPedido": 23,
-        "numeroPedido": 1013,
-        "fechaPedido": "14-10-2024",
-        "nombreCliente": "Sofía",
-        "direccionEntregaDiferente": 1,
-        "recurrente": 0,
-        "diaEntrega": "Jueves",
-        "frecuencia": "Semanal",
-        "modoPago": "Efectivo",
-        "estadoPedido": "En Proceso"
-    },
-    {
-        "idPedido": 24,
-        "numeroPedido": 1014,
-        "fechaPedido": "14-10-2024",
-        "nombreCliente": "Miguel",
-        "direccionEntregaDiferente": 0,
-        "recurrente": 1,
-        "diaEntrega": "Viernes",
-        "frecuencia": "Quincenal",
-        "modoPago": "Tarjeta",
-        "estadoPedido": "Entregado"
-    },
-    {
-        "idPedido": 25,
-        "numeroPedido": 1015,
-        "fechaPedido": "14-10-2024",
-        "nombreCliente": "Laura",
-        "direccionEntregaDiferente": 1,
-        "recurrente": 0,
-        "diaEntrega": "Lunes",
-        "frecuencia": "Mensual",
-        "modoPago": "Transferencia",
-        "estadoPedido": "Pendiente"
-    },
-    {
-        "idPedido": 26,
-        "numeroPedido": 1016,
-        "fechaPedido": "14-10-2024",
-        "nombreCliente": "Javier",
-        "direccionEntregaDiferente": 0,
-        "recurrente": 1,
-        "diaEntrega": "Martes",
-        "frecuencia": "Semanal",
-        "modoPago": "Efectivo",
-        "estadoPedido": "En Proceso"
-    },
-    {
-        "idPedido": 27,
-        "numeroPedido": 1017,
-        "fechaPedido": "14-10-2024",
-        "nombreCliente": "Elena",
-        "direccionEntregaDiferente": 1,
-        "recurrente": 0,
-        "diaEntrega": "Miércoles",
-        "frecuencia": "Quincenal",
-        "modoPago": "Tarjeta",
-        "estadoPedido": "Pendiente"
-    },
-    {
-        "idPedido": 28,
-        "numeroPedido": 1018,
-        "fechaPedido": "14-10-2024",
-        "nombreCliente": "Andrés",
-        "direccionEntregaDiferente": 0,
-        "recurrente": 1,
-        "diaEntrega": "Jueves",
-        "frecuencia": "Mensual",
-        "modoPago": "Transferencia",
-        "estadoPedido": "Entregado"
-    }
-]
+    const [estadoPedido, diaEntrega, frecuencia, modoPago] = valoresPedido;
+    //Otra forma de hacerlo
+    //const estadoPedido = valoresPedido[estadoPedido], así para cada valor del array
 
-*/
+    const responseCliente = await axios.get(`http://localhost:3000/api/cliente/${idCliente}`);
 
-//JSON de ejemplo para cargar pedido con detalle
-/*
-{
-    "numeroPedido": 1010,
-    "fechaPedido": "2024-10-14",
-    "idCliente": 5,
-    "direccionEntregaDiferente": true,
-    "recurrente": false,
-    "idDiaEntrega": 3,
-    "idFrecuencia": 2,
-    "idModoPago": 1,
-    "idEstadoPedido": 1,
-    "productos": [
-        {
-            "idProducto": 12,
-            "cantidad": 3,
-            "precioUnitario": 50.0
-        },
-        {
-            "idProducto": 7,
-            "cantidad": 1,
-            "precioUnitario": 30.0
-        },
-        {
-            "idProducto": 15,
-            "cantidad": 2,
-            "precioUnitario": 20.0
+    const datosCliente = responseCliente.data;
+
+    const responsePedido = await axios.get(`http://localhost:3000/api/pedido/${idPedido}`);
+
+    //Prueba para obtener los detalles del pedido
+    const responseDetalle = await axios.get(`http://localhost:3000/api/pedido/${idPedido}/detalles`);
+
+    const datosDetalles = responseDetalle.data;
+    console.log(datosDetalles);
+
+    // Obtener los datos del pedido de la respuesta
+    const datosPedido = responsePedido.data;
+    let direccion = '';
+
+    if (datosPedido.direccionEntregaDiferente === null) {
+        // Construimos la dirección utilizando los datos del cliente
+        let direccion = `${datosCliente.calle} ${datosCliente.numeroCalle}`;
+
+        // Si el cliente tiene piso y no es null ni vacío, lo agregamos a la dirección
+        if (datosCliente.piso) {
+            direccion += `, piso ${datosCliente.piso}`;
         }
-    ]
-}
 
-*/
+        // Si el cliente tiene número de departamento y no es null ni vacío, lo agregamos a la dirección
+        // if (datosCliente.numeroDepartamento) {
+        //     direccion += ` dpto ${datosCliente.numeroDepartamento}`;
+        // }
+    } else {
+        // Si direccionEntregaDiferente no es null, la usamos como dirección
+        direccion = datosPedido.direccionEntregaDiferente;
+    }
+
+    //const responseDetalle = await axios.get(`http://localhost:3000/api/pedido/${idPedido}`);
+
+    // Llenar los elementos del modal con los datos
+
+    const fechaISO = datosPedido.fechaPedido;
+    const fecha = new Date(fechaISO);
+
+    // Formatear la fecha en el formato deseado (por ejemplo, "14/10/2024")
+    const opciones = { year: 'numeric', month: '2-digit', day: '2-digit' };
+    const fechaFormateada = fecha.toLocaleDateString('es-ES', opciones);
+
+    document.getElementById('modalFecha').textContent = fechaFormateada;
+    document.getElementById('modalCliente').textContent = datosCliente.apellido + ', ' + datosCliente.nombre;
+    document.getElementById('modalEstado').textContent = estadoPedido;
+    document.getElementById('modalDireccion').textContent = direccion;
+    document.getElementById('modalTipo').textContent = datosPedido.recurrente === 1 ? 'Sí' : 'No';
+    document.getElementById('modalFrecuencia').textContent = frecuencia;
+    document.getElementById('modalDia').textContent = diaEntrega;
+
+    // Llenar la tabla de detalles del pedido
+    const detallesContainer = document.getElementById('modalDetalles');
+    detallesContainer.innerHTML = ''; // Limpiar cualquier contenido previo
+
+    let totalPedido = 0;
+
+    datosDetalles.detalles.forEach(detalle => {
+
+        // Sumar el subtotal al total del pedido
+        totalPedido += detalle.subtotal;
+
+        // Crear una fila para cada detalle del pedido
+        const fila = document.createElement('tr');
+        fila.innerHTML = `
+            <td>${detalle.producto}</td>
+            <td>${detalle.cantidad}</td>
+            <td>${detalle.precioUnitario}</td>
+            <td>${detalle.subtotal.toFixed(2)}</td>
+        `;
+        detallesContainer.appendChild(fila);
+    });
+
+    // Llenar el total
+    const formateador = new Intl.NumberFormat('es-AR', {
+        style: 'currency',
+        currency: 'ARS', // Cambia esto a 'ARS' si necesitas pesos argentinos
+    });
+    const totalFormateado = formateador.format(totalPedido.toFixed(2));
+    document.getElementById('modalTotal').textContent = totalFormateado;
+}
 
 const pedidoData = {
     numeroPedido: 1010,
@@ -602,17 +560,36 @@ const pedidoData = {
     ]
 };
 
-/* ModoPago */
+function modificarDatosPedido(pedido) {
+    console.log(pedido);
+    document.getElementById('fechaPedido').textContent = pedido.fechaPedido;
+    cargarClientes('editar', pedido);
+    cargarTiposCliente('editar', pedido);
+    cargarCondicionFiscal('editar', pedido);
+    precargarDatosCliente(pedido);
+    //cargar fecha, cliente, medio de pago, estado, productos, dirección de entrega, día de entrega y frecuencia
+}
 
+async function cargarClientes(action, cliente = null) {
+    try {
+        const response = await axios.get('http://localhost:3000/api/cliente');
 
+        const selectCliente = document.querySelector('#Cliente');
 
-/* Estado Pago */
+        selectCliente.innerHTML = '<option value="" selected disabled>Seleccione un Cliente</option>';
+        response.data.forEach(cliente => {
+            const option = document.createElement('option');
+            option.value = cliente.idCliente;
+            option.textContent = cliente.apellido + " " + cliente.nombre;
 
+            // Si se trata de edición, seleccionar el tipo correspondiente
+            if (action === 'editar' && cliente) {
+                option.selected = true;
+            }
 
-/* DiaEntrega */
-
-
-/* Frecuencia */
-
-
-
+            selectCliente.appendChild(option);
+        });
+    } catch (error) {
+        console.error('Error al cargar los tipos de cliente:', error);
+    }
+}

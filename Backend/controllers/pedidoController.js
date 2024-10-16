@@ -1,4 +1,5 @@
 const Pedido = require('../models/pedidoModel');
+const Cliente = require('../models/clienteModel');
 
 // Obtener todos los Pedidos
 //exports es para permitir q en otro lado se use
@@ -19,6 +20,37 @@ exports.getPedidoById = async (req, res) => {
     const pedido = await Pedido.getById(id);
     if (pedido) {
       res.json(pedido);
+    } else {
+      res.status(404).json({ message: 'Pedido no encontrado' });
+    }
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+exports.getDetallesPedidoByIdPedido = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const pedido = await Pedido.getById(id);
+
+    if (pedido) {
+      // Obtener el idCliente desde el pedido
+      const { idCliente } = pedido;
+
+      // Buscar el tipo de cliente a partir del idCliente
+      const cliente = await Cliente.getById(idCliente);
+      const idTipoCliente = cliente ? cliente.idTipoCliente : null;//Simplificador de if
+
+      // Obtener detalles del pedido
+      const detalles = await Pedido.getDetallesPedido(id, idTipoCliente);
+
+      // Combinar el pedido con sus detalles
+      const respuesta = {
+        pedido,
+        detalles: detalles || [], // Asegurarse de que siempre sea un array
+      };
+
+      res.json(respuesta);
     } else {
       res.status(404).json({ message: 'Pedido no encontrado' });
     }

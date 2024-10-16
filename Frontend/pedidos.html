@@ -133,10 +133,10 @@
                                 <th>Día de Entrega</th>
                                 <th>Medio de Pago</th>
                                 <th class="fixed-column" id="acciones">Acciones</th>
-                                <td class="fixed-column">
-                                    <div class="d-flex justify-content-center">
-                                        <!-- Botón para abrir el modal -->
-                                        <button class="btn btn-sm btn-outline-info " title="Más Información"
+                                <!-- <td class="fixed-column">
+                                    <div class="d-flex justify-content-center"> -->
+                                <!-- Botón para abrir el modal -->
+                                <!-- <button class="btn btn-sm btn-outline-info " title="Más Información"
                                             data-bs-toggle="modal" data-bs-target="#infoModal" data-id="001"
                                             data-cliente="Carlos Fernández" data-monto="$1500" data-tipo="Recurrente"
                                             data-fecha="24-08-2024" data-estado="Enviado">
@@ -149,14 +149,14 @@
                                             <i class="bi bi-trash"></i>
                                         </button>
                                     </div>
-                                </td>
+                                </td> -->
                             </tr>
                         </thead>
 
                         <tbody>
 
                         </tbody>
-                            
+
                     </table>
                 </div>
         </div>
@@ -176,7 +176,7 @@
             <div class="modal-content d-flex flex-column">
                 <div class="modal-header">
                     <h4 class="modal-title" id="pedidoModalLabel"><i class="fas fa-clipboard-list"></i>
-                        Nuevo Pedido</h4>
+                        Test Título</h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body flex-grow-1" style="overflow-y: auto;">
@@ -195,7 +195,7 @@
                                 <label for="clienteSelect" class="form-label">Seleccionar Cliente <span
                                         class="text-danger">*</span></label>
                                 <select id="clienteSelect" class="form-select" required>
-                                   
+
                                 </select>
                             </div>
                             <!-- Medio de Pago -->
@@ -211,7 +211,7 @@
                             <div class="col-lg-4 col-md-6 col-sm-6 col-6 mt-3">
                                 <label for="estadoSelect" class="form-label">Estado</label>
                                 <select id="estadoSelect" class="form-select" required>
-                                    
+
                                 </select>
                             </div>
                         </div>
@@ -231,15 +231,13 @@
                                             <label for="productoSelect0" class="form-label">Producto
                                                 <span class="text-danger">*</span></label>
                                             <select id="productoSelect0" class="form-select producto-select" required>
-                                               
-                                                
                                             </select>
                                         </div>
                                         <div class="col-lg-2 col-md-3 col-sm-3 col-3">
                                             <label for="cantidad0" class="form-label">Cantidad</label><span
-                                                class="text-danger"> *
-                                                <input type="number" id="cantidad0" class="form-control cantidad-input"
-                                                    required min="1" step="1" placeholder="1">
+                                                class="text-danger">*</span>
+                                            <input type="number" id="cantidad0" class="form-control cantidad-input"
+                                                required min="1" step="1" placeholder="1">
                                         </div>
                                         <!-- Iconos para Agregar, Editar y Eliminar -->
                                         <div class="d-flex align-items-end">
@@ -285,7 +283,7 @@
                                     <label for="diaPedido" class="form-label ">Día de Entrega</label>
                                     <span class="text-danger"> *
                                         <select id="diaPedido" class="form-select">
-                                            
+
                                         </select>
                                 </div>
                                 <div class="col-lg-4 col-md-4  col-7 mb-3">
@@ -293,7 +291,7 @@
                                         class="text-danger">
                                         *
                                         <select id="frecuenciaSelect" class="form-select">
-                                            
+
                                         </select>
                                 </div>
                             </div>

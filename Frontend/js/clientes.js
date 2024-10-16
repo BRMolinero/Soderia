@@ -473,19 +473,34 @@ function validacionCampos() {
         }
     }
 
-    if (calle === "") {
+  /*   if (calle === "") {
         camposObligatoriosFaltantes.push("Dirección");
         error = true;
     } else if (calle.length > 30) {
-        mensajesError += "El valor ingresado en Dirección no debe superar los 30 caracteres.<br>";
+        mensajesError += "El valor ingresado en Calle no debe superar los 30 caracteres.<br>";
         error = true;
     } else {
         let regex = /^[a-zA-Z0-9\s]+$/;
         if (!regex.test(calle)) {
-            mensajesError += "El campo Dirección solo puede contener letras y números.<br>";
+            mensajesError += "El campo Calle solo puede contener letras y números.<br>";
             error = true;
         }
-    }
+    } */
+
+        if (calle === "") {
+            camposObligatoriosFaltantes.push("Dirección");
+            error = true;
+        } else if (calle.length > 30) {
+            mensajesError += "El valor ingresado en Calle no debe superar los 30 caracteres.<br>";
+            error = true;
+        } else {
+            let regex = /^[a-zA-ZÀ-ÿ0-9\s]+$/;
+            if (!regex.test(calle)) {
+                mensajesError += "El campo Calle solo puede contener letras, números y espacios.<br>";
+                error = true;
+            }
+        }
+        
 
     if (numeroCalle === "") {
         camposObligatoriosFaltantes.push("Número");
@@ -659,7 +674,7 @@ function validarDireccion() {
     errorMessageElement.textContent = mensajeError;
 }
 
-function validarNumero() {
+/* function validarNumero() {
     const numero = document.getElementById('numero').value;
     const errorMessageElement = document.getElementById('error-numero');
     let mensajeError = "";
@@ -671,7 +686,24 @@ function validarNumero() {
     }
 
     errorMessageElement.textContent = mensajeError;
+} */
+
+function validarNumero() {
+    const numero = document.getElementById('numero').value.trim();
+    const errorMessageElement = document.getElementById('error-numero');
+    let mensajeError = "";
+
+    if (numero === "") {
+        mensajeError = "* Campo obligatorio";
+    } else if (!/^\d+$/.test(numero)) {  // Verifica si el valor contiene solo dígitos
+        mensajeError = "Ingrese números positivos";
+    } else if (parseInt(numero) <= 0) {
+        mensajeError = "No ingrese números negativos o cero";
+    }
+
+    errorMessageElement.textContent = mensajeError;
 }
+
 
 function validarPiso() {
     const piso = document.getElementById('piso').value;
@@ -814,9 +846,8 @@ function validarDNI() {
     const errorMessageElement = document.getElementById('error-DNI');
     let mensajeError = "";
 
-    // Se eliminó la verificación de campo obligatorio
     if (DNI && (isNaN(DNI) || DNI.length < 7 || DNI.length > 8)) {
-        mensajeError = "No debe superar los 8 números";
+        mensajeError = "Debe tener 7 u 8 números";
     }
 
     errorMessageElement.textContent = mensajeError;
