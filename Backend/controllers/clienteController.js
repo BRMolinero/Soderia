@@ -2,7 +2,8 @@ const Cliente = require('../models/clienteModel');
 
 exports.getAllCliente = async (req, res) => {
   try {
-    const cliente = await Cliente.getAll();
+    const filter = req.query; // Extraemos los filtros de req.query
+    const cliente = await Cliente.getAll(filter); // Pasamos los filtros al modelo
     res.json(cliente);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -25,7 +26,7 @@ exports.getClienteById = async (req, res) => {
 };
 
 // Crear un nuevo cliente
-exports.createCliente= async (req, res) => {
+exports.createCliente = async (req, res) => {
   try {
     const nuevoCliente = req.body;
     const cliente = await Cliente.create(nuevoCliente);
@@ -47,12 +48,12 @@ exports.updateCliente = async (req, res) => {
   }
 };
 
-// Eliminar un cliente
-exports.deleteCliente = async (req, res) => {
+// Deshabilitar un cliente
+exports.deshabilitarCliente = async (req, res) => {
   try {
     const { id } = req.params;
-    await cliente.delete(id);
-    res.status(204).end();
+    const cliente = await Cliente.delete(id, { estado: 0 }); // Cambiar solo el estado a 0
+    res.json(cliente);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

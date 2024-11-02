@@ -10,234 +10,24 @@
     <link rel="stylesheet" href="./css/clientes.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap">
-    <!-- Incluye Bootstrap Icons CSS para los íconos -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-    <!-- Incluye Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Incluye jQuery y Bootstrap JS -->
+
+    <script src="./js/barras.js" defer></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</head>
-<!-- SweetAlert2 -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
-<script src="./js/scripts.js" defer></script>
-<script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" defer></script>
-<script src="https://code.jquery.com/jquery-3.5.1.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" defer></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js" defer></script>
+
 </head>
 
 <body class="sb-nav-fixed">
-    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-gradient bg-gradient">
-        <a class="navbar-brand ps-3 mt-1mb 1" href="index.html">
-            <img src="./images/userlmn_2.png" alt="Logo" class="logoEmpresa">
-        </a>
-        <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i
-                class="fas fa-bars"></i></button>
-        <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
+    <div id="layout"></div>
 
-        </form>
-        <!------------ Barra horizontal----------------------->
-        <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown"
-                    aria-expanded="false">
-                    <i class="fas fa-user fa-fw" style="font-size: 1.8rem;"></i>
-                </a>
-                <!-- Menu desplegable -->
-                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown"
-                    style="background-color:#13132f">
-                    <li><a class="dropdown-item text-white-50" href="#!"><i
-                                class="fas fa-user-circle text-primary text-opacity-75"></i>
-                            Perfil</a></li>
-                    <li><a class="dropdown-item text-white-50" href="#!"><i
-                                class="fas fa-cog text-primary text-opacity-75"></i>
-                            Configuración</a></li>
-                    <li>
-                        <hr class="dropdown-divider" />
-                    </li>
-                    <li><a class="dropdown-item text-white-50" href="#!"><i
-                                class="fas fa-sign-out-alt text-primary text-opacity-75"></i> Cerrar Sesión</a></li>
-                </ul>
-            </li>
-        </ul>
-
-    </nav>
     <div id="layoutSidenav">
-        <div id="layoutSidenav_nav" class="escalado">
-
-            <!----------- Barra vertical --------------------------------->
-            <nav class="sb-sidenav accordion text-muted nav" id="sidenavAccordion">
-                <div class="sb-sidenav-menu" style="--bs-bg-opacity: .95;">
-                    <div class="nav ">
-                        <div class="sb-sidenav-menu-heading">Principal</div>
-                        <a class="nav-link" href="index.html">
-                            <div class="sb-nav-link-icon"><i class="fa-solid fa-house text-primary text-opacity-75"></i>
-                            </div>
-                            Inicio
-                        </a>
-
-                        <div class="sb-sidenav-menu-heading">Menú</div>
-
-                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-                            data-bs-target="#collapseClientes" aria-expanded="false" aria-controls="collapseClientes">
-                            <div class="sb-nav-link-icon"><i class="fas fa-users text-primary text-opacity-75"></i>
-                            </div>
-                            Clientes
-                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                        </a>
-
-                        <div class="collapse" id="collapseClientes" aria-labelledby="headingTwo"
-                            data-bs-parent="#sidenavAccordion">
-                            <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPagesClientes">
-
-                                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-                                    data-bs-target="#pagesCollapseErrorClientes" aria-expanded="false"
-                                    aria-controls="pagesCollapseErrorClientes">
-                                    Lista de Cientes
-                                </a>
-                            </nav>
-                        </div>
-
-                        <!-- Buscar icono empleados -->
-                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-                            data-bs-target="#collapseEmpleados" aria-expanded="false" aria-controls="collapseEmpleados">
-                            <div class="sb-nav-link-icon"><i
-                                    class="fas fa-id-badge text-primary text-opacity-75 me-2"></i>
-                            </div>
-                            Empleados
-                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                        </a>
-
-                        <div class="collapse" id="collapseEmpleados" aria-labelledby="headingTwo"
-                            data-bs-parent="#sidenavAccordion">
-                            <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPagesEmpleados">
-
-                                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-                                    data-bs-target="#pagesCollapseErrorEmpleados" aria-expanded="false"
-                                    aria-controls="pagesCollapseErrorEmpleados">
-                                    Lista de Empleados
-                                </a>
-                            </nav>
-                        </div>
-
-
-                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-                            data-bs-target="#collapsePedidos" aria-expanded="false" aria-controls="collapsePedidos">
-                            <div class="sb-nav-link-icon"><i
-                                    class="fas fa-clipboard-list text-primary text-opacity-75 me-2"></i></div>
-                            Pedidos
-                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                        </a>
-
-                        <div class="collapse" id="collapsePedidos" aria-labelledby="headingTwo"
-                            data-bs-parent="#sidenavAccordion">
-                            <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPagesPedidos">
-                                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-                                    data-bs-target="#pagesCollapseErrorPedidos" aria-expanded="false"
-                                    aria-controls="pagesCollapseErrorPedidos">
-                                    Lista de Pedidos
-                                </a>
-                            </nav>
-                        </div>
-
-
-                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-                            data-bs-target="#collapseProductos" aria-expanded="false" aria-controls="collapseProductos">
-                            <div class="sb-nav-link-icon"><i class="fas fa-box text-primary text-opacity-75 me-2"></i>
-                            </div>
-                            Productos
-                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                        </a>
-
-                        <div class="collapse" id="collapseProductos" aria-labelledby="headingTwo"
-                            data-bs-parent="#sidenavAccordion">
-                            <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPagesProductos">
-                                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-                                    data-bs-target="#pagesCollapseErrorProductos" aria-expanded="false"
-                                    aria-controls="pagesCollapseErrorProductos">
-                                    Lista de Productos
-                                </a>
-                                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-                                    data-bs-target="#pagesCollapseErrorProductos" aria-expanded="false"
-                                    aria-controls="pagesCollapseErrorProductos">
-                                    Tipos de Productos
-                                </a>
-
-                            </nav>
-                        </div>
-
-                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-                            data-bs-target="#collapseProveedores" aria-expanded="false"
-                            aria-controls="collapseProveedores">
-                            <div class="sb-nav-link-icon"><i
-                                    class="fas fa-handshake text-primary text-opacity-75 scale"></i>
-                            </div>
-                            Proveedores
-                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                        </a>
-
-                        <div class="collapse" id="collapseProveedores" aria-labelledby="headingTwo"
-                            data-bs-parent="#sidenavAccordion">
-                            <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPagesProveedores">
-
-                                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-                                    data-bs-target="#pagesCollapseErrorProveedores" aria-expanded="false"
-                                    aria-controls="pagesCollapseErrorProveedores">
-                                    Lista de Proveedores
-                                </a>
-                            </nav>
-                        </div>
-
-                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-                            data-bs-target="#collapseRecorridos" aria-expanded="false"
-                            aria-controls="collapseRecorridos">
-                            <div class="sb-nav-link-icon"><i class="fas fa-route text-primary text-opacity-75 me-1"></i>
-                            </div>
-                            Recorridos
-                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                        </a>
-
-                        <div class="collapse" id="collapseRecorridos" aria-labelledby="headingTwo"
-                            data-bs-parent="#sidenavAccordion">
-                            <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPagesRecorridos">
-                                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-                                    data-bs-target="#pagesCollapseErrorRecorridos" aria-expanded="false"
-                                    aria-controls="pagesCollapseErrorRecorridos">
-                                    Lista de Recorridos
-                                </a>
-
-                                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-                                    data-bs-target="#pagesCollapseErrorRecorridos" aria-expanded="false"
-                                    aria-controls="pagesCollapseErrorRecorridos">
-                                    Localidades
-                                </a>
-                                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-                                    data-bs-target="#pagesCollapseErrorRecorridos" aria-expanded="false"
-                                    aria-controls="pagesCollapseErrorRecorridos">
-                                    Vehículos
-                                </a>
-                                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-                                    data-bs-target="#pagesCollapseErrorRecorridos" aria-expanded="false"
-                                    aria-controls="pagesCollapseErrorRecorridos">
-                                    Zonas
-                                </a>
-                            </nav>
-                        </div>
-                    </div>
-                </div>
-                <footer class="mb-4 bs-secondary-color mt-auto">
-                    <div class="container-fluid px-4">
-                        <div class="d-flex justify-content-start small">
-                            <div class="text-white-50">Copyright &copy; EffiTech 2024</div>
-                        </div>
-                    </div>
-                </footer>
-            </nav>
-        </div>
-
-
-
         <div id="layoutSidenav_content">
 
             <main class="">
@@ -274,30 +64,11 @@
                             </div>
 
                         </div>
-
-                        <!-- Contenedor para el select y la paginación -->
-                        <div class="col-lg-8 col-md-7 col-sm-4 col-4 d-flex align-items-center justify-content-end">
-                            <div class="d-flex  me-2 mt-3">
-                                <select id="rowsPerPage" class="form-select text-primary scale">
-                                    <option value="5">5</option>
-                                    <option value="10" selected>10</option>
-                                    <option value="15">15</option>
-                                    <option value="20">20</option>
-                                    <option value="50">50</option>
-                                </select>
-                            </div>
-
-                            <nav aria-label="Page navigation scale">
-                                <ul class="pagination scale" id="pagination">
-                                    <!-- Los botones de paginación se generarán aquí -->
-                                </ul>
-                            </nav>
-                        </div>
                     </div>
 
-
+                    <!-- De hacer dinamicamente -->
                     <div class="table-container table-responsive">
-                        <table class="table table-striped table-hover table-bordered" id="recorridoTable">
+                        <table class="table table-hover table-bordered" id="recorridoTable">
                             <thead>
                                 <tr class="fixed-row">
                                     <th>Nombre</th>
@@ -403,12 +174,12 @@
             <div class="scroll-content">
 
             </div>
-            
+
         </div>
         <br>
         <br>
         <br>
-       
+
 
         <!-- Modal para Registro de Recorridos -->
         <div class="modal fade" id="recorridoModal" tabindex="-1" aria-labelledby="recorridoModalLabel"
@@ -494,21 +265,14 @@
 
 
 
-    <style>
-        .custom-modal-width .modal-dialog {
-            max-width: 500px;
-            /* Ajusta el valor según tus necesidades */
-        }
-    </style>
-
     </div>
 
 
 
     </div>
     </div>
-    <!----------- FOOTER ----------------------------->
-    
+
+
 </body>
 
 </html>

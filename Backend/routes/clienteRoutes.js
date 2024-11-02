@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const clienteController = require('../controllers/clienteController');
 
-// Obtener todos los cliente
+// Obtener todos los clientes
 router.get('/', clienteController.getAllCliente);
 
 // Obtener un cliente por ID
@@ -14,7 +14,8 @@ router.post('/', clienteController.createCliente);
 // Actualizar un cliente existente
 router.put('/:id', clienteController.updateCliente);
 
-// Eliminar un cliente
-router.delete('/:id', clienteController.deleteCliente);
+// Deshabilitar cliente
+router.put('/deshabilitar/:id', clienteController.deshabilitarCliente);
+
 
 module.exports = router;

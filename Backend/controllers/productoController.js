@@ -1,18 +1,28 @@
 const Producto = require('../models/productoModel');
 
-// Obtener todos los producto
-//exports es para permitir q en otro lado se use
-//objeto punto algo es un metodo
 exports.getAllProducto = async (req, res) => {
   try {
-    const producto = await Producto.getAll();
+    const filter = req.query; // Extraemos los filtros de req.query
+    const producto = await Producto.getAll(filter); // Pasamos los filtros al modelo
     res.json(producto);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-// Obtener un producto por ID
+exports.getAllListaPrecios = async (req, res) => {
+  console.log("Solicitud recibida en /lista-precios"); // Confirma que la solicitud llega aquí
+  try {
+      const filter = req.query;
+      const listaPrecios = await Producto.getAllListaPrecios(filter);
+      res.json(listaPrecios);
+  } catch (err) {
+      console.error("Error en el controlador:", err);
+      res.status(500).json({ error: err.message });
+  }
+};
+
+// Obtener un Producto por ID
 exports.getProductoById = async (req, res) => {
   try {
     const { id } = req.params;
@@ -27,7 +37,17 @@ exports.getProductoById = async (req, res) => {
   }
 };
 
-// Crear un nuevo producto
+// Obtener lista de precios general
+exports.getListaPrecios = async (req, res) => {
+  try {
+    const listaPrecio = await Producto.getAllListaPrecio();
+    res.json(listaPrecio);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+// Crear un nuevo Producto
 exports.createProducto = async (req, res) => {
   try {
     const nuevoProducto = req.body;
@@ -38,7 +58,7 @@ exports.createProducto = async (req, res) => {
   }
 };
 
-// Actualizar un producto existente
+// Actualizar un Producto existente
 exports.updateProducto = async (req, res) => {
   try {
     const { id } = req.params;
@@ -50,12 +70,12 @@ exports.updateProducto = async (req, res) => {
   }
 };
 
-// Eliminar un producto
-exports.deleteProducto = async (req, res) => {
+// Deshabilitar un Producto
+exports.deshabilitarProducto = async (req, res) => {
   try {
     const { id } = req.params;
-    await Producto.delete(id);
-    res.status(204).end();
+    const producto = await Producto.delete(id, { estado: 0 }); // Cambiar solo el estado a 0
+    res.json(producto);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

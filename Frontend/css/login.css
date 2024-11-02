@@ -1,5 +1,5 @@
 body {
-    background-image: url("../images/FondoLoginAzulBrillante.png"); /* Reemplaza con la ruta de tu imagen */
+    background-image: url("../images/FondoLoginAzulBrillante.png");
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
@@ -11,36 +11,36 @@ body {
 }
 
 .login-container {
-    background: rgba(255, 255, 255, 0.8); /* Fondo claro con opacidad */
+    background: rgba(255, 255, 255, 0.8);
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); /* Sombra oscura para darle profundidad */
-    border: 2px solid rgba(255, 255, 255, 0.6); /* Borde claro */
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    border: 2px solid rgba(255, 255, 255, 0.6);
     width: 350px;
 }
 
 .login-container h2 {
-    color: #000119; /* Texto en color oscuro */
+    color: #000119;
     text-align: center;
     margin-bottom: 20px;
 }
 
 .login-container .form-control {
-    background: rgba(255, 255, 255, 0.9); /* Fondo casi blanco para los campos de entrada */
+    background: rgba(255, 255, 255, 0.9);
     border: none;
-    color: #000119; /* Texto en color oscuro */
+    color: #000119;
 }
 
 .login-container .btn {
-    background-color: #1D4ED8; /* Botón azul brillante */
+    background-color: #1D4ED8;
     border: none;
     width: 100%;
-    color: #FFFFFF; /* Texto en blanco */
+    color: #FFFFFF;
     font-weight: bold;
 }
 
 .login-container .btn:hover {
-    background-color: #003D79; /* Color del botón al hacer hover */
+    background-color: #003D79;
 }
 
 .login-container .forgot-password {
@@ -49,7 +49,7 @@ body {
 }
 
 .login-container .forgot-password a {
-    color: #003D79; /* Enlace en color azul oscuro */
+    color: #003D79;
     text-decoration: none;
 }
 
@@ -63,25 +63,23 @@ body {
 }
 
 .logo-container img {
-    max-width: 150px; /* Tamaño del logo más grande */
+    max-width: 150px;
 }
 
 .logoEmpresa {
-    max-width: 100%; /* Ajusta la imagen al ancho del contenedor */
-    height: auto;    /* Mantiene las proporciones de la imagen */
-  }
+    max-width: 100%;
+    height: auto;
+}
 
-  /*  */
-  .input-group-text .bi {
-    font-size: 1.2rem; /* Ajusta el tamaño del ícono */
-    color: #6c757d; /* Color del ícono */
+.input-group-text .bi {
+    font-size: 1.2rem;
+    color: #6c757d;
 }
 
 .form-control {
-    padding-left: 2.5rem; /* Añade espacio para el ícono a la izquierda */
+    padding-left: 2.5rem;
 }
 
 #togglePassword {
     cursor: pointer;
 }
-
