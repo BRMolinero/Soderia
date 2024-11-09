@@ -322,15 +322,16 @@ async function cargarPedidosTabla(filter = null) {
         // Limpiar el contenido del tbody antes de agregar nuevos datos
         tbody.innerHTML = '';
 
-        // Ordenar los clientes primero por estado y luego por apellido
+        // Ordenar los pedidos primero por estado y luego por fecha en orden descendente
         const pedidosOrdenados = response.data.sort((a, b) => {
             // Ordenar por idEstadoPedido (ascendente)
             if (a.idEstadoPedido !== b.idEstadoPedido) {
                 return a.idEstadoPedido - b.idEstadoPedido; // Orden ascendente de estados
             }
-            // Si tienen el mismo idEstadoPedido, ordenar por fechaPedido (ascendente)
-            return new Date(a.fechaPedido) - new Date(b.fechaPedido);
+            // Si tienen el mismo idEstadoPedido, ordenar por fechaPedido (descendente)
+            return new Date(b.fechaPedido) - new Date(a.fechaPedido);
         });
+
 
         // Iterar sobre cada cliente y agregar a la tabla
         pedidosOrdenados.forEach(pedido => agregarFilaPedido(tbody, pedido));
@@ -482,64 +483,47 @@ function agregarFilaPedido(tbody, pedido) {
     tbody.appendChild(fila);
 }
 
-/* function deshabilitarPedido(productoId) {
+function deshabilitarPedido(productoId) {
     const apiUrl = `http://localhost:3000/api/pedido/deshabilitar/${productoId}`;
     const productoData = { estado: 4 };
 
-    axios.put(apiUrl, productoData)
-        .then(response => {
-            if (response.status === 200) {
-                alert("Pedido cancelado con éxito");
-                location.reload(); // Refrescar la página
-            }
-        })
-        .catch(error => {
-            console.error("Error al deshabilitar el pedido:", error);
-            alert("Error al deshabilitar el pedido.");
-        });
-} */
-
-        function deshabilitarPedido(productoId) {
-            const apiUrl = `http://localhost:3000/api/pedido/deshabilitar/${productoId}`;
-            const productoData = { estado: 4 };
-        
-            Swal.fire({
-                title: '¿Estás seguro?',
-                text: "Esta acción cancelará el pedido.",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Sí, cancelar',
-                cancelButtonText: 'No, mantener'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    axios.put(apiUrl, productoData)
-                        .then(response => {
-                            if (response.status === 200) {
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Pedido cancelado',
-                                    text: 'El pedido fue cancelado con éxito.',
-                                    confirmButtonText: 'Aceptar'
-                                }).then(() => {
-                                    location.reload(); // Refrescar la página
-                                });
-                            }
-                        })
-                        .catch(error => {
-                            console.error("Error al deshabilitar el pedido:", error);
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: 'Hubo un problema al deshabilitar el pedido.',
-                                confirmButtonText: 'Aceptar'
-                            });
+    Swal.fire({
+        title: '¿Estás seguro?',
+        text: "Esta acción cancelará el pedido.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, cancelar',
+        cancelButtonText: 'No, mantener'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            axios.put(apiUrl, productoData)
+                .then(response => {
+                    if (response.status === 200) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Pedido cancelado',
+                            text: 'El pedido fue cancelado con éxito.',
+                            confirmButtonText: 'Aceptar'
+                        }).then(() => {
+                            location.reload(); // Refrescar la página
                         });
-                }
-            });
+                    }
+                })
+                .catch(error => {
+                    console.error("Error al deshabilitar el pedido:", error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Hubo un problema al deshabilitar el pedido.',
+                        confirmButtonText: 'Aceptar'
+                    });
+                });
         }
-        
+    });
+}
+
 
 async function llenarModalConDatos(valoresPedido, idPedido, idCliente) {
 
@@ -564,21 +548,21 @@ async function llenarModalConDatos(valoresPedido, idPedido, idCliente) {
     let direccion = '';
 
     if (datosPedido.direccionEntregaDiferente === null) {
-    
+
         let direccion = `${datosCliente.calle} ${datosCliente.numeroCalle}`;
 
-        
+
         if (datosCliente.piso) {
             direccion += `, piso ${datosCliente.piso}`;
         }
 
-        
+
     } else {
-       
+
         direccion = datosPedido.direccionEntregaDiferente;
     }
 
-  
+
 
     // Llenar los elementos del modal con los datos
 
@@ -791,3 +775,55 @@ function filtrarPorCliente() {
         }
     });
 }
+
+function filtrarPedidos() {
+    const clienteBuscar = document.getElementById('buscarCliente').value.toLowerCase();
+    const fechaInicio = document.getElementById('fechaInicio').value;
+    const fechaFin = document.getElementById('fechaFin').value;
+    const estadoBuscar = document.getElementById('estadoPedido').value;
+    const filasTabla = document.querySelectorAll('#pedidosTable tbody tr');
+
+    filasTabla.forEach(fila => {
+        const celdaCliente = fila.querySelector('td:nth-child(3)');
+        const celdaFecha = fila.querySelector('td:nth-child(2)');
+        const celdaEstado = fila.querySelector('td:nth-child(4)');
+
+        let mostrar = true;
+
+        // Filtrado por cliente
+        if (celdaCliente) {
+            const nombreCliente = celdaCliente.textContent.toLowerCase();
+            if (!nombreCliente.includes(clienteBuscar)) {
+                mostrar = false;
+            }
+        }
+
+        // Filtrado por rango de fechas
+        if (celdaFecha && fechaInicio && fechaFin) {
+            const fechaTexto = celdaFecha.textContent.trim(); // Obtener texto y eliminar espacios
+            const [day, month, year] = fechaTexto.split('-'); // Suponiendo formato DD-MM-AAAA
+            const fechaPedido = new Date(year, month - 1, day); // Crear objeto Date con la fecha en el formato adecuado
+
+            const inicio = new Date(fechaInicio);
+            const fin = new Date(fechaFin);
+
+            if (fechaPedido < inicio || fechaPedido > fin) {
+                mostrar = false;
+            }
+        }
+
+        // Filtrado por estado
+        if (celdaEstado && estadoBuscar) {
+            const estadoPedido = celdaEstado.textContent.toLowerCase();
+            if (estadoPedido !== estadoBuscar.toLowerCase()) {
+                mostrar = false;
+            }
+        }
+
+        // Mostrar u ocultar la fila según el resultado de los filtros
+        fila.style.display = mostrar ? '' : 'none';
+    });
+}
+
+
+

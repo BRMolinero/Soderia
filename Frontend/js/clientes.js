@@ -379,11 +379,19 @@ botonFiltrar.addEventListener("click", function (event) {
 
 function obtenerDatosFiltro() {
   const nombre = document.getElementById("filtroNombre").value;
-   // Retornamos un objeto con los valores de los filtros
-  return {
-    nombre: nombre || "",
-   
-  };
+  const estado = parseInt(document.getElementById('filtroEstado').value);
+  
+   const filtro = {};
+
+   if (nombre) {
+       filtro.nombre = nombre;
+   }
+ 
+   if (!isNaN(estado)) {
+       filtro.estado = estado;
+   }
+ 
+   return filtro;
 }
 
 function modificarDatosCliente(cliente) {

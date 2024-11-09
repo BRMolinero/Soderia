@@ -34,7 +34,28 @@ const pedido = {
         INNER JOIN estadoPedido as ep ON p.idEstadoPedido = ep.idEstadoPedido
       WHERE 1=1
       order by p.idEstadoPedido asc, p.fechaPedido asc, c.apellido asc`;
+     
       const queryParams = [];
+      if (filter.nombre) {
+        query += `
+          AND (
+            c.nombre LIKE ?
+            OR c.apellido LIKE ?
+          )
+        `;
+        
+        const searchValue = `%${filter.nombre}%`;
+        queryParams.push(searchValue, searchValue); // Se aplica el mismo valor a los tres campos
+      }
+     /*  console.log("AAAAAAAAAAAAAAAAA" + filter.NOMBRE) */
+      // Filtrar por estado
+      if (filter.estado) {
+        query += ' AND c.estado = ?';
+        queryParams.push(Number(filter.estado)); // Suponiendo que 'estado' es un valor exacto
+      }
+     
+
+
 
       // Ejecutamos la consulta con los parámetros correspondientes
       const [rows] = await db.query(query, queryParams);

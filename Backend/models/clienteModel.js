@@ -39,9 +39,7 @@ const cliente = {
             OR c.razonSocial LIKE ?
           )
         `;
-        query += `
-          order by c.apellido asc
-        `;
+        
         const searchValue = `%${filter.nombre}%`;
         queryParams.push(searchValue, searchValue, searchValue); // Se aplica el mismo valor a los tres campos
       }
@@ -51,6 +49,9 @@ const cliente = {
         query += ' AND c.estado = ?';
         queryParams.push(Number(filter.estado)); // Suponiendo que 'estado' es un valor exacto
       }
+      query += `
+          order by c.apellido asc
+        `;
 
       // Ejecutamos la consulta con los parámetros correspondientes
       const [rows] = await db.query(query, queryParams);

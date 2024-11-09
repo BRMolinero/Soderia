@@ -33,7 +33,7 @@
     <div id="layout"></div>
     <div id="layoutSidenav">
         <div id="layoutSidenav_content">
-            <main class="">
+            <main class="me-2">
                 <div class="container">
                     <h4 class="text-dark mt-2 mb-4">Listado de Pedidos</h4>
 
@@ -43,29 +43,44 @@
                             data-bs-target="#pedidoModal">
                             <i class="fas fa-clipboard-list"></i> Nuevo
                         </button>
+                        <br>
                     </div>
-                    <div class="row">
+                    <div class="row mt-1">
                         <!-- Contenedor para los filtros -->
-                        <div class="flex-column col-lg-10 col-md-9 col-sm-12 col-12">
-
-                            <div class="col-xl-5 col-lg-7 col-md-7 col-sm-12 col-12">
-                                <label for="buscarCliente" class="form-label"></label>
-                                <input type="text" id="buscarCliente" class="form-control" placeholder="Filtrar por Cliente"
-                                    onkeyup="filtrarPorCliente()">
+                        <div class="d-flex flex-row align-items-center justify-content-start flex-wrap">
+                            <!-- Inputs para el rango de fechas -->
+                            <div class="me-2 mt-2">
+                                <input type="date" id="fechaInicio" class="form-control" onchange="filtrarPedidos()" placeholder="Fecha inicio">
                             </div>
-<br>
-
+                            <div class="me-2 mt-2">
+                                <input type="date" id="fechaFin" class="form-control" onchange="filtrarPedidos()" placeholder="Fecha fin">
+                            </div>
+                    
+                            <!-- Selector para el estado -->
+                            <div class=" mt-2">
+                                <select id="estadoPedido" class="form-select" onchange="filtrarPedidos()">
+                                    <option value="">Todos los estados</option>
+                                    <option value="pendiente">Pendiente</option>
+                                    <option value="en proceso">En Proceso</option>
+                                    <option value="entregado">Entregado</option>
+                                    <option value="cancelado">Cancelado</option>
+                                </select>
+                            </div>
+                    
+                            <!-- Input para buscar por cliente -->
+                            <div class="col-xl-3 col-lg- 3 col-md-4 col-sm-10 col-12 me-2">
+                                <input type="text" id="buscarCliente" class="form-control" oninput="filtrarPedidos()" placeholder="Buscar por cliente">
+                            </div>
                         </div>
-
                     </div>
-
+                    
                 </div>
 
-                <div class="table-container table-responsive">
-                    <table class="table table-hover table-bordered" id="pedidosTable">
+                <div class="table-container table-responsive me-2">
+                    <table class="table table-hover table-bordered me-4 " style="margin-left: 10px;" id="pedidosTable">
                         <thead>
                             <tr class="fixed-row">
-                                <th>Numero Pedido</th>
+                                <th>Número Pedido</th>
                                 <th>Fecha</th>
                                 <th>Cliente</th>
                                 <th>Estado</th>
@@ -77,7 +92,7 @@
                                 <th>Día de Entrega</th>
                                 <th>Medio de Pago</th>
                                 <th class="fixed-column" id="acciones">Acciones</th>
-                                
+
                             </tr>
                         </thead>
 

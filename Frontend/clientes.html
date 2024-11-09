@@ -45,20 +45,22 @@
 
                 <div class="row ">
                     <!-- Contenedor para los filtros -->
-                    <div class="col-lg-4 col-md-8 col-sm-8 col-8">
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-8">
                         <div class="d-flex flex-column scale">
                             <div class="input-group">
                                 <div class="search-container text-primary">
                                     <input type="text" id="filtroNombre" class="form-control"
                                         placeholder="Nombre, Apellido, Razón Social">
-                                    <div class="scale mt-2">
-                                        <button id="btnFiltrar" class="btn btn-outline-primary small"
-                                            style="width: 45px; height: 45px;"><i class="bi bi-search"></i></button>
+                                    <div class="scale mt-2 d-flex col-lg-6 col-md-8 col-sm-8 col-8">
+                                        <select id="filtroEstado" class="form-select custom-select  me-4">
+                                            <option value="">Todos los Estados</option>
+                                            <option value="1">Activo</option>
+                                            <option value="0">Inactivo</option>
+                                        </select>
+                                        <button id="btnFiltrar" class="btn btn-outline-primary small me-4"
+                                            style="width: 45px; height: 40px;"><i class="bi bi-search"></i></button>
                                     </div>
-
                                 </div>
-
-
                             </div>
                             <div class="col">
                                 <!-- Botón de Filtrar -->
@@ -68,7 +70,8 @@
 
 
                     </div>
-                </div>               
+
+                </div>
 
             </div>
 
@@ -163,7 +166,7 @@
                         <div class="dropdown-container col-md-4 col-sm-7 col-6 mb-3">
                             <label for="ciudad" class="required">Localidad</label>
                             <select class="form-select custom-select" id="ciudad" required>
-                               
+
                             </select>
                             <div class="error-message" id="error-ciudad"></div>
                         </div>
@@ -179,7 +182,7 @@
                         <div class="dropdown-container col-md-4 col-sm-6 col-6 mb-3">
                             <label for="tipoCliente" class="required">Tipo de Cliente</label>
                             <select class="form-select custom-select" id="tipoCliente" required>
-                               
+
                             </select>
                             <div class="error-message" id="error-tipoCliente"></div>
                         </div>
