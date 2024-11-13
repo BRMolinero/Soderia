@@ -1,215 +1,13 @@
-// ------Modal de nuevo pedido-------------------------------------------------------------------
-document.addEventListener('DOMContentLoaded', function () {
-    // Manejar la visibilidad de la dirección de entrega diferente
-    var diferenteDireccionCheck = document.getElementById('diferenteDireccionCheck');
-    var direccionEntregaContainer = document.getElementById('direccionEntregaContainer');
-    var direccionEntregaInput = document.getElementById('direccionEntrega');
-
-    diferenteDireccionCheck.addEventListener('change', function () {
-        if (diferenteDireccionCheck.checked) {
-            direccionEntregaContainer.classList.remove('d-none');
-            direccionEntregaInput.required = true;
-        } else {
-            direccionEntregaContainer.classList.add('d-none');
-            direccionEntregaInput.required = false;
-            direccionEntregaInput.value = ''; // Limpiar el campo si se desmarca
-        }
-    });
-
-    // Manejar la visibilidad de las opciones recurrentes
-    document.getElementById('recurrenteCheck').addEventListener('change', async function () {
-        document.getElementById('recurrenteOptions').classList.toggle('d-none', !this.checked);
-    });
-
-    // Agregar nuevo producto
-    document.getElementById('addProducto').addEventListener('click', async function () {
-        var productosContainer = document.getElementById('productosContainer');
-        var productoCount = productosContainer.querySelectorAll('.producto-row').length;
-        var newProductoRow = document.createElement('div');
-        newProductoRow.className = 'd-flex align-items-end mb-3 producto-row';
-
-        // Crear la estructura del HTML para la nueva fila de producto
-        newProductoRow.innerHTML = `
-            <div class="col-lg-4 col-md-6 col-sm-6 col-7">
-                <label for="productoSelect${productoCount}" class="form-label"></label>
-                <select id="productoSelect${productoCount}" class="form-select producto-select" required>
-                    <option value="" disabled selected>Seleccione Producto</option>
-                </select>
-            </div>
-            <div class="col-lg-2 col-md-3 col-sm-3 col-3">
-                <label for="cantidad${productoCount}" class="form-label"></label>
-                <input type="number" id="cantidad${productoCount}" class="form-control cantidad-input" required min="1" step="1" placeholder="1">
-            </div>
-            <div class="d-flex align-items-end">
-                <button type="button" class="btn btn-outline-danger btn-sm" onclick="removeProducto(this)">
-                    <i class="bi bi-trash"></i>
-                </button>
-            </div>
-        `;
-
-        // Añadir la nueva fila al contenedor de productos
-        productosContainer.appendChild(newProductoRow);
-
-        // Llenar el select del nuevo producto con los datos de la base de datos
-        await getProductosPedido(`productoSelect${productoCount}`);
-    });
-
-
-});
-// Función para editar un producto
-function editProducto(button) {
-    var productoRow = button.closest('.producto-row');
-    var productoSelect = productoRow.querySelector('.producto-select');
-    var cantidadInput = productoRow.querySelector('.cantidad-input');
-
-    // Aquí podrías agregar lógica para editar el producto seleccionado y su cantidad
-    alert(`Editar Producto: ${productoSelect.value}, Cantidad: ${cantidadInput.value}`);
-}
-
-// Función para eliminar un producto
-function removeProducto(button) {
-    var productoRow = button.closest('.producto-row');
-    productoRow.remove();
-}
-
-
-/*  */
-
-//Script para manejar la información del modal del boton informacion
-
-document.addEventListener('DOMContentLoaded', function () {
-    var infoModal = document.getElementById('infoModal');
-    infoModal.addEventListener('show.bs.modal', function (event) {
-        var button = event.relatedTarget; // Botón que abrió el modal
-
-        // Obtener los datos del botón
-        var id = button.getAttribute('data-id');
-        var cliente = button.getAttribute('data-cliente');
-        var monto = button.getAttribute('data-monto');
-        var tipo = button.getAttribute('data-tipo');
-        var fecha = button.getAttribute('data-fecha');
-        var estado = button.getAttribute('data-estado');
-
-        // Establecer los valores en el modal
-        document.getElementById('modalFecha').textContent = fecha;
-        document.getElementById('modalCliente').textContent = cliente;
-        document.getElementById('modalEstado').textContent = estado;
-        document.getElementById('modalDireccion').textContent = 'N/A'; // Aquí se puede cambiar si es necesario
-        document.getElementById('modalTipo').textContent = tipo;
-        document.getElementById('modalFrecuencia').textContent = 'N/A'; // Aquí se puede cambiar si es necesario
-        document.getElementById('modalDia').textContent = 'N/A'; // Aquí se puede cambiar si es necesario
-
-        // Ejemplo de cómo agregar filas de productos (debes adaptar esto a tus necesidades)
-        var detalles = document.getElementById('modalDetalles');
-        detalles.innerHTML = `
-            <tr>
-                <td>Cilindro de Gas 45kg</td>
-                <td>2</td>
-                <td>$50.00</td>
-                <td>$100.00</td>
-            </tr>
-            <tr>
-                <td>Botellón de Agua 12L</td>
-                <td>4</td>
-                <td>$10.00</td>
-                <td>$40.00</td>
-            </tr>
-        `;
-
-        // Actualizar el total
-        document.getElementById('modalTotal').textContent = '$140.00'; // Aquí debes calcular el total dinámicamente si es necesario
-    });
-});
-
-async function buscarClientes(action, pedido = null) {
-    try {
-        const response = await axios.get('http://localhost:3000/api/cliente');
-        console.log(response);
-
-        // Filtrar los clientes para excluir aquellos con estado = 0 (inactivos)
-        const clientesActivos = response.data.filter(cliente => cliente.estado === 1);
-
-        // Ordenar los clientes activos por apellido alfabéticamente
-        const clientesOrdenados = clientesActivos.sort((a, b) => {
-            return a.apellido.localeCompare(b.apellido);
-        });
-
-        // Limpiar las opciones existentes antes de agregar nuevas opciones
-        const selectElement = document.getElementById('clienteSelect');
-        selectElement.innerHTML = ''; // Limpiar las opciones actuales del select
-
-        // Agregar la opción predeterminada "Seleccione un cliente"
-        const defaultOption = document.createElement('option');
-        defaultOption.value = ''; // Dejar el valor vacío
-        defaultOption.text = 'Seleccione un cliente';
-        defaultOption.disabled = true; // No seleccionable
-        defaultOption.selected = true; // Aparece como la opción seleccionada por defecto
-        selectElement.appendChild(defaultOption);
-
-        // Agregar las opciones de clientes ordenados
-        clientesOrdenados.forEach(cliente => {
-            const option = document.createElement('option');
-            option.value = cliente.idCliente; // Usar el ID del cliente como valor de la opción
-            option.text = `${cliente.apellido}, ${cliente.nombre}`;
-
-            // Marcar como seleccionada si el pedido existe y el idCliente coincide
-            if (pedido && cliente.idCliente === pedido.idCliente) {
-                option.selected = true;
-            }
-
-            selectElement.appendChild(option);
-        });
-
-    } catch (error) {
-        console.error('Error al buscar clientes:', error);
-    }
-}
-
-
-function agregarOptionCliente(cliente) {
-    // Obtener el elemento select
-    const selectElement = document.getElementById('clienteSelect');
-
-    // Crear una nueva opción con el formato "Apellido Nombre"
-    const option = document.createElement('option');
-    option.value = cliente.idCliente; // Supongo que el cliente tiene un identificador único
-    option.text = `${cliente.apellido} ${cliente.nombre}`; // Concatenar apellido y nombre
-
-    // Agregar la opción al select
-    selectElement.appendChild(option);
-}
-
-botonNuevoPedido = document.getElementById("nuevoPedido");
-botonNuevoPedido.addEventListener("click", function () {
-    document.getElementById('pedidoModalLabel').innerHTML = '<i class="fas fa-file-alt"></i> Nuevo Pedido';
-    buscarClientes("crear");
-    cargarModoPago();
-    cargarEstadoPedido();
-    getProductosPedido('productoSelect0');
-    cargarFrecuencia();
-    cargarDiaDeEntrega();
-});
-
-botonGuardarPedido = document.getElementById("savePedido");
-botonGuardarPedido.addEventListener("click", function () {
-    const pedidoId = document.getElementById("pedidoId").value;
-
-    if (pedidoId) {
-        editarPedido(pedidoId); // tengo id entonces existe
-    } else {
-        nuevoPedido();
-    }
-});
-
 async function nuevoPedido() {
     const apiUrl = `http://localhost:3000/api/pedido`;
-    const clienteData = obtenerDatosPedido();
+    const pedidoData = obtenerDatosPedido();
+
+    if (!validacionCamposPedido()) return;
 
     try {
-        // Si no existe, procede a guardar el nuevo cliente
-        const saveResponse = await axios.post(apiUrl, clienteData);
+        const saveResponse = await axios.post(apiUrl, pedidoData);
         if (saveResponse.status === 200 || saveResponse.status === 201) {
-            console.log('Cliente guardado:', saveResponse.data);
+            console.log('Pedido guardado:', saveResponse.data);
             Swal.fire({
                 icon: 'success',
                 title: 'Pedido Guardado',
@@ -235,11 +33,11 @@ async function nuevoPedido() {
 
 async function editarPedido(idPedido) {
     const apiUrl = `http://localhost:3000/api/pedido/${idPedido}`;
-    const clienteData = obtenerDatosPedido(); // Asumiendo que esta función obtiene los datos del pedido
+    const pedidoData = obtenerDatosPedido();
 
     try {
         // Realiza la solicitud PUT para actualizar el pedido
-        const saveResponse = await axios.put(apiUrl, clienteData);
+        const saveResponse = await axios.put(apiUrl, pedidoData);
         if (saveResponse.status === 200 || saveResponse.status === 204) {
             console.log('Pedido actualizado:', saveResponse.data);
             Swal.fire({
@@ -248,7 +46,7 @@ async function editarPedido(idPedido) {
                 text: 'El pedido se ha actualizado correctamente.',
                 confirmButtonText: 'Entendido'
             }).then(() => {
-                location.reload(); // Recarga la página para reflejar los cambios
+                location.reload(); 
             });
         } else {
             throw new Error('Error al actualizar el pedido: ' + saveResponse.status);
@@ -265,6 +63,61 @@ async function editarPedido(idPedido) {
     }
 }
 
+function deshabilitarPedido(pedidoId) {
+    const apiUrl = `http://localhost:3000/api/pedido/deshabilitar/${pedidoId}`;
+    const pedidoData = { estado: 4 };
+
+    Swal.fire({
+        title: '¿Estás seguro?',
+        text: "Esta acción cancelará el pedido.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, cancelar',
+        cancelButtonText: 'No, mantener'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            axios.put(apiUrl, pedidoData)
+                .then(response => {
+                    if (response.status === 200) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Pedido cancelado',
+                            text: 'El pedido fue cancelado con éxito.',
+                            confirmButtonText: 'Aceptar'
+                        }).then(() => {
+                            location.reload(); // Refrescar la página
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error("Error al cancelar el pedido:", error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Hubo un problema al cancelar el pedido.',
+                        confirmButtonText: 'Aceptar'
+                    });
+                });
+        }
+    });
+}
+
+async function modificarDatosPedido(pedido) {
+    //console.log(pedido);
+    document.getElementById('fechaPedido').textContent = pedido.fechaPedido;
+    
+    buscarClientes("editar", pedido);
+    cargarModoPago("editar", pedido);
+    cargarEstadoPedido("editar", pedido);
+    getProductosPedido('productoSelect0');
+    checkRecurrente(pedido);
+    checkDireccion(pedido);
+    cargarFrecuencia("editar", pedido);
+    cargarDiaDeEntrega("editar", pedido);
+    await precargarDatosPedido(pedido);
+}
 
 function obtenerDatosPedido() {
     const productos = [];
@@ -299,12 +152,11 @@ function obtenerDatosPedido() {
         detallesPedido: productos // Lista de productos seleccionados
     };
 
-    console.log('Datos del pedido formateados:', datosPedido); // Para verificar que los datos estén correctos
+    // console.log('Datos del pedido formateados:', datosPedido); 
 
-    console.log(datosPedido);
+    //console.log(datosPedido);
     return datosPedido;
 }
-
 
 async function cargarPedidosTabla(filter = null) {
     try {
@@ -333,14 +185,11 @@ async function cargarPedidosTabla(filter = null) {
         });
 
 
-        // Iterar sobre cada cliente y agregar a la tabla
         pedidosOrdenados.forEach(pedido => agregarFilaPedido(tbody, pedido));
     } catch (error) {
         console.error('Error al cargar los pedidos:', error);
     }
 }
-
-cargarPedidosTabla();
 
 function agregarFilaPedido(tbody, pedido) {
     const fila = document.createElement('tr');
@@ -483,51 +332,8 @@ function agregarFilaPedido(tbody, pedido) {
     tbody.appendChild(fila);
 }
 
-function deshabilitarPedido(productoId) {
-    const apiUrl = `http://localhost:3000/api/pedido/deshabilitar/${productoId}`;
-    const productoData = { estado: 4 };
-
-    Swal.fire({
-        title: '¿Estás seguro?',
-        text: "Esta acción cancelará el pedido.",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Sí, cancelar',
-        cancelButtonText: 'No, mantener'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            axios.put(apiUrl, productoData)
-                .then(response => {
-                    if (response.status === 200) {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Pedido cancelado',
-                            text: 'El pedido fue cancelado con éxito.',
-                            confirmButtonText: 'Aceptar'
-                        }).then(() => {
-                            location.reload(); // Refrescar la página
-                        });
-                    }
-                })
-                .catch(error => {
-                    console.error("Error al deshabilitar el pedido:", error);
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: 'Hubo un problema al deshabilitar el pedido.',
-                        confirmButtonText: 'Aceptar'
-                    });
-                });
-        }
-    });
-}
-
-
 async function llenarModalConDatos(valoresPedido, idPedido, idCliente) {
-
-    const [estadoPedido, diaEntrega, frecuencia, modoPago] = valoresPedido;
+    const [estadoPedido, diaEntrega, frecuencia] = valoresPedido;
     //Otra forma de hacerlo
     //const estadoPedido = valoresPedido[estadoPedido], así para cada valor del array
 
@@ -541,7 +347,7 @@ async function llenarModalConDatos(valoresPedido, idPedido, idCliente) {
     const responseDetalle = await axios.get(`http://localhost:3000/api/pedido/${idPedido}/detalles`);
 
     const datosDetalles = responseDetalle.data;
-    console.log(datosDetalles);
+    //console.log(datosDetalles);
 
     // Obtener los datos del pedido de la respuesta
     const datosPedido = responsePedido.data;
@@ -551,17 +357,13 @@ async function llenarModalConDatos(valoresPedido, idPedido, idCliente) {
 
         let direccion = `${datosCliente.calle} ${datosCliente.numeroCalle}`;
 
-
         if (datosCliente.piso) {
             direccion += `, piso ${datosCliente.piso}`;
         }
 
-
     } else {
-
         direccion = datosPedido.direccionEntregaDiferente;
     }
-
 
 
     // Llenar los elementos del modal con los datos
@@ -612,81 +414,6 @@ async function llenarModalConDatos(valoresPedido, idPedido, idCliente) {
     document.getElementById('modalTotal').textContent = totalFormateado;
 }
 
-const pedidoData = {
-    numeroPedido: 1010,
-    fechaPedido: "2024-10-14",
-    idCliente: 5,
-    direccionEntregaDiferente: true,
-    recurrente: false,
-    idDiaEntrega: 3,
-    idFrecuencia: 2,
-    idModoPago: 1,
-    idEstadoPedido: 1,
-    detallesPedido: [
-        { idProducto: 12, cantidad: 3, precioUnitario: 50.0 },
-        { idProducto: 7, cantidad: 1, precioUnitario: 30.0 },
-        { idProducto: 15, cantidad: 2, precioUnitario: 20.0 }
-    ]
-};
-
-async function modificarDatosPedido(pedido) {
-    console.log(pedido);
-    document.getElementById('fechaPedido').textContent = pedido.fechaPedido;
-    // cargarClientes('editar', pedido);
-    // cargarTiposCliente('editar', pedido);
-    // cargarCondicionFiscal('editar', pedido);
-    // precargarDatosCliente(pedido);
-
-
-    buscarClientes("editar", pedido);
-    cargarModoPago("editar", pedido);
-    cargarEstadoPedido("editar", pedido);
-    getProductosPedido('productoSelect0');
-    checkRecurrente(pedido);
-    checkDireccion(pedido);
-    cargarFrecuencia("editar", pedido);
-    cargarDiaDeEntrega("editar", pedido);
-    await precargarDatosPedido(pedido);
-
-
-    //cargar fecha, cliente, medio de pago, estado, productos, dirección de entrega, día de entrega y frecuencia
-}
-
-function checkRecurrente(pedido) {
-    const recurrenteCheck = document.getElementById('recurrenteCheck');
-    const recurrenteOptions = document.getElementById('recurrenteOptions');
-
-    // Verificar si el pedido es recurrente al cargar
-    if (pedido.recurrente === 1) {
-        recurrenteCheck.checked = true;
-        recurrenteOptions.classList.remove('d-none');
-    } else {
-        recurrenteCheck.checked = false;
-        recurrenteOptions.classList.add('d-none');
-    }
-}
-
-function checkDireccion(pedido) {
-    const diferenteDireccionCheck = document.getElementById('diferenteDireccionCheck');
-    const direccionEntregaContainer = document.getElementById('direccionEntregaContainer');
-    const direccionEntregaInput = document.getElementById('direccionEntrega');
-    if (pedido.direccionEntregaDiferente) {
-        direccionEntregaContainer.classList.remove('d-none');
-        direccionEntregaInput.required = true;
-        direccionEntregaInput.value = pedido.direccionEntregaDiferente;
-    } else {
-        direccionEntregaContainer.classList.add('d-none');
-        direccionEntregaInput.required = false;
-        direccionEntregaInput.value = ''; // Limpiar el campo si se desmarca
-    }
-}
-
-function formatearFecha(fecha) {
-    const [day, month, year] = fecha.split('-');
-    const formattedDate = `${year}-${month}-${day}`;
-    return formattedDate;
-}
-
 async function precargarDatosPedido(pedido) {
     document.getElementById('fechaPedido').value = formatearFecha(pedido.fechaPedido);
     const detallesPedido = await obtenerDetallesPedido(pedido.idPedido);
@@ -729,51 +456,221 @@ async function precargarDatosPedido(pedido) {
         selectProducto.value = detalle.idProducto;
     }
 
-    console.log("Aca se mandaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-    console.log("Estos son los detalles: ", detallesPedido);
+    //console.log("Aca se mandaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+    //console.log("Estos son los detalles: ", detallesPedido);
 }
 
-async function obtenerDetallesPedido(idPedido) {
-    const responseDetalle = await axios.get(`http://localhost:3000/api/pedido/${idPedido}/detalles`);
-    console.log("Respuesta de la API:", responseDetalle.data);
-    return responseDetalle.data;
+
+function validacionCamposPedido() {
+    // Obtener valores de los campos del formulario
+    let fechaPedido = document.getElementById('fechaPedido').value;
+    let cliente = document.getElementById('clienteSelect').value;
+    let medioPago = document.getElementById('medioPagoSelect').value;
+    let estado = document.getElementById('estadoSelect').value;
+
+    // Variables para detalle de productos
+    let productos = document.querySelectorAll('.producto-select');
+    let cantidades = document.querySelectorAll('.cantidad-input');
+
+    // Opcional: otros campos
+    let direccionEntregaCheck = document.getElementById('diferenteDireccionCheck').checked;
+    let direccionEntrega = direccionEntregaCheck ? document.getElementById('direccionEntrega').value : null;
+
+    let error = false;
+    let mensajesError = "";
+    let camposObligatoriosFaltantes = [];
+
+    // Validaciones para campos generales
+    if (fechaPedido === "") {
+        camposObligatoriosFaltantes.push("Fecha de Pedido");
+        error = true;
+    }
+
+    if (cliente === "") {
+        camposObligatoriosFaltantes.push("Cliente");
+        error = true;
+    }
+
+    if (medioPago === "") {
+        camposObligatoriosFaltantes.push("Medio de Pago");
+        error = true;
+    }
+
+    if (estado === "") {
+        camposObligatoriosFaltantes.push("Estado");
+        error = true;
+    }
+
+    // Validación de detalle de productos
+    if (productos.length === 0) {
+        mensajesError += "Debe añadir al menos un producto al pedido.<br>";
+        error = true;
+    } else {
+        productos.forEach((producto, index) => {
+            if (producto.value === "") {
+                mensajesError += `Seleccione un producto en la fila ${index + 1}.<br>`;
+                error = true;
+            }
+        });
+
+        cantidades.forEach((cantidad, index) => {
+            if (cantidad.value === "" || isNaN(cantidad.value) || parseInt(cantidad.value) <= 0) {
+                mensajesError += `Ingrese una cantidad válida para el producto en la fila ${index + 1}.<br>`;
+                error = true;
+            }
+        });
+    }
+
+    // Validación de dirección de entrega (si está marcado el checkbox)
+    if (direccionEntregaCheck && direccionEntrega === "") {
+        camposObligatoriosFaltantes.push("Dirección de Entrega");
+        error = true;
+    }
+
+    // Mostrar campos obligatorios faltantes
+    if (camposObligatoriosFaltantes.length > 0) {
+        mensajesError += "Ingrese datos en: " + camposObligatoriosFaltantes.join(", ") + ".<br>";
+    }
+
+    // Mostrar alertas de error si es necesario
+    if (error) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Campos obligatorios faltantes o con errores',
+            html: mensajesError,
+            confirmButtonText: 'Entendido'
+        });
+    }
+
+    return !error; // Retorna false si hay errores
 }
 
-async function cargarClientes(action, cliente = null) {
+// Modal de nuevo pedido-------------------------------------------------------------------
+document.addEventListener('DOMContentLoaded', function () {
+    // Manejar la visibilidad de la dirección de entrega diferente
+    var diferenteDireccionCheck = document.getElementById('diferenteDireccionCheck');
+    var direccionEntregaContainer = document.getElementById('direccionEntregaContainer');
+    var direccionEntregaInput = document.getElementById('direccionEntrega');
+
+    diferenteDireccionCheck.addEventListener('change', function () {
+        if (diferenteDireccionCheck.checked) {
+            direccionEntregaContainer.classList.remove('d-none');
+            direccionEntregaInput.required = true;
+        } else {
+            direccionEntregaContainer.classList.add('d-none');
+            direccionEntregaInput.required = false;
+            direccionEntregaInput.value = ''; // Limpiar el campo si se desmarca
+        }
+    });
+
+    // Manejar la visibilidad de las opciones recurrentes
+    document.getElementById('recurrenteCheck').addEventListener('change', async function () {
+        document.getElementById('recurrenteOptions').classList.toggle('d-none', !this.checked);
+    });
+
+    // Agregar nuevo producto
+    document.getElementById('addProducto').addEventListener('click', async function () {
+        var productosContainer = document.getElementById('productosContainer');
+        var productoCount = productosContainer.querySelectorAll('.producto-row').length;
+        var newProductoRow = document.createElement('div');
+        newProductoRow.className = 'd-flex align-items-end mb-3 producto-row';
+
+        // Crear la estructura del HTML para la nueva fila de producto
+        newProductoRow.innerHTML = `
+            <div class="col-lg-4 col-md-6 col-sm-6 col-7">
+                <label for="productoSelect${productoCount}" class="form-label"></label>
+                <select id="productoSelect${productoCount}" class="form-select producto-select" required>
+                    <option value="" disabled selected>Seleccione Producto</option>
+                </select>
+            </div>
+            <div class="col-lg-2 col-md-3 col-sm-3 col-3">
+                <label for="cantidad${productoCount}" class="form-label"></label>
+                <input type="number" id="cantidad${productoCount}" class="form-control cantidad-input" required min="1" step="1">
+            </div>
+            <div class="d-flex align-items-end">
+                <button type="button" class="btn btn-outline-danger btn-sm" onclick="removeProducto(this)">
+                    <i class="bi bi-trash"></i>
+                </button>
+            </div>
+        `;
+
+        // Añadir la nueva fila al contenedor de productos
+        productosContainer.appendChild(newProductoRow);
+
+        // Llenar el select del nuevo producto con los datos de la base de datos
+        await getProductosPedido(`productoSelect${productoCount}`);
+    });
+});
+
+function editProducto(button) {
+    var productoRow = button.closest('.producto-row');
+    var productoSelect = productoRow.querySelector('.producto-select');
+    var cantidadInput = productoRow.querySelector('.cantidad-input');
+
+    // Aquí podrías agregar lógica para editar el producto seleccionado y su cantidad
+    alert(`Editar Producto: ${productoSelect.value}, Cantidad: ${cantidadInput.value}`);
+}
+
+function removeProducto(button) {
+    var productoRow = button.closest('.producto-row');
+    productoRow.remove();
+}
+
+async function buscarClientes(action, pedido = null) {
     try {
         const response = await axios.get('http://localhost:3000/api/cliente');
+        //console.log(response);
 
-        const selectCliente = document.querySelector('#Cliente');
+        // Filtrar los clientes para excluir aquellos con estado = 0 (inactivos)
+        const clientesActivos = response.data.filter(cliente => cliente.estado === 1);
 
-        selectCliente.innerHTML = '<option value="" selected disabled>Seleccione un Cliente</option>';
-        response.data.forEach(cliente => {
+        // Ordenar los clientes activos por apellido alfabéticamente
+        const clientesOrdenados = clientesActivos.sort((a, b) => {
+            return a.apellido.localeCompare(b.apellido);
+        });
+
+        // Limpiar las opciones existentes antes de agregar nuevas opciones
+        const selectElement = document.getElementById('clienteSelect');
+        selectElement.innerHTML = ''; // Limpiar las opciones actuales del select
+
+        // Agregar la opción predeterminada "Seleccione un cliente"
+        const defaultOption = document.createElement('option');
+        defaultOption.value = ''; // Dejar el valor vacío
+        defaultOption.text = 'Seleccione un cliente';
+        defaultOption.disabled = true; // No seleccionable
+        defaultOption.selected = true; // Aparece como la opción seleccionada por defecto
+        selectElement.appendChild(defaultOption);
+
+        // Agregar las opciones de clientes ordenados
+        clientesOrdenados.forEach(cliente => {
             const option = document.createElement('option');
-            option.value = cliente.idCliente;
-            option.textContent = cliente.apellido + " " + cliente.nombre;
+            option.value = cliente.idCliente; // Usar el ID del cliente como valor de la opción
+            option.text = `${cliente.apellido}, ${cliente.nombre}`;
 
-            // Si se trata de edición, seleccionar el tipo correspondiente
-            if (action === 'editar' && cliente) {
+            // Marcar como seleccionada si el pedido existe y el idCliente coincide
+            if (pedido && cliente.idCliente === pedido.idCliente) {
                 option.selected = true;
             }
 
-            selectCliente.appendChild(option);
+            selectElement.appendChild(option);
         });
+
     } catch (error) {
-        console.error('Error al cargar los tipos de cliente:', error);
+        console.error('Error al buscar clientes:', error);
     }
 }
 
-function filtrarPorCliente() {
-    const clienteBuscar = document.getElementById('buscarCliente').value.toLowerCase();
-    const filasTabla = document.querySelectorAll('#pedidosTable tbody tr');
+function agregarOptionCliente(cliente) {
+    // Obtener el elemento select
+    const selectElement = document.getElementById('clienteSelect');
 
-    filasTabla.forEach(fila => {
-        const celdaCliente = fila.querySelector('td:nth-child(3)');
-        if (celdaCliente) {
-            const nombreCliente = celdaCliente.textContent.toLowerCase();
-            fila.style.display = nombreCliente.includes(clienteBuscar) ? '' : 'none';
-        }
-    });
+    // Crear una nueva opción con el formato "Apellido Nombre"
+    const option = document.createElement('option');
+    option.value = cliente.idCliente; // Supongo que el cliente tiene un identificador único
+    option.text = `${cliente.apellido} ${cliente.nombre}`; // Concatenar apellido y nombre
+
+    // Agregar la opción al select
+    selectElement.appendChild(option);
 }
 
 function filtrarPedidos() {
@@ -825,5 +722,71 @@ function filtrarPedidos() {
     });
 }
 
+function checkRecurrente(pedido) {
+    const recurrenteCheck = document.getElementById('recurrenteCheck');
+    const recurrenteOptions = document.getElementById('recurrenteOptions');
+
+    // Verificar si el pedido es recurrente al cargar
+    if (pedido.recurrente === 1) {
+        recurrenteCheck.checked = true;
+        recurrenteOptions.classList.remove('d-none');
+    } else {
+        recurrenteCheck.checked = false;
+        recurrenteOptions.classList.add('d-none');
+    }
+}
+
+function checkDireccion(pedido) {
+    const direccionEntregaContainer = document.getElementById('direccionEntregaContainer');
+    const direccionEntregaInput = document.getElementById('direccionEntrega');
+    if (pedido.direccionEntregaDiferente) {
+        direccionEntregaContainer.classList.remove('d-none');
+        direccionEntregaInput.required = true;
+        direccionEntregaInput.value = pedido.direccionEntregaDiferente;
+    } else {
+        direccionEntregaContainer.classList.add('d-none');
+        direccionEntregaInput.required = false;
+        direccionEntregaInput.value = ''; // Limpiar el campo si se desmarca
+    }
+}
+
+function formatearFecha(fecha) {
+    const [day, month, year] = fecha.split('-');
+    const formattedDate = `${year}-${month}-${day}`;
+    return formattedDate;
+}
+
+async function obtenerDetallesPedido(idPedido) {
+    const responseDetalle = await axios.get(`http://localhost:3000/api/pedido/${idPedido}/detalles`);
+    //console.log("Respuesta de la API:", responseDetalle.data);
+    return responseDetalle.data;
+}
 
 
+botonNuevoPedido = document.getElementById("nuevoPedido");
+botonNuevoPedido.addEventListener("click", function () {
+    document.getElementById('pedidoModalLabel').innerHTML = '<i class="fas fa-file-alt"></i> Nuevo Pedido';
+    buscarClientes("crear");
+    cargarModoPago();
+    cargarEstadoPedido();
+    getProductosPedido('productoSelect0');
+    cargarFrecuencia();
+    cargarDiaDeEntrega();
+});
+
+botonGuardarPedido = document.getElementById("savePedido");
+botonGuardarPedido.addEventListener("click", function () {
+    const pedidoId = document.getElementById("pedidoId").value;
+
+    if (pedidoId) {
+        editarPedido(pedidoId); // tengo id entonces existe
+    } else {
+        nuevoPedido();
+    }
+});
+
+cargarPedidosTabla();
+
+document.querySelector(".btn-close").addEventListener("click", function () {
+    location.reload();
+});

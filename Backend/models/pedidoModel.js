@@ -116,11 +116,7 @@ const pedido = {
 
   create: async (pedido) => {
     try {
-      // Validación básica
-      /*   if (!pedido || !pedido.numeroPedido) {
-          throw new Error('Faltan datos obligatorios');
-        }
-   */
+   
       const {
         numeroPedido,
         fechaPedido,
