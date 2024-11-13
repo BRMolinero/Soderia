@@ -13,6 +13,16 @@ exports.getAllPedido = async (req, res) => {
   }
 };
 
+
+exports.getUltimoNumeroPedido = async (req, res) => {
+  try {
+    const pedido = await Pedido.getUltimoNumeroPedido(); // Pasamos los filtros al modelo
+    res.json(pedido);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
 // Obtener un Pedido por ID
 exports.getPedidoById = async (req, res) => {
   try {

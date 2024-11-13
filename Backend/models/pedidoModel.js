@@ -33,7 +33,7 @@ const pedido = {
         INNER JOIN modoPago as mp ON p.idModoPago = mp.idModoPago
         INNER JOIN estadoPedido as ep ON p.idEstadoPedido = ep.idEstadoPedido
       WHERE 1=1
-      order by p.idEstadoPedido asc, p.fechaPedido asc, c.apellido asc`;
+      `;
      
       const queryParams = [];
       if (filter.nombre) {
@@ -53,9 +53,10 @@ const pedido = {
         query += ' AND c.estado = ?';
         queryParams.push(Number(filter.estado)); // Suponiendo que 'estado' es un valor exacto
       }
-     
 
-
+      query += `
+      order by p.idEstadoPedido asc, p.fechaPedido desc, c.apellido asc
+        `;
 
       // Ejecutamos la consulta con los parámetros correspondientes
       const [rows] = await db.query(query, queryParams);
@@ -64,6 +65,23 @@ const pedido = {
 
     } catch (error) {
       console.error('Error en getAll:', error);
+      throw error;
+    }
+  },
+
+  getUltimoNumeroPedido: async () => {
+    try {
+      const query = `
+        SELECT numeroPedido
+        FROM pedido
+        ORDER BY idPedido DESC
+        LIMIT 1
+      `;
+
+      const [rows] = await db.query(query);
+      return rows[0] || { numeroPedido: 0 }; // Si no hay registros, devolver número 0 como valor predeterminado
+    } catch (error) {
+      console.error('Error en getUltimoNumeroPedido:', error);
       throw error;
     }
   },

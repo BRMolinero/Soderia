@@ -226,6 +226,8 @@ const producto = {
         FROM producto AS p
         INNER JOIN tipoProducto as tp on p.idTipoProducto = tp.idTipoProducto
         INNER JOIN proveedor as pr on p.idProveedor = pr.idProveedor
+        
+        WHERE p.estado = 1
       `);
       return rows;
     } catch (error) {
@@ -236,7 +238,7 @@ const producto = {
 
   getById: async (id) => {
     try {
-      const [rows] = await db.query('SELECT * FROM producto WHERE idProducto = ?', [id]);
+      const [rows] = await db.query('SELECT * FROM producto WHERE idProducto = ? AND estado = 1', [id]);
       return rows[0];
     } catch (error) {
       console.error('Error en tratar de traer un producto en específico:', error);

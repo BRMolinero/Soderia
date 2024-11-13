@@ -7,7 +7,7 @@ async function nuevoPedido() {
     try {
         const saveResponse = await axios.post(apiUrl, pedidoData);
         if (saveResponse.status === 200 || saveResponse.status === 201) {
-            console.log('Pedido guardado:', saveResponse.data);
+            //console.log('Pedido guardado:', saveResponse.data);
             Swal.fire({
                 icon: 'success',
                 title: 'Pedido Guardado',
@@ -21,7 +21,7 @@ async function nuevoPedido() {
         }
 
     } catch (error) {
-        console.error('Error al procesar la solicitud:', error.response ? error.response.data : error.message);
+       // console.error('Error al procesar la solicitud:', error.response ? error.response.data : error.message);
         Swal.fire({
             icon: 'error',
             title: 'Error',
@@ -29,6 +29,90 @@ async function nuevoPedido() {
             confirmButtonText: 'Entendido'
         });
     }
+}
+
+function validacionCamposPedido() {
+    // Obtener valores de los campos del formulario
+    let fechaPedido = document.getElementById('fechaPedido').value;
+    let cliente = document.getElementById('clienteSelect').value;
+    let medioPago = document.getElementById('medioPagoSelect').value;
+    let estado = document.getElementById('estadoSelect').value;
+
+    // Variables para detalle de productos
+    let productos = document.querySelectorAll('.producto-select');
+    let cantidades = document.querySelectorAll('.cantidad-input');
+
+    // Opcional: otros campos
+    let direccionEntregaCheck = document.getElementById('diferenteDireccionCheck').checked;
+    let direccionEntrega = direccionEntregaCheck ? document.getElementById('direccionEntrega').value : null;
+
+    let error = false;
+    let mensajesError = "";
+    let camposObligatoriosFaltantes = [];
+
+    // Validaciones para campos generales
+    if (fechaPedido === "") {
+        camposObligatoriosFaltantes.push("Fecha de Pedido");
+        error = true;
+    }
+
+    if (cliente === "") {
+        camposObligatoriosFaltantes.push("Cliente");
+        error = true;
+    }
+
+    if (medioPago === "") {
+        camposObligatoriosFaltantes.push("Medio de Pago");
+        error = true;
+    }
+
+    if (estado === "") {
+        camposObligatoriosFaltantes.push("Estado");
+        error = true;
+    }
+
+    // Validación de detalle de productos
+    if (productos.length === 0) {
+        mensajesError += "Debe añadir al menos un producto al pedido.<br>";
+        error = true;
+    } else {
+        productos.forEach((producto, index) => {
+            if (producto.value === "") {
+                mensajesError += `Seleccione un producto en la fila ${index + 1}.<br>`;
+                error = true;
+            }
+        });
+
+        cantidades.forEach((cantidad, index) => {
+            if (cantidad.value === "" || isNaN(cantidad.value) || parseInt(cantidad.value) <= 0) {
+                mensajesError += `Ingrese una cantidad válida para el producto en la fila ${index + 1}.<br>`;
+                error = true;
+            }
+        });
+    }
+
+    // Validación de dirección de entrega (si está marcado el checkbox)
+    if (direccionEntregaCheck && direccionEntrega === "") {
+        camposObligatoriosFaltantes.push("Dirección de Entrega");
+        error = true;
+    }
+
+    // Mostrar campos obligatorios faltantes
+    if (camposObligatoriosFaltantes.length > 0) {
+        mensajesError += "Ingrese datos en: " + camposObligatoriosFaltantes.join(", ") + ".<br>";
+    }
+
+    // Mostrar alertas de error si es necesario
+    if (error) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Campos obligatorios faltantes o con errores',
+            html: mensajesError,
+            confirmButtonText: 'Entendido'
+        });
+    }
+
+    return !error; // Retorna false si hay errores
 }
 
 async function editarPedido(idPedido) {
@@ -39,7 +123,7 @@ async function editarPedido(idPedido) {
         // Realiza la solicitud PUT para actualizar el pedido
         const saveResponse = await axios.put(apiUrl, pedidoData);
         if (saveResponse.status === 200 || saveResponse.status === 204) {
-            console.log('Pedido actualizado:', saveResponse.data);
+            //console.log('Pedido actualizado:', saveResponse.data);
             Swal.fire({
                 icon: 'success',
                 title: 'Pedido Actualizado',
@@ -53,7 +137,7 @@ async function editarPedido(idPedido) {
         }
 
     } catch (error) {
-        console.error('Error al procesar la solicitud:', error.response ? error.response.data : error.message);
+        //console.error('Error al procesar la solicitud:', error.response ? error.response.data : error.message);
         Swal.fire({
             icon: 'error',
             title: 'Error',
@@ -92,7 +176,7 @@ function deshabilitarPedido(pedidoId) {
                     }
                 })
                 .catch(error => {
-                    console.error("Error al cancelar el pedido:", error);
+                    //console.error("Error al cancelar el pedido:", error);
                     Swal.fire({
                         icon: 'error',
                         title: 'Error',
@@ -140,7 +224,7 @@ function obtenerDatosPedido() {
     // Formatear el objeto para que coincida con el formato esperado por Postman
 
     const datosPedido = {
-        numeroPedido: (Math.floor(Math.random() * 1000000)).toString(),
+        numeroPedido: document.getElementById('ultimoNumeroPedido').value,
         fechaPedido: document.getElementById('fechaPedido').value,
         idCliente: parseInt(document.getElementById('clienteSelect').value, 10),
         direccionEntregaDiferente: document.getElementById('diferenteDireccionCheck').checked ? document.getElementById('direccionEntrega').value : null,
@@ -168,6 +252,7 @@ async function cargarPedidosTabla(filter = null) {
         } else {
             response = await axios.get('http://localhost:3000/api/pedido');
         }
+        //console.log(response.data);
 
         const tbody = document.querySelector('#pedidosTable tbody');
 
@@ -184,8 +269,9 @@ async function cargarPedidosTabla(filter = null) {
             return new Date(b.fechaPedido) - new Date(a.fechaPedido);
         });
 
-
+        
         pedidosOrdenados.forEach(pedido => agregarFilaPedido(tbody, pedido));
+        //console.log(pedidosOrdenados);
     } catch (error) {
         console.error('Error al cargar los pedidos:', error);
     }
@@ -285,7 +371,7 @@ function agregarFilaPedido(tbody, pedido) {
     // Añadir el evento de clic para modificar
     botonModificar.addEventListener("click", async () => {
         // Aquí iría la función que maneja la modificación de los datos del pedido
-        document.getElementById('pedidoModalLabel').innerHTML = '<i class="bi bi-person-plus p-1"></i> Editar Pedido';
+        document.getElementById('pedidoModalLabel').innerHTML = '<i class="fas fa-clipboard-list p-1"></i> Editar Pedido';
         document.getElementById('pedidoModal').setAttribute('data-action', 'editar');
         // document.getElementById('pedidoId').value = pedido.idPedido;
         await modificarDatosPedido(pedido);
@@ -332,6 +418,7 @@ function agregarFilaPedido(tbody, pedido) {
     tbody.appendChild(fila);
 }
 
+/* Detalle */
 async function llenarModalConDatos(valoresPedido, idPedido, idCliente) {
     const [estadoPedido, diaEntrega, frecuencia] = valoresPedido;
     //Otra forma de hacerlo
@@ -460,92 +547,14 @@ async function precargarDatosPedido(pedido) {
     //console.log("Estos son los detalles: ", detallesPedido);
 }
 
-
-function validacionCamposPedido() {
-    // Obtener valores de los campos del formulario
-    let fechaPedido = document.getElementById('fechaPedido').value;
-    let cliente = document.getElementById('clienteSelect').value;
-    let medioPago = document.getElementById('medioPagoSelect').value;
-    let estado = document.getElementById('estadoSelect').value;
-
-    // Variables para detalle de productos
-    let productos = document.querySelectorAll('.producto-select');
-    let cantidades = document.querySelectorAll('.cantidad-input');
-
-    // Opcional: otros campos
-    let direccionEntregaCheck = document.getElementById('diferenteDireccionCheck').checked;
-    let direccionEntrega = direccionEntregaCheck ? document.getElementById('direccionEntrega').value : null;
-
-    let error = false;
-    let mensajesError = "";
-    let camposObligatoriosFaltantes = [];
-
-    // Validaciones para campos generales
-    if (fechaPedido === "") {
-        camposObligatoriosFaltantes.push("Fecha de Pedido");
-        error = true;
-    }
-
-    if (cliente === "") {
-        camposObligatoriosFaltantes.push("Cliente");
-        error = true;
-    }
-
-    if (medioPago === "") {
-        camposObligatoriosFaltantes.push("Medio de Pago");
-        error = true;
-    }
-
-    if (estado === "") {
-        camposObligatoriosFaltantes.push("Estado");
-        error = true;
-    }
-
-    // Validación de detalle de productos
-    if (productos.length === 0) {
-        mensajesError += "Debe añadir al menos un producto al pedido.<br>";
-        error = true;
-    } else {
-        productos.forEach((producto, index) => {
-            if (producto.value === "") {
-                mensajesError += `Seleccione un producto en la fila ${index + 1}.<br>`;
-                error = true;
-            }
-        });
-
-        cantidades.forEach((cantidad, index) => {
-            if (cantidad.value === "" || isNaN(cantidad.value) || parseInt(cantidad.value) <= 0) {
-                mensajesError += `Ingrese una cantidad válida para el producto en la fila ${index + 1}.<br>`;
-                error = true;
-            }
-        });
-    }
-
-    // Validación de dirección de entrega (si está marcado el checkbox)
-    if (direccionEntregaCheck && direccionEntrega === "") {
-        camposObligatoriosFaltantes.push("Dirección de Entrega");
-        error = true;
-    }
-
-    // Mostrar campos obligatorios faltantes
-    if (camposObligatoriosFaltantes.length > 0) {
-        mensajesError += "Ingrese datos en: " + camposObligatoriosFaltantes.join(", ") + ".<br>";
-    }
-
-    // Mostrar alertas de error si es necesario
-    if (error) {
-        Swal.fire({
-            icon: 'error',
-            title: 'Campos obligatorios faltantes o con errores',
-            html: mensajesError,
-            confirmButtonText: 'Entendido'
-        });
-    }
-
-    return !error; // Retorna false si hay errores
+async function obtenerDetallesPedido(idPedido) {
+    const responseDetalle = await axios.get(`http://localhost:3000/api/pedido/${idPedido}/detalles`);
+    //console.log("Respuesta de la API:", responseDetalle.data);
+    return responseDetalle.data;
 }
 
-// Modal de nuevo pedido-------------------------------------------------------------------
+
+// ------Modal de nuevo pedido-------------------------------------------------------------------
 document.addEventListener('DOMContentLoaded', function () {
     // Manejar la visibilidad de la dirección de entrega diferente
     var diferenteDireccionCheck = document.getElementById('diferenteDireccionCheck');
@@ -600,6 +609,8 @@ document.addEventListener('DOMContentLoaded', function () {
         // Llenar el select del nuevo producto con los datos de la base de datos
         await getProductosPedido(`productoSelect${productoCount}`);
     });
+
+
 });
 
 function editProducto(button) {
@@ -673,6 +684,41 @@ function agregarOptionCliente(cliente) {
     selectElement.appendChild(option);
 }
 
+function checkRecurrente(pedido) {
+    const recurrenteCheck = document.getElementById('recurrenteCheck');
+    const recurrenteOptions = document.getElementById('recurrenteOptions');
+
+    // Verificar si el pedido es recurrente al cargar
+    if (pedido.recurrente === 1) {
+        recurrenteCheck.checked = true;
+        recurrenteOptions.classList.remove('d-none');
+    } else {
+        recurrenteCheck.checked = false;
+        recurrenteOptions.classList.add('d-none');
+    }
+}
+
+function checkDireccion(pedido) {
+    const diferenteDireccionCheck = document.getElementById('diferenteDireccionCheck');
+    const direccionEntregaContainer = document.getElementById('direccionEntregaContainer');
+    const direccionEntregaInput = document.getElementById('direccionEntrega');
+    if (pedido.direccionEntregaDiferente) {
+        direccionEntregaContainer.classList.remove('d-none');
+        direccionEntregaInput.required = true;
+        direccionEntregaInput.value = pedido.direccionEntregaDiferente;
+    } else {
+        direccionEntregaContainer.classList.add('d-none');
+        direccionEntregaInput.required = false;
+        direccionEntregaInput.value = ''; // Limpiar el campo si se desmarca
+    }
+}
+
+function formatearFecha(fecha) {
+    const [day, month, year] = fecha.split('-');
+    const formattedDate = `${year}-${month}-${day}`;
+    return formattedDate;
+}
+
 function filtrarPedidos() {
     const clienteBuscar = document.getElementById('buscarCliente').value.toLowerCase();
     const fechaInicio = document.getElementById('fechaInicio').value;
@@ -722,49 +768,36 @@ function filtrarPedidos() {
     });
 }
 
-function checkRecurrente(pedido) {
-    const recurrenteCheck = document.getElementById('recurrenteCheck');
-    const recurrenteOptions = document.getElementById('recurrenteOptions');
+function getFechaActual() {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0'); // Añadimos un cero delante si es necesario
+    const day = String(today.getDate()).padStart(2, '0');        // Añadimos un cero delante si es necesario
 
-    // Verificar si el pedido es recurrente al cargar
-    if (pedido.recurrente === 1) {
-        recurrenteCheck.checked = true;
-        recurrenteOptions.classList.remove('d-none');
-    } else {
-        recurrenteCheck.checked = false;
-        recurrenteOptions.classList.add('d-none');
-    }
-}
-
-function checkDireccion(pedido) {
-    const direccionEntregaContainer = document.getElementById('direccionEntregaContainer');
-    const direccionEntregaInput = document.getElementById('direccionEntrega');
-    if (pedido.direccionEntregaDiferente) {
-        direccionEntregaContainer.classList.remove('d-none');
-        direccionEntregaInput.required = true;
-        direccionEntregaInput.value = pedido.direccionEntregaDiferente;
-    } else {
-        direccionEntregaContainer.classList.add('d-none');
-        direccionEntregaInput.required = false;
-        direccionEntregaInput.value = ''; // Limpiar el campo si se desmarca
-    }
-}
-
-function formatearFecha(fecha) {
-    const [day, month, year] = fecha.split('-');
+    // Formateamos la fecha como YYYY-MM-DD
     const formattedDate = `${year}-${month}-${day}`;
-    return formattedDate;
+
+    // Asignamos la fecha al campo input de tipo date
+    document.getElementById("fechaPedido").value = formattedDate;
 }
 
-async function obtenerDetallesPedido(idPedido) {
-    const responseDetalle = await axios.get(`http://localhost:3000/api/pedido/${idPedido}/detalles`);
-    //console.log("Respuesta de la API:", responseDetalle.data);
-    return responseDetalle.data;
+async function getUltimoNumeroPedido() {
+    try {
+        const response = await axios.get('http://localhost:3000/api/pedido/ultimo-numero');
+        const ultimoNumero = response.data.numeroPedido; // Asumiendo que el último número de pedido se recibe en esta propiedad
+
+        return ultimoNumero;
+
+    } catch (error) {
+        console.error('Error al cargar el último número de pedido:', error);
+        return 0; // Si ocurre un error, devolvemos 0 como valor predeterminado
+    }
 }
 
-
+let nuevoNumeroPedido = 0;
 botonNuevoPedido = document.getElementById("nuevoPedido");
-botonNuevoPedido.addEventListener("click", function () {
+botonNuevoPedido.addEventListener("click", async function () {
+    document.getElementById('ultimoNumeroPedido').value = "";
     document.getElementById('pedidoModalLabel').innerHTML = '<i class="fas fa-file-alt"></i> Nuevo Pedido';
     buscarClientes("crear");
     cargarModoPago();
@@ -772,6 +805,18 @@ botonNuevoPedido.addEventListener("click", function () {
     getProductosPedido('productoSelect0');
     cargarFrecuencia();
     cargarDiaDeEntrega();
+    getFechaActual();
+    nuevoNumeroPedido = await getUltimoNumeroPedido();
+    document.getElementById('ultimoNumeroPedido').value = nuevoNumeroPedido + 1;
+});
+
+botonResetFiltro = document.getElementById("btnResetFiltro");
+botonResetFiltro.addEventListener("click", function () {
+    document.getElementById("buscarCliente").value = "";
+    document.getElementById("estadoPedido").selectedIndex = 0;
+    document.getElementById("fechaInicio").value = "";
+    document.getElementById("fechaFin").value = "";
+    cargarPedidosTabla();
 });
 
 botonGuardarPedido = document.getElementById("savePedido");
@@ -785,8 +830,8 @@ botonGuardarPedido.addEventListener("click", function () {
     }
 });
 
-cargarPedidosTabla();
-
 document.querySelector(".btn-close").addEventListener("click", function () {
     location.reload();
 });
+
+cargarPedidosTabla();

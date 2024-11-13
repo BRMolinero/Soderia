@@ -71,6 +71,11 @@
                             <div class="col-xl-3 col-lg- 3 col-md-4 col-sm-10 col-12 me-2">
                                 <input type="text" id="buscarCliente" class="form-control" oninput="filtrarPedidos()" placeholder="Buscar por cliente">
                             </div>
+                            <button id="btnResetFiltro"
+                                            class="btn btn-outline-primary small d-flex align-items-center justify-content-center"
+                                            style="width: 41px; height: 45px;">
+                                            <i class="bi bi-arrow-clockwise"></i>
+                                        </button>
                         </div>
                     </div>
                     
@@ -115,6 +120,7 @@
     <!-- Modal para nuevo pedido -------------------------------------------------------------------------------->
     <div class="modal fade scale modal-pedidos" id="pedidoModal" tabindex="-1" aria-labelledby="pedidoModalLabel"
         aria-hidden="true">
+        <input type="hidden" id="ultimoNumeroPedido">
         <div class="modal-dialog modal-lg">
             <div class="modal-content d-flex flex-column">
                 <div class="modal-header">

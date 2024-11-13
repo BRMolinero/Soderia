@@ -5,6 +5,9 @@ const pedidoController = require('../controllers/pedidoController');
 // Obtener todos los Pedidos
 router.get('/', pedidoController.getAllPedido);
 
+//Obtener último número de pedido registrado
+router.get('/ultimo-numero', pedidoController.getUltimoNumeroPedido);
+
 // Obtener un Pedido por ID
 router.get('/:id', pedidoController.getPedidoById);
 
