@@ -6,6 +6,7 @@ const pedido = {
       let query = `
       SELECT
         p.idPedido,
+        p.numeroPedido,
         p.idCliente,
         p.numeroPedido,
         DATE_FORMAT(p.fechaPedido, '%d-%m-%Y') AS fechaPedido, 
@@ -55,7 +56,7 @@ const pedido = {
       }
 
       query += `
-      order by p.idEstadoPedido asc, p.fechaPedido desc, c.apellido asc
+      order by p.idEstadoPedido asc, p.fechaPedido desc, p.numeroPedido desc, c.apellido asc
         `;
 
       // Ejecutamos la consulta con los parámetros correspondientes
@@ -84,6 +85,11 @@ const pedido = {
       console.error('Error en getUltimoNumeroPedido:', error);
       throw error;
     }
+  },
+
+  getNumeroPedidoById: async (id) => {
+    const [rows] = await db.query('SELECT numeroPedido FROM pedido WHERE idPedido = ? ', [id]);
+    return rows[0];
   },
 
   getById: async (id) => {

@@ -8,6 +8,9 @@ router.get('/', pedidoController.getAllPedido);
 //Obtener último número de pedido registrado
 router.get('/ultimo-numero', pedidoController.getUltimoNumeroPedido);
 
+//Obtener número de pedido por ID
+router.get('/ultimo-numero/:id', pedidoController.getNumeroPedidoId);
+
 // Obtener un Pedido por ID
 router.get('/:id', pedidoController.getPedidoById);
 

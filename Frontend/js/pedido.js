@@ -21,7 +21,7 @@ async function nuevoPedido() {
         }
 
     } catch (error) {
-       // console.error('Error al procesar la solicitud:', error.response ? error.response.data : error.message);
+       console.error('Error al procesar la solicitud:', error.response ? error.response.data : error.message);
         Swal.fire({
             icon: 'error',
             title: 'Error',
@@ -236,7 +236,7 @@ function obtenerDatosPedido() {
         detallesPedido: productos // Lista de productos seleccionados
     };
 
-    // console.log('Datos del pedido formateados:', datosPedido); 
+    console.log('Datos del pedido formateados:', datosPedido); 
 
     //console.log(datosPedido);
     return datosPedido;
@@ -252,7 +252,7 @@ async function cargarPedidosTabla(filter = null) {
         } else {
             response = await axios.get('http://localhost:3000/api/pedido');
         }
-        //console.log(response.data);
+        console.log(response.data);
 
         const tbody = document.querySelector('#pedidosTable tbody');
 
@@ -271,7 +271,7 @@ async function cargarPedidosTabla(filter = null) {
 
         
         pedidosOrdenados.forEach(pedido => agregarFilaPedido(tbody, pedido));
-        //console.log(pedidosOrdenados);
+        console.log(pedidosOrdenados);
     } catch (error) {
         console.error('Error al cargar los pedidos:', error);
     }
@@ -281,7 +281,7 @@ function agregarFilaPedido(tbody, pedido) {
     const fila = document.createElement('tr');
 
     // Asignar una clase de Bootstrap para diferenciar el estado del pedido
-    if (pedido.estadoPedido === 'Inactivo') {
+    if (pedido.estadoPedido === 'Cancelado') {
         fila.classList.add('table-secondary');
     }
 
@@ -376,6 +376,8 @@ function agregarFilaPedido(tbody, pedido) {
         // document.getElementById('pedidoId').value = pedido.idPedido;
         await modificarDatosPedido(pedido);
         document.getElementById("pedidoId").value = pedido.idPedido;
+        numeroPedidoActual = await getNumeroPedidoById(pedido.idPedido);
+        document.getElementById('ultimoNumeroPedido').value = numeroPedidoActual;
     });
 
     // Crear botón Eliminar
@@ -787,6 +789,18 @@ async function getUltimoNumeroPedido() {
         const ultimoNumero = response.data.numeroPedido; // Asumiendo que el último número de pedido se recibe en esta propiedad
 
         return ultimoNumero;
+
+    } catch (error) {
+        console.error('Error al cargar el último número de pedido:', error);
+        return 0; // Si ocurre un error, devolvemos 0 como valor predeterminado
+    }
+}
+
+async function getNumeroPedidoById(idPedido) {
+    try {
+        const response = await axios.get(`http://localhost:3000/api/pedido/ultimo-numero/${idPedido}`);
+        const numeroPedidoActual = response.data.numeroPedido; 
+        return numeroPedidoActual;
 
     } catch (error) {
         console.error('Error al cargar el último número de pedido:', error);

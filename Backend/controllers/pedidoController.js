@@ -23,6 +23,16 @@ exports.getUltimoNumeroPedido = async (req, res) => {
   }
 };
 
+exports.getNumeroPedidoId = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const pedido = await Pedido.getNumeroPedidoById(id); // Pasamos los filtros al modelo
+    res.json(pedido);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
 // Obtener un Pedido por ID
 exports.getPedidoById = async (req, res) => {
   try {
